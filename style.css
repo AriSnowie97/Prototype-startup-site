@@ -16,9 +16,6 @@ header {
   box-shadow: 0 4px 15px rgba(0,0,0,0.2);
 }
 
-/* Далее весь CSS, который ты прислал ранее для светлой темы... */
-
-
 header nav ul {
   list-style: none;
   padding: 0;
@@ -162,4 +159,31 @@ footer {
   margin-top: 2rem;
   color: #555;
   font-size: 0.9rem;
+}
+
+/* ===== Адаптація для мобільних пристроїв ===== */
+@media (max-width: 768px) {
+  h1 {
+    font-size: 1.8rem;
+  }
+
+  h2 {
+    font-size: 1.4rem;
+  }
+  
+  header nav ul {
+    flex-direction: column; /* Ставимо посилання в стовпчик */
+    gap: 0.5rem; /* Зменшуємо відступ */
+  }
+
+  main section {
+    margin: 1rem; /* Зменшуємо зовнішні відступи */
+    padding: 1.5rem; /* Зменшуємо внутрішні відступи */
+  }
+
+  button, select {
+    padding: 0.7rem 1.2rem; /* Робимо кнопки трохи компактнішими */
+    width: 90%; /* Кнопки займають більшу частину ширини */
+    box-sizing: border-box; /* Щоб padding не впливав на ширину */
+  }
 }
