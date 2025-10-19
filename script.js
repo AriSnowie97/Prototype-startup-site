@@ -21,11 +21,8 @@ document.addEventListener('DOMContentLoaded', () => {
         action: "addTask",
         text: taskText.trim()
       };
-      // ТИМЧАСОВИЙ ТЕСТ: Показуємо дані замість відправки
-      alert("Дані для відправки:\n" + JSON.stringify(dataToSend)); 
-      
-      // tg.sendData(JSON.stringify(dataToSend)); // Поки не відправляємо
-      // tg.close(); // І не закриваємо, щоб побачити alert
+      tg.sendData(JSON.stringify(dataToSend));
+      tg.close();
     }
   });
 
