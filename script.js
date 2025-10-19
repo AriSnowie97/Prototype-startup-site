@@ -21,8 +21,11 @@ document.addEventListener('DOMContentLoaded', () => {
         action: "addTask",
         text: taskText.trim()
       };
-      tg.sendData(JSON.stringify(dataToSend));
-      tg.close();
+      // ТИМЧАСОВИЙ ТЕСТ: Показуємо дані замість відправки
+      alert("Дані для відправки:\n" + JSON.stringify(dataToSend)); 
+      
+      // tg.sendData(JSON.stringify(dataToSend)); // Поки не відправляємо
+      // tg.close(); // І не закриваємо, щоб побачити alert
     }
   });
 
@@ -126,54 +129,4 @@ document.addEventListener('DOMContentLoaded', () => {
   // Перший рендер завдань при завантаженні сторінки
   renderTasks();
 
-  // ===== Відправка повідомлення з сайту через Flask =====
-  const messageInput = document.getElementById('messageInput');
-  const statusDiv = document.getElementById('status');
-  const sendButton = document.getElementById('sendButton');
-
-  // ❗️ ВАЖЛИВО: Замініть цей URL на публічну IP-адресу або домен вашого сервера,
-  // де запущено Python-скрипт.
-  const API_URL = 'http://notificationtgbot-production.up.railway.app/send_message'; 
-
-  sendButton.addEventListener('click', sendMessage);
-
-  async function sendMessage() {
-      const messageText = messageInput.value.trim();
-
-      if (!messageText) {
-          statusDiv.textContent = 'Будь ласка, введіть повідомлення!';
-          statusDiv.style.color = 'red';
-          return;
-      }
-
-      sendButton.disabled = true;
-      sendButton.textContent = 'Відправка...';
-      statusDiv.textContent = '';
-
-      try {
-          const response = await fetch(API_URL, { // Використовуємо змінну API_URL
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({ message: messageText })
-          });
-
-          const result = await response.json();
-
-          if (response.ok) {
-              statusDiv.textContent = 'Успішно надіслано!';
-              statusDiv.style.color = 'green';
-              messageInput.value = ''; // Очищуємо поле
-          } else {
-              statusDiv.textContent = 'Помилка: ' + result.message;
-              statusDiv.style.color = 'red';
-          }
-      } catch (error) {
-          statusDiv.textContent = 'Не вдалося підключитися до сервера.';
-          statusDiv.style.color = 'red';
-          console.error('Помилка fetch:', error);
-      } finally {
-          sendButton.disabled = false;
-          sendButton.textContent = 'Надіслати';
-      }
-  }
 });
