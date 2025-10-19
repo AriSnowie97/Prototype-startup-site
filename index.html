@@ -22,41 +22,36 @@
   </header>
 
   <main>
-    <!-- Секції -->
     <section id="tasks">
       <h2>Завдання</h2>
-      <p>Список завдань з дедлайнами</p>
-      <ul>
-        <li>Практична з математики — дедлайн 10.10</li>
-        <li>Реферат з історії — дедлайн 12.10</li>
-        <li>Лабораторна з програмування — дедлайн 15.10</li>
-      </ul>
-      <button>+ Додати завдання</button>
+      <div id="task-list"></div>
+      <button id="add-task-btn">+ Додати завдання (у бот)</button>
     </section>
 
     <section id="calendar">
       <h2>Календар</h2>
       <p>Розклад занять і інтеграція з Google Calendar</p>
       <div class="calendar-mockup">
-        <p>📅 Приклад тижня: Пн - Ср - Пт заняття</p>
+        <p>📅 Всі події з календаря керуються через бота.</p>
       </div>
     </section>
 
     <section id="focus">
       <h2>Режим концентрації</h2>
       <p>Запусти таймер і сконцентруйся на навчанні</p>
-      <button>▶️ Почати сесію (25 хв)</button>
-      <button>⏸️ Пауза</button>
-      <button>⏹️ Стоп</button>
+      <div id="timer-display" style="font-size: 3rem; margin: 1rem; font-weight: bold;">25:00</div>
+      <button id="start-btn">▶️ Почати</button>
+      <button id="pause-btn">⏸️ Пауза</button>
+      <button id="stop-btn">⏹️ Стоп</button>
     </section>
 
     <section id="analytics">
       <h2>Аналітика</h2>
       <p>Звіти та мотивація</p>
       <div class="progress-bar">
-        <div class="progress" style="width: 70%;">70%</div>
+        <div id="progress-fill" class="progress" style="width: 0%;">0%</div>
       </div>
-      <p>Виконано 7 з 10 завдань</p>
+      <p id="progress-text">Виконано 0 з 0 завдань</p>
     </section>
 
     <section id="settings">
@@ -70,9 +65,9 @@
         </label>
         <br>
         <label>Нагадування:
-          <input type="checkbox" checked> Push
-          <input type="checkbox"> Telegram
-          <input type="checkbox"> Email
+          <input type="checkbox" id="push-cb"> Push
+          <input type="checkbox" id="telegram-cb"> Telegram
+          <input type="checkbox" id="email-cb"> Email
         </label>
       </form>
     </section>
@@ -81,7 +76,8 @@
   <footer>
     <p>© 2025 Смарт-бот для студентів</p>
   </footer>
-
+  
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
   <script src="script.js"></script>
 </body>
 </html>
