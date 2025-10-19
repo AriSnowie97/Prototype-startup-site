@@ -22,11 +22,17 @@
   </header>
 
   <main>
-    <section id="tasks">
-      <h2>Завдання</h2>
-      <div id="task-list"></div>
-      <button id="add-task-btn">+ Додати завдання (у бот)</button>
-    </section>
+<section id="tasks">
+  <h2>Завдання</h2>
+  
+  <form id="add-task-form" style="display: flex; gap: 10px; margin-bottom: 1rem;">
+    <input type="text" id="new-task-input" placeholder="Назва нового завдання..." style="flex-grow: 1; padding: 0.5rem; border-radius: 8px; border: 1px solid #ccc;">
+    <button type="submit">Додати</button>
+  </form>
+  
+  <div id="task-list"></div>
+  <button id="add-task-btn">+ Додати завдання (у бот)</button>
+</section>
 
     <section id="calendar">
       <h2>Календар</h2>
@@ -81,3 +87,4 @@
   <script src="script.js"></script>
 </body>
 </html>
+
