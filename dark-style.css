@@ -160,3 +160,16 @@ footer {
   color: #aaa;
   font-size: 0.9rem;
 }
+
+/* ===== Адаптація для мобільних пристроїв ===== */
+@media (max-width: 768px) {
+  h1 {
+    font-size: 1.8rem;
+  }
+
+  h2 {
+    font-size: 1.4rem;
+  }
+  
+  header nav ul {
+    flex-direction: column; /* Ставимо посилання в стовпчик */
