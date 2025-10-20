@@ -11,42 +11,32 @@ document.addEventListener("DOMContentLoaded", () => {
   const tg = window.Telegram.WebApp;
   tg.ready();
 
-  const addTaskViaBotButton = document.getElementById("add-task-btn");
-
-  addTaskViaBotButton.addEventListener("click", () => {
-    const taskText = prompt(
-      "Введіть назву завдання для додавання в Google Calendar через бота:",
-      "Лабораторна з програмування"
-    );
-    if (taskText && taskText.trim() !== "") {
-      const dataToSend = {
-        action: "addTask",
-        text: taskText.trim(),
-      };
-      // Цей метод відправляє дані напряму в бот, а не на Flask
-      tg.sendData(JSON.stringify(dataToSend));
-      tg.close();
-    }
-  });
-
-  // ✅ ================== НОВА ЛОГІКА ДЛЯ FLASK ==================
+  // ✅ ================== ОНОВЛЕНА ЛОГІКА ДЛЯ FLASK ==================
 
   // 1. Отримуємо URL бекенду з параметра ?backendUrl=...
   const urlParams = new URLSearchParams(window.location.search);
   const backendUrl = urlParams.get("backendUrl");
 
+  // --- Тестова кнопка ---
   const testFlaskBtn = document.getElementById("test-flask-btn");
   const flaskStatus = document.getElementById("flask-status");
 
+  // --- Кнопка додавання завдань ---
+  const addTaskViaFlaskButton = document.getElementById("add-task-btn");
+  const addTaskStatus = document.getElementById("add-task-status"); // Потрібно додати в HTML
+
   if (!backendUrl) {
-    // Якщо URL не передано, блокуємо кнопку
+    // Якщо URL не передано, блокуємо обидві кнопки
     testFlaskBtn.disabled = true;
+    addTaskViaFlaskButton.disabled = true;
     flaskStatus.textContent =
       "❌ Помилка: URL бекенду не знайдено. Відкрийте додаток через кнопку в боті.";
     flaskStatus.style.color = "red";
   }
 
+  // Обробник для тестової кнопки (без змін)
   testFlaskBtn.addEventListener("click", async () => {
+    // ... (код для тестової кнопки залишається без змін) ...
     flaskStatus.textContent = "Відправка запиту...";
     flaskStatus.style.color = "orange";
 
@@ -56,9 +46,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       const response = await fetch(apiUrl, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           message: "Це тестове повідомлення з сайту GitHub Pages!",
         }),
@@ -67,8 +55,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const result = await response.json();
 
       if (response.ok) {
-        flaskStatus.textContent =
-          "✅ Успіх! Повідомлення надіслано в Telegram.";
+        flaskStatus.textContent = "✅ Успіх! Повідомлення надіслано в Telegram.";
         flaskStatus.style.color = "green";
       } else {
         throw new Error(result.message || "Невідома помилка сервера");
@@ -79,6 +66,44 @@ document.addEventListener("DOMContentLoaded", () => {
       flaskStatus.style.color = "red";
     }
   });
+  
+  // ✅ НОВИЙ обробник для кнопки додавання завдань через Flask
+  addTaskViaFlaskButton.addEventListener("click", async () => {
+    const taskText = prompt(
+      "Введіть назву завдання для додавання в Google Calendar:",
+      "Лабораторна з програмування"
+    );
+
+    if (!taskText || taskText.trim() === "") {
+      return; // Користувач скасував ввід або ввів порожній рядок
+    }
+    
+    addTaskStatus.textContent = "Додаю завдання...";
+    addTaskStatus.style.color = "orange";
+    
+    try {
+      const apiUrl = `${backendUrl}/add_task`; // Новий маршрут
+      const response = await fetch(apiUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ text: taskText.trim() }) // Надсилаємо текст завдання
+      });
+
+      const result = await response.json();
+
+      if (response.ok) {
+        addTaskStatus.textContent = "✅ Успіх! Завдання додано. Перевірте Telegram.";
+        addTaskStatus.style.color = "green";
+      } else {
+        throw new Error(result.message || "Невідома помилка сервера");
+      }
+    } catch (error) {
+      console.error("Add Task Fetch Error:", error);
+      addTaskStatus.textContent = `❌ Помилка: ${error.message}`;
+      addTaskStatus.style.color = "red";
+    }
+  });
+
   // ✅ ==========================================================
 
   // ===== Режим концентрації (Таймер Помодоро) =====
