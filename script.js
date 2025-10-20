@@ -78,6 +78,16 @@ document.addEventListener("DOMContentLoaded", () => {
       return; // Користувач скасував ввід або ввів порожній рядок
     }
     
+    // ✅ ДОДАНО: Отримуємо дані користувача з Telegram
+    const tg = window.Telegram.WebApp;
+    const userId = tg.initDataUnsafe?.user?.id;
+
+    if (!userId) {
+        addTaskStatus.textContent = "❌ Помилка: Не вдалося отримати ID користувача Telegram.";
+        addTaskStatus.style.color = "red";
+        return;
+    }
+
     addTaskStatus.textContent = "Додаю завдання...";
     addTaskStatus.style.color = "orange";
     
@@ -86,7 +96,11 @@ document.addEventListener("DOMContentLoaded", () => {
       const response = await fetch(apiUrl, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ text: taskText.trim() }) // Надсилаємо текст завдання
+        // ✅ ЗМІНЕНО: Надсилаємо і текст, і ID користувача
+        body: JSON.stringify({ 
+            text: taskText.trim(),
+            userId: userId 
+        })
       });
 
       const result = await response.json();
