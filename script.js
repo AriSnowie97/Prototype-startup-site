@@ -11,114 +11,112 @@ document.addEventListener("DOMContentLoaded", () => {
   const tg = window.Telegram.WebApp;
   tg.ready();
 
-  // ✅ ================== ОНОВЛЕНА ЛОГІКА ДЛЯ FLASK ==================
+  // =======================================================================
+  //                      ГОЛОВНА ЧАСТИНА РЕФАКТОРИНГУ
+  // =======================================================================
 
-  // 1. Отримуємо URL бекенду з параметра ?backendUrl=...
+  // --- Отримуємо URL бекенду один раз при завантаженні ---
   const urlParams = new URLSearchParams(window.location.search);
   const backendUrl = urlParams.get("backendUrl");
 
-  // --- Тестова кнопка ---
+  // --- Отримуємо елементи для відображення статусу ---
   const testFlaskBtn = document.getElementById("test-flask-btn");
   const flaskStatus = document.getElementById("flask-status");
-
-  // --- Кнопка додавання завдань ---
   const addTaskViaFlaskButton = document.getElementById("add-task-btn");
-  const addTaskStatus = document.getElementById("add-task-status"); // Потрібно додати в HTML
+  const addTaskStatus = document.getElementById("add-task-status");
 
-  if (!backendUrl) {
-    // Якщо URL не передано, блокуємо обидві кнопки
-    testFlaskBtn.disabled = true;
-    addTaskViaFlaskButton.disabled = true;
-    flaskStatus.textContent =
-      "❌ Помилка: URL бекенду не знайдено. Відкрийте додаток через кнопку в боті.";
-    flaskStatus.style.color = "red";
-  }
+  /**
+   * ✅ ГОЛОВНА ФУНКЦІЯ для відправки будь-яких запитів на бекенд.
+   * @param {string} endpoint - Шлях до API (наприклад, '/send_message').
+   * @param {object} payload - Дані для відправки в тілі запиту.
+   * @param {HTMLElement} statusElement - Елемент для відображення статусу (успіх/помилка).
+   * @param {string} successMessage - Повідомлення, яке буде показано у разі успіху.
+   */
+  async function sendApiRequest(endpoint, payload, statusElement, successMessage) {
+    // Перевіряємо наявність URL бекенду
+    if (!backendUrl) {
+      statusElement.textContent = "❌ Помилка: URL бекенду не знайдено.";
+      statusElement.style.color = "red";
+      return;
+    }
 
-  // Обробник для тестової кнопки (без змін)
-  testFlaskBtn.addEventListener("click", async () => {
-    // ... (код для тестової кнопки залишається без змін) ...
-    flaskStatus.textContent = "Відправка запиту...";
-    flaskStatus.style.color = "orange";
+    // Отримуємо ID користувача з Telegram
+    const userId = tg.initDataUnsafe?.user?.id;
+    if (!userId) {
+      statusElement.textContent = "❌ Помилка: Не вдалося отримати ID користувача.";
+      statusElement.style.color = "red";
+      return;
+    }
+
+    // Показуємо користувачу, що процес почався
+    statusElement.textContent = "Обробка запиту...";
+    statusElement.style.color = "orange";
 
     try {
-      // 2. Формуємо повний шлях до нашого API
-      const apiUrl = `${backendUrl}/send_message`;
+      const apiUrl = `${backendUrl}${endpoint}`;
+      
+      // Формуємо тіло запиту, автоматично додаючи userId до будь-якого payload
+      const body = { ...payload, userId };
 
       const response = await fetch(apiUrl, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          message: "Це тестове повідомлення з сайту GitHub Pages!",
-        }),
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body)
       });
 
       const result = await response.json();
 
       if (response.ok) {
-        flaskStatus.textContent = "✅ Успіх! Повідомлення надіслано в Telegram.";
-        flaskStatus.style.color = "green";
+        statusElement.textContent = `✅ ${successMessage}`;
+        statusElement.style.color = "green";
       } else {
+        // Якщо сервер повернув помилку, викидаємо її
         throw new Error(result.message || "Невідома помилка сервера");
       }
     } catch (error) {
-      console.error("Fetch Error:", error);
-      flaskStatus.textContent = `❌ Помилка відправки: ${error.message}`;
-      flaskStatus.style.color = "red";
+      console.error(`API Request Error to ${endpoint}:`, error);
+      statusElement.textContent = `❌ Помилка: ${error.message}`;
+      statusElement.style.color = "red";
     }
+  }
+
+  // --- Перевірка URL та блокування кнопок, якщо його немає ---
+  if (!backendUrl) {
+    testFlaskBtn.disabled = true;
+    addTaskViaFlaskButton.disabled = true;
+    flaskStatus.textContent = "❌ Помилка: Відкрийте додаток через кнопку в боті.";
+    flaskStatus.style.color = "red";
+  }
+
+  // --- ОНОВЛЕНИЙ Обробник для тестової кнопки ---
+  testFlaskBtn.addEventListener("click", () => {
+    const payload = {
+      message: "Це тестове повідомлення з сайту GitHub Pages!"
+    };
+    sendApiRequest('/send_message', payload, flaskStatus, "Повідомлення надіслано!");
   });
   
-  // ✅ НОВИЙ обробник для кнопки додавання завдань через Flask
-  addTaskViaFlaskButton.addEventListener("click", async () => {
+  // --- ОНОВЛЕНИЙ Обробник для кнопки додавання завдань ---
+  addTaskViaFlaskButton.addEventListener("click", () => {
     const taskText = prompt(
       "Введіть назву завдання для додавання в Google Calendar:",
       "Лабораторна з програмування"
     );
 
     if (!taskText || taskText.trim() === "") {
-      return; // Користувач скасував ввід або ввів порожній рядок
+      return; // Нічого не робимо, якщо користувач скасував ввід
     }
     
-    // ✅ ДОДАНО: Отримуємо дані користувача з Telegram
-    const tg = window.Telegram.WebApp;
-    const userId = tg.initDataUnsafe?.user?.id;
-
-    if (!userId) {
-        addTaskStatus.textContent = "❌ Помилка: Не вдалося отримати ID користувача Telegram.";
-        addTaskStatus.style.color = "red";
-        return;
-    }
-
-    addTaskStatus.textContent = "Додаю завдання...";
-    addTaskStatus.style.color = "orange";
-    
-    try {
-      const apiUrl = `${backendUrl}/add_task`; // Новий маршрут
-      const response = await fetch(apiUrl, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        // ✅ ЗМІНЕНО: Надсилаємо і текст, і ID користувача
-        body: JSON.stringify({ 
-            text: taskText.trim(),
-            userId: userId 
-        })
-      });
-
-      const result = await response.json();
-
-      if (response.ok) {
-        addTaskStatus.textContent = "✅ Успіх! Завдання додано. Перевірте Telegram.";
-        addTaskStatus.style.color = "green";
-      } else {
-        throw new Error(result.message || "Невідома помилка сервера");
-      }
-    } catch (error) {
-      console.error("Add Task Fetch Error:", error);
-      addTaskStatus.textContent = `❌ Помилка: ${error.message}`;
-      addTaskStatus.style.color = "red";
-    }
+    const payload = { 
+      text: taskText.trim() 
+    };
+    sendApiRequest('/add_task', payload, addTaskStatus, "Завдання успішно додано!");
   });
 
-  // ✅ ==========================================================
+  // =======================================================================
+  //                 КІНЕЦЬ ЧАСТИНИ, ЩО СТОСУЄТЬСЯ БОТА
+  // =======================================================================
+
 
   // ===== Режим концентрації (Таймер Помодоро) =====
   const timerDisplay = document.getElementById("timer-display");
@@ -133,9 +131,7 @@ document.addEventListener("DOMContentLoaded", () => {
   function updateTimerDisplay() {
     const minutes = Math.floor(timeLeft / 60);
     const seconds = timeLeft % 60;
-    timerDisplay.textContent = `${minutes.toString().padStart(2, "0")}:${seconds
-      .toString()
-      .padStart(2, "0")}`;
+    timerDisplay.textContent = `${minutes.toString().padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
   }
 
   function startTimer() {
@@ -168,12 +164,11 @@ document.addEventListener("DOMContentLoaded", () => {
   pauseBtn.addEventListener("click", pauseTimer);
   stopBtn.addEventListener("click", stopTimer);
 
-  // ===== Завдання та Аналітика (Клієнтська сторона) =====
+  // ===== Завдання та Аналітика (Клієнтська сторона) - БЕЗ ЗМІН =====
   const taskListContainer = document.getElementById("task-list");
   const progressFill = document.getElementById("progress-fill");
   const progressText = document.getElementById("progress-text");
 
-  // Початковий список завдань (для демонстрації)
   let tasks = [
     { text: "Практична з математики", done: true },
     { text: "Реферат з історії", done: false },
@@ -211,15 +206,12 @@ document.addEventListener("DOMContentLoaded", () => {
   function updateAnalytics() {
     const totalTasks = tasks.length;
     const completedTasks = tasks.filter((task) => task.done).length;
-
-    const percentage =
-      totalTasks === 0 ? 0 : Math.round((completedTasks / totalTasks) * 100);
+    const percentage = totalTasks === 0 ? 0 : Math.round((completedTasks / totalTasks) * 100);
 
     progressFill.style.width = `${percentage}%`;
     progressFill.textContent = `${percentage}%`;
     progressText.textContent = `Виконано ${completedTasks} з ${totalTasks} завдань`;
   }
-
-  // Перший рендер завдань при завантаженні сторінки
+  
   renderTasks();
 });
