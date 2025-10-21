@@ -1,0 +1,104 @@
+name: Deploy to GitHub Pages & Notify
+
+on:
+  # Запускати при push у гілку main
+  push:
+    branches: [ "main" ]
+  # Дозволяє запускати цей workflow вручну з вкладки Actions
+  workflow_dispatch:
+
+# Встановлюємо дозволи для GITHUB_TOKEN для розгортання на GitHub Pages
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Дозволяємо лише одне одночасне розгортання, скасовуючи старі запуски
+concurrency:
+  group: "pages"
+  cancel-in-progress: true
+
+jobs:
+  # Крок збірки
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
+      - name: Build with Jekyll (або ваш інструмент)
+        uses: actions/jekyll-build-pages@v1
+        with:
+          source: ./
+          destination: ./_site
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: './_site'
+
+  # Крок розгортання
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    needs: build # Цей крок залежить від успішного завершення 'build'
+    # ⭐ ВИПРАВЛЕННЯ: Додаємо outputs, щоб передати URL наступному кроку
+    outputs:
+      page_url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+
+  # Крок сповіщення
+  notify:
+    runs-on: ubuntu-latest
+    needs: deploy # Цей крок залежить від успішного завершення 'deploy'
+    env:
+      TG_BOT_TOKEN: ${{ secrets.TG_BOT_TOKEN }}
+      # ⭐ ОНОВЛЕННЯ: Використовуємо новий секрет у множині
+      TG_CHAT_IDS: ${{ secrets.TG_CHAT_IDS }} 
+      # Тепер це буде працювати завдяки виправленню вище
+      PAGE_URL: ${{ needs.deploy.outputs.page_url }} 
+    steps:
+      - name: Check Telegram variables
+        run: |
+          if [ -z "${TG_BOT_TOKEN}" ]; then
+            echo "❌ TG_BOT_TOKEN не задано!"
+            exit 1
+          fi
+          # ⭐ ОНОВЛЕННЯ: Перевіряємо новий секрет
+          if [ -z "${TG_CHAT_IDS}" ]; then
+            echo "❌ TG_CHAT_IDS не задано!"
+            exit 1
+          fi
+          
+      - name: Notify Telegram on Success
+        if: success() # Запускати лише якщо попередній крок успішний
+        run: |
+          MSG="✅ Сайт успішно оновлено!\n\n${PAGE_URL}"
+          
+          # ⭐ ОНОВЛЕННЯ: Запускаємо цикл для кожного ID з секрету
+          
+          # 1. Читаємо рядок з ID, замінюємо коми на пробіли для циклу bash
+          IFS=',' read -ra CHAT_IDS <<< "${TG_CHAT_IDS}"
+          
+          # 2. Проходимо циклом по кожному ID
+          for CHAT_ID in "${CHAT_IDS[@]}"; do
+            echo "Відправка сповіщення до ${CHAT_ID}..."
+            
+            # 3. Надсилаємо curl-запит для кожного ID
+            curl -s -X POST "https://api.telegram.org/bot${TG_BOT_TOKEN}/sendMessage" \
+              -H "Content-Type: application/json" \
+              -d @- <<EOF
+            {
+              "chat_id": "${CHAT_ID}",
+              "text": "${MSG}",
+              "disable_web_page_preview": false
+            }
+            EOF
+            
+            echo # Додаємо новий рядок для чистоти логів
+          done
