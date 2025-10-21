@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Смарт-бот для студентів (режим розробника)</title>
+  <link id="theme-link" rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <header>
+    <h1>Смарт-бот / Органайзер студентів</h1>
+    <h3><i>Режим розробника увімкнено</i></h3>
+    <nav>
+      <ul>
+        <li><a href="#tasks">Завдання</a></li>
+        <li><a href="#calendar">Календар</a></li>
+        <li><a href="#focus">Фокус</a></li>
+        <li><a href="#analytics">Аналітика</a></li>
+        <li><a href="#settings">Налаштування</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+  
+    <section id="testing">
+      <h2>Тестування зв'язку</h2>
+      <p>Ця кнопка надішле тестове повідомлення на ваш локальний Flask-сервер через ngrok.</p>
+      <button id="test-flask-btn">Надіслати тестове повідомлення</button>
+      <p id="flask-status" style="margin-top: 10px; font-weight: bold;"></p>
+    </section>
+
+    <section id="settings">
+      <h2>Налаштування</h2>
+      <form>
+        <label>Тема:
+          <select id="theme-select">
+            <option value="light">Світла</option>
+            <option value="dark">Темна</option>
+          </select>
+        </label>
+        <br>
+        <label>Нагадування:
+          <input type="checkbox" id="push-cb"> Push
+          <input type="checkbox" id="telegram-cb"> Telegram
+          <input type="checkbox" id="email-cb"> Email
+        </label>
+        <label>
+          Режим розробника:
+          <button type="button" id="dev-mode-btn"><a href = "developomde.html"></a>Вимкнути</button>
+        </label>
+      </form>
+    </section>
+  </main>
+
+  <footer>
+    <p>© 2025 Смарт-бот для студентів</p>
+  </footer>
+  
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
