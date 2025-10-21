@@ -43,12 +43,10 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
-    needs: build 
-    
-    # ⭐ ВИПРАВЛЕННЯ 1: Додаємо outputs, щоб передати URL наступному кроку
+    needs: build
+    # Додаємо outputs, щоб передати URL наступному кроку
     outputs:
       page_url: ${{ steps.deployment.outputs.page_url }}
-      
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
@@ -58,10 +56,12 @@ jobs:
   notify:
     runs-on: ubuntu-latest
     needs: deploy # Цей крок залежить від успішного завершення 'deploy'
+    # Запускати лише якщо попередній крок успішний
+    if: success()
     env:
       TG_BOT_TOKEN: ${{ secrets.TG_BOT_TOKEN }}
-      TG_CHAT_IDS: ${{ secrets.TG_CHAT_IDS }} 
-      PAGE_URL: ${{ needs.deploy.outputs.page_url }} # Тепер це буде працювати
+      TG_CHAT_IDS: ${{ secrets.TG_CHAT_IDS }}
+      PAGE_URL: ${{ needs.deploy.outputs.page_url }}
     steps:
       - name: Check Telegram variables
         run: |
@@ -73,27 +73,27 @@ jobs:
             echo "❌ TG_CHAT_IDS не задано!"
             exit 1
           fi
-          
       - name: Notify Telegram on Success
-        if: success() # Запускати лише якщо попередній крок успішний
         run: |
-          MSG="✅ Сайт успішно оновлено!\n\n${PAGE_URL}"
+          MSG="✅ Сайт успішно оновлено!
+
+          ${PAGE_URL}"
           
+          # Розділяємо рядок з ID на масив
           IFS=',' read -ra CHAT_IDS <<< "${TG_CHAT_IDS}"
           
+          # Проходимо циклом по кожному ID і відправляємо повідомлення
           for CHAT_ID in "${CHAT_IDS[@]}"; do
             echo "Відправка сповіщення до ${CHAT_ID}..."
             
-            # 3. Надсилаємо curl-запит для кожного ID
             curl -s -X POST "https://api.telegram.org/bot${TG_BOT_TOKEN}/sendMessage" \
               -H "Content-Type: application/json" \
               -d @- <<EOF
-            {
-              "chat_id": "${CHAT_ID}",
-              "text": "${MSG}",
-              "disable_web_page_preview": false
-            }
-EOF # ⭐ ВИПРАВЛЕННЯ 2: Цей рядок має бути без жодних відступів (пробілів)
-            
-            echo # Додаємо новий рядок для чистоти логів
+          {
+            "chat_id": "${CHAT_ID}",
+            "text": "${MSG}",
+            "disable_web_page_preview": false
+          }
+EOF
+            echo "Сповіщення до ${CHAT_ID} відправлено."
           done
