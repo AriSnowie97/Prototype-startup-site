@@ -43,10 +43,12 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
-    needs: build # Цей крок залежить від успішного завершення 'build'
-    # ⭐ ВИПРАВЛЕННЯ: Додаємо outputs, щоб передати URL наступному кроку
+    needs: build 
+    
+    # ⭐ ВИПРАВЛЕННЯ 1: Додаємо outputs, щоб передати URL наступному кроку
     outputs:
       page_url: ${{ steps.deployment.outputs.page_url }}
+      
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
@@ -58,10 +60,8 @@ jobs:
     needs: deploy # Цей крок залежить від успішного завершення 'deploy'
     env:
       TG_BOT_TOKEN: ${{ secrets.TG_BOT_TOKEN }}
-      # ⭐ ОНОВЛЕННЯ: Використовуємо новий секрет у множині
       TG_CHAT_IDS: ${{ secrets.TG_CHAT_IDS }} 
-      # Тепер це буде працювати завдяки виправленню вище
-      PAGE_URL: ${{ needs.deploy.outputs.page_url }} 
+      PAGE_URL: ${{ needs.deploy.outputs.page_url }} # Тепер це буде працювати
     steps:
       - name: Check Telegram variables
         run: |
@@ -69,7 +69,6 @@ jobs:
             echo "❌ TG_BOT_TOKEN не задано!"
             exit 1
           fi
-          # ⭐ ОНОВЛЕННЯ: Перевіряємо новий секрет
           if [ -z "${TG_CHAT_IDS}" ]; then
             echo "❌ TG_CHAT_IDS не задано!"
             exit 1
@@ -80,12 +79,8 @@ jobs:
         run: |
           MSG="✅ Сайт успішно оновлено!\n\n${PAGE_URL}"
           
-          # ⭐ ОНОВЛЕННЯ: Запускаємо цикл для кожного ID з секрету
-          
-          # 1. Читаємо рядок з ID, замінюємо коми на пробіли для циклу bash
           IFS=',' read -ra CHAT_IDS <<< "${TG_CHAT_IDS}"
           
-          # 2. Проходимо циклом по кожному ID
           for CHAT_ID in "${CHAT_IDS[@]}"; do
             echo "Відправка сповіщення до ${CHAT_ID}..."
             
@@ -98,7 +93,7 @@ jobs:
               "text": "${MSG}",
               "disable_web_page_preview": false
             }
-            EOF
+EOF # ⭐ ВИПРАВЛЕННЯ 2: Цей рядок має бути без жодних відступів (пробілів)
             
             echo # Додаємо новий рядок для чистоти логів
           done
