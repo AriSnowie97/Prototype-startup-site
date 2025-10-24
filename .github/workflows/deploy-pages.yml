@@ -52,22 +52,16 @@ jobs:
   # Крок сповіщення
   notify:
     runs-on: ubuntu-latest
-    needs: deploy # Залежить від 'deploy'
+    needs: deploy
     env:
       TG_BOT_TOKEN: ${{ secrets.TG_BOT_TOKEN }}
-      # !!! ВИПРАВЛЕННЯ 2: Використовуємо TG_CHAT_IDS (у множині)
-      TG_CHAT_IDS: ${{ secrets.TG_CHAT_IDS }} 
-      # !!! ВИПРАВЛЕННЯ 3: Отримуємо URL з 'outputs'
+      TG_CHAT_ID: "777807345"
       PAGE_URL: ${{ needs.deploy.outputs.page_url }} 
     steps:
       - name: Check Telegram variables
         run: |
           if [ -z "${TG_BOT_TOKEN}" ]; then
             echo "❌ TG_BOT_TOKEN не задано!"
-            exit 1
-          fi
-          if [ -z "${TG_CHAT_IDS}" ]; then
-            echo "❌ TG_CHAT_IDS не задано!"
             exit 1
           fi
           if [ -z "${PAGE_URL}" ]; then
@@ -77,29 +71,20 @@ jobs:
           
       - name: Notify Telegram on Success (Silently)
         if: success()
-        # !!! ВИПРАВЛЕННЯ 4: Повний скрипт з циклом, тихим режимом та виправленням 'EOF'
         run: |
           MSG=$(printf "✅ Сайт успішно оновлено!\n\n%s" "${PAGE_URL}")
           
-          echo "${TG_CHAT_IDS}" | tr ',' '\n' | while read -r CHAT_ID; do
-            TRIMMED_CHAT_ID=$(echo "$CHAT_ID" | tr -d ' ')
-            
-            if [ -n "$TRIMMED_CHAT_ID" ]; then
-              echo "Відправка ТИХОГО сповіщення до чату: $TRIMMED_CHAT_ID"
-              
-              # JSON_PAYLOAD та EOF повинні бути без відступів
-              JSON_PAYLOAD=$(cat <<EOF
+          echo "Відправка ТИХОГО сповіщення до чату: ${TG_CHAT_ID}"
+          
+          JSON_PAYLOAD=$(cat <<EOF
 {
-  "chat_id": "${TRIMMED_CHAT_ID}",
+  "chat_id": "${TG_CHAT_ID}",
   "text": "${MSG}",
   "disable_web_page_preview": false,
   "disable_notification": true
 }
-EOF
-)
+EOF)
               
-              curl -s -X POST "https://api.telegram.org/bot${TG_BOT_TOKEN}/sendMessage" \
-                -H "Content-Type: application/json" \
-                -d "${JSON_PAYLOAD}"
-            fi
-          done
+          curl -s -X POST "https://api.telegram.org/bot${TG_BOT_TOKEN}/sendMessage" \
+            -H "Content-Type: application/json" \
+            -d "${JSON_PAYLOAD}"
