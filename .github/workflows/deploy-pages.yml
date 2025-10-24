@@ -72,19 +72,10 @@ jobs:
       - name: Notify Telegram on Success (Silently)
         if: success()
         run: |
-          MSG=$(printf "✅ Сайт успішно оновлено!\n\n%s" "${PAGE_URL}")
+          MSG="✅ Сайт успішно оновлено!\n\n${PAGE_URL}"
           
           echo "Відправка ТИХОГО сповіщення до чату: ${TG_CHAT_ID}"
           
-          JSON_PAYLOAD=$(cat <<EOF
-{
-  "chat_id": "${TG_CHAT_ID}",
-  "text": "${MSG}",
-  "disable_web_page_preview": false,
-  "disable_notification": true
-}
-EOF)
-              
           curl -s -X POST "https://api.telegram.org/bot${TG_BOT_TOKEN}/sendMessage" \
             -H "Content-Type: application/json" \
-            -d "${JSON_PAYLOAD}"
+            -d "{\"chat_id\": \"${TG_CHAT_ID}\", \"text\": \"${MSG}\", \"disable_web_page_preview\": false, \"disable_notification\": true}"
