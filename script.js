@@ -1,4 +1,21 @@
 document.addEventListener("DOMContentLoaded", () => {
+  // ===== Отримання та збереження backendUrl =====
+  function getBackendUrl() {
+    // Спробуємо отримати URL з параметрів
+    let url = new URLSearchParams(window.location.search).get("backendUrl");
+    // Якщо немає в URL, спробуємо взяти з localStorage
+    if (!url) {
+      url = localStorage.getItem('backendUrl');
+    }
+    // Якщо знайшли в URL, зберігаємо в localStorage
+    else {
+      localStorage.setItem('backendUrl', url);
+    }
+    return url;
+  }
+
+  const backendUrl = getBackendUrl();
+
   // ===== Перемикач тем =====
   const themeSelect = document.getElementById("theme-select");
   const themeLink = document.getElementById("theme-link");
@@ -11,19 +28,43 @@ document.addEventListener("DOMContentLoaded", () => {
   const tg = window.Telegram.WebApp;
   tg.ready();
 
-  // =======================================================================
-  //                      ГОЛОВНА ЧАСТИНА РЕФАКТОРИНГУ
-  // =======================================================================
-
-  // --- Отримуємо URL бекенду один раз при завантаженні ---
-  const urlParams = new URLSearchParams(window.location.search);
-  const backendUrl = urlParams.get("backendUrl");
+  // ===== Обробка переходу в режим розробника =====
+  const devModeBtn = document.getElementById("dev-mode-btn");
+  if (devModeBtn) {
+    devModeBtn.addEventListener("click", () => {
+      const currentBackendUrl = backendUrl;
+      if (currentBackendUrl) {
+        const devPageUrl = `developomde.html?backendUrl=${encodeURIComponent(currentBackendUrl)}`;
+        window.location.href = devPageUrl;
+      } else {
+        window.location.href = 'developomde.html';
+      }
+    });
+  }
 
   // --- Отримуємо елементи для відображення статусу ---
   const testFlaskBtn = document.getElementById("test-flask-btn");
   const flaskStatus = document.getElementById("flask-status");
   const addTaskViaFlaskButton = document.getElementById("add-task-btn");
   const addTaskStatus = document.getElementById("add-task-status");
+
+  // Перевіряємо, чи елементи існують (вони можуть бути відсутні залежно від сторінки)
+  if (testFlaskBtn && flaskStatus) {
+    // Перевіряємо наявність backendUrl для тестової кнопки
+    if (!backendUrl) {
+      testFlaskBtn.disabled = true;
+      flaskStatus.textContent = "❌ Помилка: Відкрийте додаток через кнопку в боті.";
+      flaskStatus.style.color = "red";
+    } else {
+      testFlaskBtn.disabled = false;
+      testFlaskBtn.addEventListener("click", () => {
+        const payload = {
+          message: "Це тестове повідомлення з сайту GitHub Pages!"
+        };
+        sendApiRequest('/send_message', payload, flaskStatus, "Повідомлення надіслано!");
+      });
+    }
+  }
 
   /**
    * ✅ ГОЛОВНА ФУНКЦІЯ для відправки будь-яких запитів на бекенд.
@@ -80,21 +121,29 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  // --- Перевірка URL та блокування кнопок, якщо його немає ---
-  if (!backendUrl) {
-    testFlaskBtn.disabled = true;
-    addTaskViaFlaskButton.disabled = true;
-    flaskStatus.textContent = "❌ Помилка: Відкрийте додаток через кнопку в боті.";
-    flaskStatus.style.color = "red";
-  }
+  // Перевіряємо наявність кнопки додавання завдань
+  if (addTaskViaFlaskButton && addTaskStatus) {
+    if (!backendUrl) {
+      addTaskViaFlaskButton.disabled = true;
+    } else {
+      addTaskViaFlaskButton.disabled = false;
+      addTaskViaFlaskButton.addEventListener("click", () => {
+        const taskText = prompt(
+          "Введіть назву завдання для додавання в Google Calendar:",
+          "Лабораторна з програмування"
+        );
 
-  // --- ОНОВЛЕНИЙ Обробник для тестової кнопки ---
-  testFlaskBtn.addEventListener("click", () => {
-    const payload = {
-      message: "Це тестове повідомлення з сайту GitHub Pages!"
-    };
-    sendApiRequest('/send_message', payload, flaskStatus, "Повідомлення надіслано!");
-  });
+        if (!taskText || taskText.trim() === "") {
+          return;
+        }
+        
+        const payload = { 
+          text: taskText.trim() 
+        };
+        sendApiRequest('/add_task', payload, addTaskStatus, "Завдання успішно додано!");
+      });
+    }
+  }
   
   // --- ОНОВЛЕНИЙ Обробник для кнопки додавання завдань ---
   addTaskViaFlaskButton.addEventListener("click", () => {
