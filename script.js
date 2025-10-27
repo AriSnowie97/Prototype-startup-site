@@ -28,17 +28,37 @@ document.addEventListener("DOMContentLoaded", () => {
   const tg = window.Telegram.WebApp;
   tg.ready();
 
-  // ===== Обробка переходу в режим розробника =====
+  // ===== Обробка переходу в/з режиму розробника =====
+
+  // --- 1. Кнопка "Увімкнути" (яка є на index.html) ---
   const devModeBtn = document.getElementById("dev-mode-btn");
   if (devModeBtn) {
     devModeBtn.addEventListener("click", () => {
-      const currentBackendUrl = backendUrl;
+      // Беремо URL, який ми вже отримали при завантаженні сторінки
+      const currentBackendUrl = backendUrl; 
+      let devPageUrl = 'developomde.html';
+
       if (currentBackendUrl) {
-        const devPageUrl = `developomde.html?backendUrl=${encodeURIComponent(currentBackendUrl)}`;
-        window.location.href = devPageUrl;
-      } else {
-        window.location.href = 'developomde.html';
+        // Додаємо URL як параметр
+        devPageUrl = `developomde.html?backendUrl=${encodeURIComponent(currentBackendUrl)}`;
       }
+      window.location.href = devPageUrl;
+    });
+  }
+
+  // --- 2. Кнопка "Вимкнути" (яка є на developomde.html) ---
+  const exitDevModeBtn = document.getElementById("exit-dev-mode-btn");
+  if (exitDevModeBtn) {
+    exitDevModeBtn.addEventListener("click", () => {
+      // Так само беремо URL, який ми отримали
+      const currentBackendUrl = backendUrl;
+      let indexPageUrl = 'index.html';
+
+      if (currentBackendUrl) {
+        // Додаємо URL як параметр при поверненні на index
+        indexPageUrl = `index.html?backendUrl=${encodeURIComponent(currentBackendUrl)}`;
+      }
+      window.location.href = indexPageUrl;
     });
   }
 
