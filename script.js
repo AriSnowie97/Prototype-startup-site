@@ -99,6 +99,16 @@ document.addEventListener("DOMContentLoaded", () => {
       // Формуємо тіло запиту, автоматично додаючи userId до будь-якого payload
       const body = { ...payload, userId };
 
+      const alertMessage = `
+Відправляємо запит:
+Endpoint: ${endpoint}
+User ID: ${userId}
+Дані: ${JSON.stringify(payload, null, 2)}
+    `;
+    
+    // Показуємо нативний алерт Telegram
+    tg.showAlert(alertMessage);
+
       const response = await fetch(apiUrl, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -145,27 +155,9 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
   
-  // --- ОНОВЛЕНИЙ Обробник для кнопки додавання завдань ---
-  addTaskViaFlaskButton.addEventListener("click", () => {
-    const taskText = prompt(
-      "Введіть назву завдання для додавання в Google Calendar:",
-      "Лабораторна з програмування"
-    );
-
-    if (!taskText || taskText.trim() === "") {
-      return; // Нічого не робимо, якщо користувач скасував ввід
-    }
-    
-    const payload = { 
-      text: taskText.trim() 
-    };
-    sendApiRequest('/add_task', payload, addTaskStatus, "Завдання успішно додано!");
-  });
-
   // =======================================================================
   //                 КІНЕЦЬ ЧАСТИНИ, ЩО СТОСУЄТЬСЯ БОТА
   // =======================================================================
-
 
   // ===== Режим концентрації (Таймер Помодоро) =====
   const timerDisplay = document.getElementById("timer-display");
