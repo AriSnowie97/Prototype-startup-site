@@ -1,105 +1,113 @@
 <!DOCTYPE html>
 <html lang="uk">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Смарт-бот для студентів</title>
-  <link id="theme-link" rel="stylesheet" href="style.css">
-</head>
-<body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Смарт-бот для студентів</title>
+    <link id="theme-link" rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <header>
+      <h1>Смарт-бот / Органайзер студентів</h1>
+      <nav>
+        <ul>
+          <li><a href="#tasks">Завдання</a></li>
+          <li><a href="#calendar">Календар</a></li>
+          <li><a href="#focus">Фокус</a></li>
+          <li><a href="#analytics">Аналітика</a></li>
+          <li><a href="#settings">Налаштування</a></li>
+        </ul>
+      </nav>
+    </header>
 
-  <header>
-    <h1>Смарт-бот / Органайзер студентів</h1>
-    <nav>
-      <ul>
-        <li><a href="#tasks">Завдання</a></li>
-        <li><a href="#calendar">Календар</a></li>
-        <li><a href="#focus">Фокус</a></li>
-        <li><a href="#analytics">Аналітика</a></li>
-        <li><a href="#settings">Налаштування</a></li>
-      </ul>
-    </nav>
-  </header>
+    <main>
+      <section id="tasks">
+        <h2>Завдання</h2>
 
-  <main>
-    <section id="testing">
-      <h2>Тестування зв'язку</h2>
-      <p>Ця кнопка надішле тестове повідомлення на ваш локальний Flask-сервер через ngrok.</p>
-      <button id="test-flask-btn">Надіслати тестове повідомлення</button>
-      <p id="flask-status" style="margin-top: 10px; font-weight: bold;"></p>
-    </section>
+        <form
+          id="add-task-form"
+          style="display: flex; gap: 10px; margin-bottom: 1rem"
+        >
+          <input
+            type="text"
+            id="new-task-input"
+            placeholder="Назва нового завдання..."
+            style="
+              flex-grow: 1;
+              padding: 0.5rem;
+              border-radius: 8px;
+              border: 1px solid #ccc;
+            "
+          />
+          <button type="submit">Додати</button>
+        </form>
 
+        <div id="task-list"></div>
+        <button id="add-task-btn">+ Додати завдання (у бот)</button>
+        <p id="add-task-status" style="margin-top: 10px; font-weight: bold"></p>
+      </section>
 
+      <section id="calendar">
+        <h2>Календар</h2>
+        <p>Розклад занять і інтеграція з Google Calendar</p>
+        <div class="calendar-mockup">
+          <p>📅 Всі події з календаря керуються через бота.</p>
+        </div>
+      </section>
 
-  <section id="tasks">
-    <h2>Завдання</h2>
-    
-    <form id="add-task-form" style="display: flex; gap: 10px; margin-bottom: 1rem;">
-      <input type="text" id="new-task-input" placeholder="Назва нового завдання..." style="flex-grow: 1; padding: 0.5rem; border-radius: 8px; border: 1px solid #ccc;">
-      <button type="submit">Додати</button>
-    </form>
-    
-    <div id="task-list"></div>
-    <button id="add-task-btn">+ Додати завдання (у бот)</button>
-    <p id="add-task-status" style="margin-top: 10px; font-weight: bold;"></p>
-  </section>
+      <section id="focus">
+        <h2>Режим концентрації</h2>
+        <p>Запусти таймер і сконцентруйся на навчанні</p>
+        <div
+          id="timer-display"
+          style="font-size: 3rem; margin: 1rem; font-weight: bold"
+        >
+          25:00
+        </div>
+        <button id="start-btn">▶️ Почати</button>
+        <button id="pause-btn">⏸️ Пауза</button>
+        <button id="stop-btn">⏹️ Стоп</button>
+      </section>
 
-    <section id="calendar">
-      <h2>Календар</h2>
-      <p>Розклад занять і інтеграція з Google Calendar</p>
-      <div class="calendar-mockup">
-        <p>📅 Всі події з календаря керуються через бота.</p>
-      </div>
-    </section>
+      <section id="analytics">
+        <h2>Аналітика</h2>
+        <p>Звіти та мотивація</p>
+        <div class="progress-bar">
+          <div id="progress-fill" class="progress" style="width: 0%">0%</div>
+        </div>
+        <p id="progress-text">Виконано 0 з 0 завдань</p>
+      </section>
 
-    <section id="focus">
-      <h2>Режим концентрації</h2>
-      <p>Запусти таймер і сконцентруйся на навчанні</p>
-      <div id="timer-display" style="font-size: 3rem; margin: 1rem; font-weight: bold;">25:00</div>
-      <button id="start-btn">▶️ Почати</button>
-      <button id="pause-btn">⏸️ Пауза</button>
-      <button id="stop-btn">⏹️ Стоп</button>
-    </section>
+      <section id="settings">
+        <h2>Налаштування</h2>
+        <form>
+          <label
+            >Тема:
+            <select id="theme-select">
+              <option value="light">Світла</option>
+              <option value="dark">Темна</option>
+            </select>
+          </label>
+          <br />
+          <label
+            >Нагадування: <input type="checkbox" id="push-cb" /> Push
+            <input type="checkbox" id="telegram-cb" /> Telegram
+            <input type="checkbox" id="email-cb" /> Email
+          </label>
+          <br />
+          <label>
+            Режим розробника:
+            <button type="button" id="dev-mode-btn">Увімкнути</button>
+          </label>
+        </form>
+      </section>
+    </main>
 
-    <section id="analytics">
-      <h2>Аналітика</h2>
-      <p>Звіти та мотивація</p>
-      <div class="progress-bar">
-        <div id="progress-fill" class="progress" style="width: 0%;">0%</div>
-      </div>
-      <p id="progress-text">Виконано 0 з 0 завдань</p>
-    </section>
+    <footer>
+      <p>© 2025 Смарт-бот для студентів</p>
+    </footer>
 
-    <section id="settings">
-      <h2>Налаштування</h2>
-      <form>
-        <label>Тема:
-          <select id="theme-select">
-            <option value="light">Світла</option>
-            <option value="dark">Темна</option>
-          </select>
-        </label>
-        <br>
-        <label>Нагадування:
-          <input type="checkbox" id="push-cb"> Push
-          <input type="checkbox" id="telegram-cb"> Telegram
-          <input type="checkbox" id="email-cb"> Email
-        </label>
-        <br>
-        <label>
-          Режим розробника:
-          <button type="button" id="dev-mode-btn">Увімкнути</button>
-        </label>
-      </form>
-    </section>
-  </main>
-
-  <footer>
-    <p>© 2025 Смарт-бот для студентів</p>
-  </footer>
-  
-  <script src="https://telegram.org/js/telegram-web-app.js"></script>
-  <script src="script.js"></script>
-</body>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <script src="script.js"></script>
+  </body>
 </html>
-
