@@ -66,6 +66,7 @@
       <p>Виконано 7 з 10 завдань</p>
     </section>
 
+
     <section id="settings">
       <h2>Налаштування</h2>
       <form>
@@ -77,12 +78,17 @@
         </label>
         <br>
         <label>Нагадування:
-          <input type="checkbox" checked> Push
-          <input type="checkbox"> Telegram
-          <input type="checkbox"> Email
+          <input type="checkbox" id="push-cb"> Push
+          <input type="checkbox" id="telegram-cb"> Telegram
+          <input type="checkbox" id="email-cb"> Email
+        </label>
+        <br>
+        <label>
+          Режим розробника:
+          <button type="button" id="dev-mode-btn" onclick="window.location.href='developomde.html'">Увімкнути</button>
         </label>
       </form>
-    </section>
+    </section> 
   </main>
 
   <footer>
