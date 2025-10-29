@@ -1,20 +1,22 @@
 document.addEventListener("DOMContentLoaded", () => {
   // ===== Отримання та збереження backendUrl =====
-  function getBackendUrl() {
-    // Спробуємо отримати URL з параметрів
-    let url = new URLSearchParams(window.location.search).get("backendUrl");
-    // Якщо немає в URL, спробуємо взяти з localStorage
-    if (!url) {
-      url = localStorage.getItem('backendUrl');
-    }
-    // Якщо знайшли в URL, зберігаємо в localStorage
-    else {
-      localStorage.setItem('backendUrl', url);
-    }
-    return url;
-  }
+  // function getBackendUrl() {
+  //   // Спробуємо отримати URL з параметрів
+  //   let url = new URLSearchParams(window.location.search).get("backendUrl");
+  //   // Якщо немає в URL, спробуємо взяти з localStorage
+  //   if (!url) {
+  //     url = localStorage.getItem('backendUrl');
+  //   }
+  //   // Якщо знайшли в URL, зберігаємо в localStorage
+  //   else {
+  //     localStorage.setItem('backendUrl', url);
+  //   }
+  //   return url;
+  // }
 
-  const backendUrl = getBackendUrl();
+  // const backendUrl = getBackendUrl();
+  // const backendUrl = process.env.backendUrl;
+  const backendUrl = "https://notificationtgbotheavyapikitchen-production.up.railway.app/"
 
   // ===== Перемикач тем =====
   const themeSelect = document.getElementById("theme-select");
