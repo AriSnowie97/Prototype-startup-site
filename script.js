@@ -67,6 +67,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // --- Отримуємо елементи для відображення статусу ---
   const testFlaskBtn = document.getElementById("test-flask-btn");
   const flaskStatus = document.getElementById("flask-status");
+  
   const addTaskViaFlaskButton = document.getElementById("add-task-btn");
   const addTaskStatus = document.getElementById("add-task-status");
 
