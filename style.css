@@ -110,9 +110,9 @@ button:active {
   text-align: center;
   font-size: 0.9rem;
   font-weight: bold;
-  width: 65%; /* приклад заповненості */
+  min-width: 3.5rem; /* <-- ДОДАНО: Мінімальна ширина для тексту */
+  /* width: 65%; <-- ВИДАЛЕНО: Цим керує JavaScript */
 }
-
 /* ===== Стилізація селекта ===== */
 select {
   appearance: none;
@@ -186,4 +186,41 @@ footer {
     width: 90%; /* Кнопки займають більшу частину ширини */
     box-sizing: border-box; /* Щоб padding не впливав на ширину */
   }
+}
+/* Адаптація Bootstrap під наш "Глассморфізм" */
+
+/* Робимо поля вводу "скляними" */
+.form-control {
+  background: rgba(255, 255, 255, 0.25) !important;
+  border: 1px solid rgba(255, 255, 255, 0.4) !important;
+  border-radius: 12px !important;
+  color: #1f3b73 !important;
+  backdrop-filter: blur(5px);
+  box-shadow: 4px 4px 10px rgba(0,0,0,0.1),
+              -4px -4px 10px rgba(255,255,255,0.6) !important;
+}
+
+.form-control::placeholder {
+  color: #1f3b73;
+  opacity: 0.7;
+}
+
+.form-control:focus {
+  background: rgba(255, 255, 255, 0.45) !important;
+  box-shadow: 6px 6px 15px rgba(0,0,0,0.15),
+              -6px -6px 15px rgba(255,255,255,0.8) !important;
+}
+
+/* Перестилізуємо кнопку (беремо стилі з твого 'button') */
+.input-group .btn {
+  /* Копіюємо стилі з твого 'button' */
+  background: rgba(255,255,255,0.35);
+  border: 1px solid rgba(255,255,255,0.5);
+  border-radius: 12px !important; /* !important потрібен, бо Bootstrap дуже впертий */
+  color: #1f3b73;
+  font-weight: bold;
+  box-shadow: 4px 4px 10px rgba(0,0,0,0.15),
+              -4px -4px 10px rgba(255,255,255,0.6);
+  transition: all 0.3s ease;
+  margin-left: 10px; /* Дамо трохи відступу, який був у 'gap' */
 }
