@@ -224,3 +224,50 @@ footer {
   transition: all 0.3s ease;
   margin-left: 10px; /* Дамо трохи відступу, який був у 'gap' */
 }
+/* ===================
+   СТИЛІ ДЛЯ КАЛЕНДАРЯ
+   =================== */
+
+/* Контейнер для сітки (дні тижня + дні місяця) */
+.calendar-grid {
+  display: grid;
+  /* 7 колонок однакової ширини */
+  grid-template-columns: repeat(7, 1fr); 
+  gap: 5px; /* Невеликий відступ між осередками */
+}
+
+/* Стилізація заголовків (Пн, Вт, Ср...) */
+#calendar-header div {
+  font-weight: bold;
+  padding: 0.5rem;
+  text-align: center;
+  opacity: 0.7;
+}
+
+/* Стилізація осередків з днями */
+#calendar-grid .calendar-day {
+  padding: 0.5rem;
+  min-height: 80px; /* Мінімальна висота, щоб було куди клікати */
+  text-align: left;
+  font-weight: bold;
+  
+  /* Адаптивний "скляний" фон для осередку */
+  background: rgba(255, 255, 255, 0.1); 
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+/* Ефект при наведенні */
+#calendar-grid .calendar-day:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+/* Стиль для днів, що не входять в поточний місяць (зробимо їх тьмяними) */
+#calendar-grid .other-month {
+  opacity: 0.4;
+  background: transparent;
+  border: none;
+  cursor: default;
+}

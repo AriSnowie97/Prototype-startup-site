@@ -54,12 +54,65 @@
       </section>
 
       <section id="calendar">
-        <h2>Календар</h2>
-        <p>Розклад занять і інтеграція з Google Calendar</p>
-        <div class="calendar-mockup">
-          <p>📅 Приклад тижня: Пн - Ср - Пт заняття</p>
-        </div>
-      </section>
+  <h2>Календар</h2>
+
+  <div id="calendar-controls" class="d-flex justify-content-between align-items-center mb-3 p-2" style="background: rgba(0,0,0,0.05); border-radius: 12px;">
+    <button id="prev-month-btn" title="Попередній місяць">&lt;</button>
+    
+    <h3 id="month-year-display" class="mb-0 mx-3" style="color: inherit; font-weight: bold;"></h3>
+    
+    <button id="next-month-btn" title="Наступний місяць">&gt;</button>
+  </div>
+
+  <div id="calendar-container">
+    <div id="calendar-header" class="calendar-grid">
+      <div>Пн</div>
+      <div>Вт</div>
+      <div>Ср</div>
+      <div>Чт</div>
+      <div>Пт</div>
+      <div>Сб</div>
+      <div>Нд</div>
+    </div>
+    <div id="calendar-grid" class="calendar-grid">
+      </div>
+  </div>
+  
+  <button id="add-event-btn" class="mt-3" data-bs-toggle="modal" data-bs-target="#addEventModal">
+    + Додати подію
+  </button>
+
+</section>
+<div class="modal fade" id="addEventModal" tabindex="-1" aria-labelledby="addEventModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="addEventModalLabel">Додати нову подію</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form id="add-event-form">
+          <div class="mb-3">
+            <label for="event-title" class="form-label">Назва події:</label>
+            <input type="text" class="form-control" id="event-title" placeholder="Наприклад, 'Лабораторна з програмування'" required>
+          </div>
+          <div class="mb-3">
+            <label for="event-date" class="form-label">Дата:</label>
+            <input type="date" class="form-control" id="event-date" required>
+          </div>
+          <div class="mb-3">
+            <label for="event-time" class="form-label">Час (необов'язково):</label>
+            <input type="time" class="form-control" id="event-time">
+          </div>
+          </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрити</button>
+        <button type="button" id="save-event-btn" class="btn btn-primary">Зберегти</button>
+      </div>
+    </div>
+  </div>
+</div>
 
       <section id="focus">
         <h2>Режим концентрації</h2>
