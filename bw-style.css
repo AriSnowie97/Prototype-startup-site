@@ -195,7 +195,7 @@ footer {
 /* Адаптація Bootstrap під наш "Глассморфізм" */
 
 /* Робимо поля вводу "скляними" */
-.form-control {
+body .form-control {
   background: rgba(255, 255, 255, 0.5) !important;
   border: 1px solid rgba(0, 0, 0, 0.2) !important;
   border-radius: 12px !important;
@@ -303,7 +303,7 @@ footer {
 }
 
 /* Стилі для модального вікна Bootstrap */
-.modal-content {
+body .modal-content {
   background: rgba(255, 255, 255, 0.8);
   backdrop-filter: blur(10px);
   border: 1px solid rgba(0,0,0,0.2);
@@ -315,11 +315,11 @@ footer {
   border-bottom: 1px solid rgba(0,0,0,0.1);
 }
 
-.modal-footer {
+body .modal-footer {
   border-top: 1px solid rgba(0,0,0,0.1);
 }
 
 /* Адаптуємо кнопку закриття */
-.btn-close {
+body .btn-close {
   filter: invert(0) brightness(1);
 }

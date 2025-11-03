@@ -185,7 +185,7 @@ footer {
 /* Адаптація Bootstrap під наш "Глассморфізм" */
 
 /* Робимо поля вводу "скляними" */
-.form-control {
+body .form-control {
   background: rgba(255, 255, 255, 0.25) !important;
   border: 1px solid rgba(255, 255, 255, 0.4) !important;
   border-radius: 12px !important;
