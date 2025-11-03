@@ -45,8 +45,8 @@ header nav ul li a:hover {
 
 /* ===== Секції (темний глазморфізм) ===== */
 main section {
-  margin: 1rem 0.5rem; /* 1rem зверху/знизу, 0.5rem з боків */
-  padding: 1.5rem 1rem; /* 1.5rem зверху/знизу, 1rem з боків */
+  margin: 2rem auto;
+  padding: 2rem;
   max-width: 800px;
   border-radius: 20px;
   background: rgba(20, 30, 70, 0.6); /* прозрачный темно-синий */
@@ -185,10 +185,9 @@ footer {
 	}
   
   main section {
-    margin: 1rem;
-    padding: 1.5rem;
+    margin: 1rem 0.5rem; /* 1rem зверху/знизу, 0.5rem з боків */
+    padding: 1.5rem 1rem; /* 1.5rem зверху/знизу, 1rem з боків */
   }
-
   button, select {
     padding: 0.7rem 1.2rem;
     width: 90%;
