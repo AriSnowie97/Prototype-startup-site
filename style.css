@@ -381,6 +381,7 @@ footer {
 
 /* Стилізація осередків з днями */
 #calendar-grid .calendar-day {
+position: relative; /* <-- ДОДАЙ ЦЕЙ РЯДОК */
   padding: 0.5rem;
   min-height: 80px; /* Мінімальна висота, щоб було куди клікати */
   text-align: left;
@@ -411,4 +412,16 @@ footer {
   background: rgba(255, 255, 255, 0.45);
   border: 2px solid #1f3b73;
   box-shadow: 0 0 10px rgba(74, 144, 226, 0.5);
+}
+/* Стиль для зайнятої дати (точка) */
+#calendar-grid .calendar-day.busy-day::after {
+  content: '';
+  position: absolute;
+  bottom: 8px; /* Відступ знизу */
+  left: 50%; /* Центрування по горизонталі */
+  transform: translateX(-50%);
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: #1f3b73; /* Головний колір теми */
 }

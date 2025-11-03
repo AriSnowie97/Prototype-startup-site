@@ -273,6 +273,7 @@ body .form-control {
 
 /* Стилізація осередків з днями */
 #calendar-grid .calendar-day {
+position: relative; /* <-- ДОДАЙ ЦЕЙ РЯДОК */
   padding: 0.5rem;
   min-height: 80px; /* Мінімальна висота, щоб було куди клікати */
   text-align: left;
@@ -304,6 +305,18 @@ body .form-control {
   background: rgba(255, 255, 255, 0.45);
   border: 2px solid #0a5c2a;
   box-shadow: 0 0 10px rgba(30, 100, 50, 0.5);
+}
+/* Стиль для зайнятої дати (точка) */
+#calendar-grid .calendar-day.busy-day::after {
+  content: '';
+  position: absolute;
+  bottom: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: #0a5c2a; /* Головний колір теми */
 }
 
 /* Стилі для модального вікна Bootstrap */
