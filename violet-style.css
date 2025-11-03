@@ -298,6 +298,12 @@ body .form-control {
   border: none;
   cursor: default;
 }
+/* Стиль для поточної дати */
+#calendar-grid .calendar-day.today {
+  background: rgba(255, 255, 255, 0.45);
+  border: 2px solid #5c1fa3;
+  box-shadow: 0 0 10px rgba(136, 74, 226, 0.5);
+}
 /* ===================
    ЦЕНТРУВАННЯ НАЛАШТУВАНЬ
    =================== */

@@ -295,6 +295,12 @@ body .input-group .btn {
   border: none;
   cursor: default;
 }
+/* Стиль для поточної дати */
+#calendar-grid .calendar-day.today {
+  background: rgba(255, 255, 255, 0.15);
+  border: 2px solid #88c0d0;
+  box-shadow: 0 0 10px rgba(136, 192, 208, 0.5);
+}
 
 /* =========================================
    Стилі для модального вікна Bootstrap (ДОДАНО)
