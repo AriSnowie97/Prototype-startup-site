@@ -45,8 +45,8 @@ header nav ul li a:hover {
 
 /* ===== Секції (оновлений глазморфізм) ===== */
 main section {
-  margin: 2rem auto;
-  padding: 2rem;
+  margin: 1rem 0.5rem; /* 1rem зверху/знизу, 0.5rem з боків */
+  padding: 1.5rem 1rem; /* 1.5rem зверху/знизу, 1rem з боків */
   max-width: 800px;
   border-radius: 20px;
   background: rgba(255, 255, 255, 0.25); /* прозорий білий */
