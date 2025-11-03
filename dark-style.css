@@ -1,9 +1,14 @@
+/* ===================
+   dark-style.css (ТЕМНА ТЕМА - ВИПРАВЛЕНА)
+   =================== */
+
 /* ===== Базові стилі (темно-синя тема) ===== */
 body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   margin: 0;
   background: linear-gradient(135deg, #0d1b3d, #1a2a5c); /* темно-синий градиент */
   color: #e0e0e0;
+  overflow-x: hidden; /* <-- ВИПРАВЛЕННЯ: "білий кут" */
 }
 
 /* ===== Хедер ===== */
@@ -91,8 +96,6 @@ button:active {
 }
 
 /* ===== Прогрес-бар ===== */
-/* Зміни ці назви у dark-style.css */
-
 .custom-progress-track {
   width: 100%;
   background: rgba(60,80,140,0.5);
@@ -107,16 +110,16 @@ button:active {
 .custom-progress-fill {
   background: linear-gradient(90deg, #5e81ac, #88c0d0);
   color: white;
-  padding: 0.3rem;
+  /* padding: 0.3rem; (Прибрано для flex-центрування) */
   border-radius: 12px 0 0 12px;
-  text-align: center;
+  /* text-align: center; (Прибрано для flex-центрування) */
   font-size: 0.9rem;
   font-weight: bold;
   min-width: 3.5rem; 
   display: flex;
   align-items: center; /* Центрування по вертикалі */
   justify-content: center; /* Центрування по горизонталі */
-height: 100%; /* Змушуємо зайняти всю висоту батька (25px) */
+  height: 100%; /* Змушуємо зайняти всю висоту батька (25px) */
 }
 
 /* ===== Стилізація селекта ===== */
@@ -180,47 +183,130 @@ footer {
   header nav ul {
     flex-direction: column; /* Ставимо посилання в стовпчик */
 	}
+  
+  main section {
+    margin: 1rem;
+    padding: 1.5rem;
+  }
 
+  button, select {
+    padding: 0.7rem 1.2rem;
+    width: 90%;
+    box-sizing: border-box;
+  }
 }
-/* Адаптація Bootstrap під наш "Глассморфізм" */
+/* ========================================================
+   Адаптація Bootstrap під наш "Глассморфізм" (ВИПРАВЛЕНО)
+   ======================================================== */
 
 /* Робимо поля вводу "скляними" */
 body .form-control {
-  background: rgba(255, 255, 255, 0.25) !important;
-  border: 1px solid rgba(255, 255, 255, 0.4) !important;
+  background: rgba(40,60,120,0.6) !important;
+  border: 1px solid rgba(255,255,255,0.2) !important;
   border-radius: 12px !important;
-  color: #1f3b73 !important;
+  color: #e0e0e0 !important;
   backdrop-filter: blur(5px);
-  box-shadow: 4px 4px 10px rgba(0,0,0,0.1),
-              -4px -4px 10px rgba(255,255,255,0.6) !important;
+  box-shadow: 4px 4px 10px rgba(0,0,0,0.4),
+              -4px -4px 10px rgba(100,120,180,0.2) !important;
 }
 
-.form-control::placeholder {
-  color: #1f3b73;
+body .form-control::placeholder {
+  color: #e0e0e0;
   opacity: 0.7;
 }
 
-.form-control:focus {
-  background: rgba(255, 255, 255, 0.45) !important;
-  box-shadow: 6px 6px 15px rgba(0,0,0,0.15),
-              -6px -6px 15px rgba(255,255,255,0.8) !important;
+body .form-control:focus {
+  background: rgba(70,90,160,0.9) !important;
+  box-shadow: inset 2px 2px 5px rgba(0,0,0,0.5),
+              inset -2px -2px 5px rgba(120,140,200,0.2) !important;
 }
 
 /* Перестилізуємо кнопку (беремо стилі з твого 'button') */
-.input-group .btn {
+body .input-group .btn {
   /* Копіюємо стилі з твого 'button' */
-  background: rgba(255,255,255,0.35);
-  border: 1px solid rgba(255,255,255,0.5);
-  border-radius: 12px !important; /* !important потрібен, бо Bootstrap дуже впертий */
-  color: #1f3b73;
+  background: rgba(60,80,140,0.7);
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 12px !important; 
+  color: #e0e0e0;
   font-weight: bold;
-  box-shadow: 4px 4px 10px rgba(0,0,0,0.15),
-              -4px -4px 10px rgba(255,255,255,0.6);
+  box-shadow: 4px 4px 10px rgba(0,0,0,0.6),
+              -4px -4px 10px rgba(100,120,180,0.2);
   transition: all 0.3s ease;
   margin-left: 10px; /* Дамо трохи відступу, який був у 'gap' */
 }
+
 /* ===================
-   ЦЕНТРУВАННЯ НАЛАШТУВАНЬ
+   СТИЛІ ДЛЯ КАЛЕНДАРЯ (ДОДАНО)
+   =================== */
+
+/* Контейнер для сітки (дні тижня + дні місяця) */
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr); 
+  gap: 5px;
+}
+
+#calendar-header div {
+  font-weight: bold;
+  padding: 0.5rem;
+  text-align: center;
+  opacity: 0.7;
+}
+
+#calendar-grid .calendar-day {
+  padding: 0.5rem;
+  min-height: 80px;
+  text-align: left;
+  font-weight: bold;
+  background: rgba(255, 255, 255, 0.05); /* Дуже прозорий білий */
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+#calendar-grid .calendar-day:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+#calendar-grid .other-month {
+  opacity: 0.4;
+  background: transparent;
+  border: none;
+  cursor: default;
+}
+
+/* =========================================
+   Стилі для модального вікна Bootstrap (ДОДАНО)
+   ========================================= */
+body .modal-content {
+  background: rgba(20, 30, 70, 0.8);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 12px;
+  color: #e0e0e0;
+}
+
+body .modal-header {
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+
+body .modal-footer {
+  border-top: 1px solid rgba(255,255,255,0.1);
+}
+
+/* Адаптуємо кнопку закриття (Універсальний фікс) */
+body .btn-close {
+  filter: brightness(0) invert(1) !important;
+  opacity: 0.7 !important; 
+}
+
+body .btn-close:hover {
+  opacity: 1 !important;
+}
+
+/* ===================
+   ЦЕНТРУВАННЯ НАЛАШТУВАНЬ (вже було, але хай буде в кінці)
    =================== */
 
 #settings form {
