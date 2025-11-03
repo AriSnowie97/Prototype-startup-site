@@ -1,5 +1,5 @@
 ﻿// ==========================================================
-//           ПОВНИЙ SCRIPT.JS (з завантаженням подій)
+//           ПОВНИЙ SCRIPT.JS (з часом закінчення)
 // ==========================================================
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -8,7 +8,7 @@ document.addEventListener("DOMContentLoaded", () => {
     "https://notificationtgbotheavyapikitchen-production.up.railway.app/";
 
   // ===================================================================
-  // ===== 1. ПЕРЕМИКАЧ ТЕМ (ОНОВЛЕНА ЛОГІКА) =====
+  // ===== 1. ПЕРЕМИКАЧ ТЕМ (з localStorage) =====
   // ===================================================================
   const themeSelect = document.getElementById("theme-select");
   const themeLink = document.getElementById("theme-link");
@@ -104,7 +104,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
   /**
    * ✅ ГОЛОВНА ФУНКЦІЯ для відправки будь-яких запитів на бекенд.
-   * (Використовується і для календаря, і для завдань)
    */
   async function sendApiRequest(
     endpoint,
@@ -132,8 +131,11 @@ document.addEventListener("DOMContentLoaded", () => {
       const apiUrl = `${backendUrl}${endpoint}`;
       const body = { ...payload, userId };
 
-      // tg.showAlert(`Відправляємо запит: ${endpoint}`); // (Можна розкоментувати для дебагу)
+      // const alertMessage = `...`; // ДЕБАГ-АЛЕРТ ВИМКНЕНО
 
+      // Показуємо нативний алерт Telegram
+      // tg.showAlert(alertMessage); // <--- ВИМКНЕНО
+      
       const response = await fetch(apiUrl, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -248,20 +250,25 @@ document.addEventListener("DOMContentLoaded", () => {
     const addEventModalEl = document.getElementById("addEventModal");
     const addEventModal = new bootstrap.Modal(addEventModalEl);
     const saveEventBtn = document.getElementById("save-event-btn");
+    
+    // Елементи форми
     const eventTitleInput = document.getElementById("event-title");
     const eventDateInput = document.getElementById("event-date");
     const eventTimeInput = document.getElementById("event-time");
+    // === ДОДАНО ===
+    const eventEndTimeInput = document.getElementById("event-end-time");
+    const allDayCheckbox = document.getElementById("all-day-checkbox");
+    // === КІНЕЦЬ ===
+    
     const calendarStatus = document.getElementById("add-task-status");
-
     let currentDate = new Date();
 
     /**
-     * 3. (ОНОВЛЕНО) Головна функція рендеру (малювання) календаря
-     * Тепер вона АСИНХРОННА, щоб чекати на дані з бекенду
+     * 3. Головна функція рендеру (малювання) календаря
      */
     async function renderCalendar() {
       const year = currentDate.getFullYear();
-      const month = currentDate.getMonth(); // 0-11
+      const month = currentDate.getMonth(); 
 
       const monthName = new Date(year, month).toLocaleString("uk-UA", {
         month: "long",
@@ -270,10 +277,7 @@ document.addEventListener("DOMContentLoaded", () => {
         monthName.charAt(0).toUpperCase() + monthName.slice(1)
       } ${year}`;
       
-      // === ДОДАНО: Завантажуємо дані ПЕРЕД малюванням ===
-      // (month + 1) тому що month 0-11, а нам треба 1-12
       const busyDates = await fetchEventDates(year, month + 1);
-      // === КІНЕЦЬ ===
 
       calendarGrid.innerHTML = "";
 
@@ -304,7 +308,7 @@ document.addEventListener("DOMContentLoaded", () => {
         dayCell.textContent = day;
 
         const cellDate = new Date(year, month, day);
-        cellDate.setHours(0, 0, 0, 0);
+        cellDate.setHours(0, 0, 0, 0); 
 
         if (cellDate.getTime() === realToday.getTime()) {
           dayCell.classList.add("today");
@@ -316,12 +320,9 @@ document.addEventListener("DOMContentLoaded", () => {
         )}-${String(day).padStart(2, "0")}`;
         dayCell.dataset.date = cellDateISO;
         
-        // === ДОДАНО: Перевірка на "зайнятість" ===
-        // busyDates - це масив, який ми завантажили, напр. ["2025-11-20", "2025-11-25"]
         if (busyDates.includes(cellDateISO)) {
           dayCell.classList.add("busy-day");
         }
-        // === КІНЕЦЬ ===
 
         dayCell.addEventListener("click", () => {
           openAddEventModal(cellDateISO);
@@ -332,53 +333,80 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     /**
-     * 4. Функція відкриття модалки (без змін)
+     * 4. (ОНОВЛЕНО) Функція відкриття модалки
      */
     function openAddEventModal(date) {
       document.getElementById("add-event-form").reset();
       eventDateInput.value = date;
+      
+      // === ДОДАНО: Сброс блокировки полей ===
+      eventTimeInput.disabled = false;
+      eventEndTimeInput.disabled = false;
+      // === КІНЕЦЬ ===
+      
       addEventModal.show();
     }
+    
+    /**
+     * (НОВА) Логіка для чекбокса "На весь день"
+     */
+    allDayCheckbox.addEventListener('change', () => {
+      if (allDayCheckbox.checked) {
+        eventTimeInput.disabled = true;
+        eventEndTimeInput.disabled = true;
+        eventTimeInput.value = '';
+        eventEndTimeInput.value = '';
+      } else {
+        eventTimeInput.disabled = false;
+        eventEndTimeInput.disabled = false;
+      }
+    });
+
 
     /**
-     * 5. (ОНОВЛЕНО) Обробники кнопок "вперед/назад"
-     * Тепер АСИНХРОННІ, щоб чекати на renderCalendar()
+     * 5. Обробники кнопок "вперед/назад"
      */
     prevMonthBtn.addEventListener("click", async () => {
       currentDate.setDate(1);
       currentDate.setMonth(currentDate.getMonth() - 1);
-      await renderCalendar(); // Чекаємо, поки новий місяць завантажиться
+      await renderCalendar(); 
     });
 
     nextMonthBtn.addEventListener("click", async () => {
       currentDate.setDate(1);
       currentDate.setMonth(currentDate.getMonth() + 1);
-      await renderCalendar(); // Чекаємо, поки новий місяць завантажиться
+      await renderCalendar(); 
     });
 
     /**
-     * 6. (ОНОВЛЕНО) Обробник кнопки "Зберегти"
-     * Тепер він також викликає renderCalendar(), щоб точка з'явилася одразу
+     * 6. (ОНОВЛЕНО) Обробник кнопки "Зберегти" в модалці
      */
-    saveEventBtn.addEventListener("click", async () => { // <--- ЗМІНА: async
+    saveEventBtn.addEventListener("click", async () => { 
       const title = eventTitleInput.value;
       const date = eventDateInput.value;
+      
+      // === НОВІ ЗМІННІ ===
       const time = eventTimeInput.value;
+      const endTime = eventEndTimeInput.value;
+      const isAllDay = allDayCheckbox.checked;
+      // === КІНЕЦЬ ===
 
       if (!title || !date) {
         tg.showAlert("Будь ласка, заповніть назву події та дату.");
         return;
       }
 
+      // === ОНОВЛЕНИЙ PAYLOAD ===
       const payload = {
         title: title,
         date: date,
-        time: time || null, 
+        time: isAllDay ? null : (time || null),
+        end_time: isAllDay ? null : (endTime || null), // Нове поле
+        all_day: isAllDay // Нове поле
       };
+      // === КІНЕЦЬ ===
 
-      // (Використовуємо стару функцію sendApiRequest, вона синхронна)
-      // Вона просто покаже "Успіх", але ми не будемо її чекати
-       sendApiRequest(
+      sendApiRequest(
         "/add_event",
         payload,
         calendarStatus,
@@ -387,21 +415,18 @@ document.addEventListener("DOMContentLoaded", () => {
       
       addEventModal.hide();
       
-      // === ДОДАНО: Оновлюємо календар, щоб одразу побачити точку ===
+      // Оновлюємо календар, щоб одразу побачити зміни
       await renderCalendar();
     });
     
     /**
      * 7. (НОВА) Функція для завантаження "зайнятих" дат
-     * @param {number} year - Поточний рік (напр. 2025)
-     * @param {number} month - Поточний МІСЯЦЬ (1-12)
-     * @returns {Promise<string[]>} - Масив дат у форматі "YYYY-MM-DD"
      */
     async function fetchEventDates(year, month) {
       const userId = tg.initDataUnsafe?.user?.id;
       if (!backendUrl || !userId) {
         console.warn("Не можу завантажити події: відсутній backendUrl або userId.");
-        return []; // Повертаємо порожній масив, щоб нічого не впало
+        return []; 
       }
 
       const payload = {
@@ -424,7 +449,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const result = await response.json();
         
         if (result.status === 'success' && Array.isArray(result.event_dates)) {
-          return result.event_dates; // Напр. ["2025-11-20", "2025-11-25"]
+          return result.event_dates; 
         } else {
           throw new Error(result.message || 'Неправильний формат відповіді');
         }
@@ -432,10 +457,9 @@ document.addEventListener("DOMContentLoaded", () => {
       } catch (error) {
         console.error("Помилка fetchEventDates:", error);
         tg.showAlert(`Не вдалося завантажити події: ${error.message}`);
-        return []; // Важливо повернути масив, щоб .includes() не впав
+        return []; 
       }
     }
-
 
     // 8. Перший запуск
     renderCalendar();
@@ -445,7 +469,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // ==================================================
 
   // ===================================================================
-  // ===== 2. ЗАВДАННЯ ТА АНАЛІТИКА (ВИПРАВЛЕНО) =====
+  // ===== 2. ЗАВДАННЯ ТА АНАЛІТИКА (з кирилицею) =====
   // ===================================================================
   
   const taskListContainer = document.querySelector("#tasks ul"); 
@@ -456,7 +480,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const addTaskForm = document.getElementById('add-task-form');
     const newTaskInput = document.getElementById('new-task-input');
 
-    // Цей масив тепер буде керувати твоїм списком завдань
     let tasks = [
       { text: "Практична з математики", done: true },
       { text: "Реферат з історії", done: false },
@@ -485,7 +508,7 @@ document.addEventListener("DOMContentLoaded", () => {
         checkbox.style.marginRight = "10px";
         checkbox.addEventListener("change", () => {
           tasks[index].done = checkbox.checked;
-          renderTasks(); // Перемалювати все
+          renderTasks();
         });
 
         li.appendChild(checkbox);
@@ -514,7 +537,6 @@ document.addEventListener("DOMContentLoaded", () => {
         progressFill.textContent = `${percentage}%`;
       }
       if (progressText) {
-        // === ВИПРАВЛЕНО: Кириллица ===
         progressText.textContent = `Виконано ${completedTasks} з ${totalTasks} завдань`;
       }
     }

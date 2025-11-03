@@ -83,19 +83,31 @@
             </div>
             <div class="modal-body">
               <form id="add-event-form">
-                <div class="mb-3">
-                  <label for="event-title" class="form-label">Назва події:</label>
-                  <input type="text" class="form-control" id="event-title" placeholder="Наприклад, 'Лабораторна з програмування'" required>
-                </div>
-                <div class="mb-3">
-                  <label for="event-date" class="form-label">Дата:</label>
-                  <input type="date" class="form-control" id="event-date" required>
-                </div>
-                <div class="mb-3">
-                  <label for="event-time" class="form-label">Час (необов'язково):</label>
-                  <input type="time" class="form-control" id="event-time">
-                </div>
-                </form>
+			  <div class="mb-3">
+				<label for="event-title" class="form-label">Назва події:</label>
+				<input type="text" class="form-control" id="event-title" placeholder="Наприклад, 'Лабораторна з програмування'" required>
+			  </div>
+			  <div class="mb-3">
+				<label for="event-date" class="form-label">Дата:</label>
+				<input type="date" class="form-control" id="event-date" required>
+			  </div>
+
+			  <div class="mb-3 form-check">
+				<input type="checkbox" class="form-check-input" id="all-day-checkbox">
+				<label class="form-check-label" for="all-day-checkbox">
+				  На весь день
+				</label>
+			  </div>
+			  <div class="mb-3">
+				<label for="event-time" class="form-label">Час (необов'язково):</label>
+				<input type="time" class="form-control" id="event-time">
+			  </div>
+
+			  <div class="mb-3">
+				<label for="event-end-time" class="form-label">Час закінчення (необов'язково):</label>
+				<input type="time" class="form-control" id="event-end-time">
+			  </div>
+			  </form>
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрити</button>
