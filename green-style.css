@@ -1,0 +1,51 @@
+/* ЗНАЙТИ: */
+background: linear-gradient(135deg, #e0eafc, #cfdef3);
+color: #333;
+/* ЗАМІНИТИ НА: */
+background: linear-gradient(135deg, #E0FCEB, #C5F7D8);
+color: #0d3b1e;
+
+/* ЗНАЙТИ: */
+background: rgba(74, 144, 226, 0.6);
+/* ЗАМІНИТИ НА: */
+background: rgba(30, 100, 50, 0.6);
+
+/* ЗНАЙТИ: */
+color: #1f3b73; /* (це заголовок h2) */
+/* ЗАМІНИТИ НА: */
+color: #0a5c2a;
+
+/* ЗНАЙТИ: */
+color: #1f3b73; /* (це колір тексту кнопки) */
+/* ЗАМІНИТИ НА: */
+color: #0a5c2a;
+
+/* ЗНАЙТИ: */
+background: linear-gradient(90deg, #4a90e2, #1f3b73);
+/* ЗАМІНИТИ НА: */
+background: linear-gradient(90deg, #4ae28a, #1f7340);
+
+/* ЗНАЙТИ: */
+color: #1f3b73; /* (це колір селекта) */
+/* ЗАМІНИТИ НА: */
+color: #0a5c2a;
+
+/* ЗНАЙТИ: */
+color: #1f3b73 !important; /* (це .form-control) */
+/* ЗАМІНИТИ НА: */
+color: #0d3b1e !important;
+
+/* ЗНАЙТИ: */
+color: #1f3b73; /* (це .form-control::placeholder) */
+/* ЗАМІНИТИ НА: */
+color: #0d3b1e;
+
+/* ЗНАЙТИ: */
+color: #1f3b73; /* (це .input-group .btn) */
+/* ЗАМІНИТИ НА: */
+color: #0a5c2a;
+
+/* ЗНАЙТИ: */
+color: #1f3b73; /* (це .modal-content) */
+/* ЗАМІНИТИ НА: */
+color: #0d3b1e;
