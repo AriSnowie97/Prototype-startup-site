@@ -219,3 +219,27 @@ footer {
   transition: all 0.3s ease;
   margin-left: 10px; /* Дамо трохи відступу, який був у 'gap' */
 }
+/* ===================
+   ЦЕНТРУВАННЯ НАЛАШТУВАНЬ
+   =================== */
+
+#settings form {
+  display: flex;
+  flex-direction: column; /* Рядки один під одним */
+  align-items: center; /* Горизонтальне центрування */
+  gap: 1rem; /* Відстань між рядками (замість <br>) */
+  margin-top: 1rem;
+}
+
+#settings form label {
+  /* Робимо сам label "гнучким" */
+  display: flex;
+  flex-direction: row; /* Текст і інпут - в рядок */
+  align-items: center; /* Вертикальне центрування */
+  justify-content: center; /* Горизонтальне центрування */
+  gap: 0.5rem; /* Відстань між текстом ("Тема:") і полем вводу */
+  flex-wrap: wrap; /* Магія адаптивності: 
+                     на вузьких екранах інпут
+                     автоматично перенесеться під текст 
+                   */
+}
