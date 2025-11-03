@@ -16,15 +16,39 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // const backendUrl = getBackendUrl();
   // const backendUrl = process.env.backendUrl;
-  const backendUrl = "https://notificationtgbotheavyapikitchen-production.up.railway.app/"
+  const backendUrl =
+    "https://notificationtgbotheavyapikitchen-production.up.railway.app/";
 
-  // ===== Перемикач тем =====
+  // ===================================================================
+  // ===== 1. ПЕРЕМИКАЧ ТЕМ (ОНОВЛЕНА ЛОГІКА) =====
+  // ===================================================================
   const themeSelect = document.getElementById("theme-select");
   const themeLink = document.getElementById("theme-link");
 
-  themeSelect.addEventListener("change", function () {
-    themeLink.href = this.value === "dark" ? "dark-style.css" : "style.css";
-  });
+  // 1. Завантажуємо збережену тему при завантаженні сторінки
+  const savedThemeFile = localStorage.getItem("themeFile") || "style.css"; // 'style.css' - за замовчуванням
+
+  if (themeLink) {
+    themeLink.href = savedThemeFile;
+  }
+  if (themeSelect) {
+    themeSelect.value = savedThemeFile;
+  }
+
+  // 2. Обробник на зміну <select>
+  if (themeSelect) {
+    themeSelect.addEventListener("change", function () {
+      const selectedThemeFile = this.value;
+      if (themeLink) {
+        themeLink.href = selectedThemeFile;
+        // Зберігаємо вибір в localStorage
+        localStorage.setItem("themeFile", selectedThemeFile);
+      }
+    });
+  }
+  // ===================================================================
+  // ===== КІНЕЦЬ ЛОГІКИ ПЕРЕМИКАЧА ТЕМ =====
+  // ===================================================================
 
   // ===== Інтеграція з Telegram Web App =====
   const tg = window.Telegram.WebApp;
@@ -37,12 +61,14 @@ document.addEventListener("DOMContentLoaded", () => {
   if (devModeBtn) {
     devModeBtn.addEventListener("click", () => {
       // Беремо URL, який ми вже отримали при завантаженні сторінки
-      const currentBackendUrl = backendUrl; 
-      let devPageUrl = 'developomde.html';
+      const currentBackendUrl = backendUrl;
+      let devPageUrl = "developomde.html";
 
       if (currentBackendUrl) {
         // Додаємо URL як параметр
-        devPageUrl = `developomde.html?backendUrl=${encodeURIComponent(currentBackendUrl)}`;
+        devPageUrl = `developomde.html?backendUrl=${encodeURIComponent(
+          currentBackendUrl
+        )}`;
       }
       window.location.href = devPageUrl;
     });
@@ -54,11 +80,13 @@ document.addEventListener("DOMContentLoaded", () => {
     exitDevModeBtn.addEventListener("click", () => {
       // Так само беремо URL, який ми отримали
       const currentBackendUrl = backendUrl;
-      let indexPageUrl = 'index.html';
+      let indexPageUrl = "index.html";
 
       if (currentBackendUrl) {
         // Додаємо URL як параметр при поверненні на index
-        indexPageUrl = `index.html?backendUrl=${encodeURIComponent(currentBackendUrl)}`;
+        indexPageUrl = `index.html?backendUrl=${encodeURIComponent(
+          currentBackendUrl
+        )}`;
       }
       window.location.href = indexPageUrl;
     });
@@ -67,7 +95,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // --- Отримуємо елементи для відображення статусу ---
   const testFlaskBtn = document.getElementById("test-flask-btn");
   const flaskStatus = document.getElementById("flask-status");
-  
+
   const addTaskViaFlaskButton = document.getElementById("add-task-btn");
   const addTaskStatus = document.getElementById("add-task-status");
 
@@ -82,9 +110,14 @@ document.addEventListener("DOMContentLoaded", () => {
       testFlaskBtn.disabled = false;
       testFlaskBtn.addEventListener("click", () => {
         const payload = {
-          message: "Це тестове повідомлення з сайту GitHub Pages!"
+          message: "Це тестове повідомлення з сайту GitHub Pages!",
         };
-        sendApiRequest('/send_message', payload, flaskStatus, "Повідомлення надіслано!");
+        sendApiRequest(
+          "/send_message",
+          payload,
+          flaskStatus,
+          "Повідомлення надіслано!"
+        );
       });
     }
   }
@@ -96,7 +129,12 @@ document.addEventListener("DOMContentLoaded", () => {
    * @param {HTMLElement} statusElement - Елемент для відображення статусу (успіх/помилка).
    * @param {string} successMessage - Повідомлення, яке буде показано у разі успіху.
    */
-  async function sendApiRequest(endpoint, payload, statusElement, successMessage) {
+  async function sendApiRequest(
+    endpoint,
+    payload,
+    statusElement,
+    successMessage
+  ) {
     // Перевіряємо наявність URL бекенду
     if (!backendUrl) {
       statusElement.textContent = "❌ Помилка: URL бекенду не знайдено.";
@@ -118,7 +156,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     try {
       const apiUrl = `${backendUrl}${endpoint}`;
-      
+
       // Формуємо тіло запиту, автоматично додаючи userId до будь-якого payload
       const body = { ...payload, userId };
 
@@ -128,14 +166,14 @@ Endpoint: ${endpoint}
 User ID: ${userId}
 Дані: ${JSON.stringify(payload, null, 2)}
     `;
-    
-    // Показуємо нативний алерт Telegram
-    tg.showAlert(alertMessage);
+
+      // Показуємо нативний алерт Telegram
+      tg.showAlert(alertMessage);
 
       const response = await fetch(apiUrl, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(body)
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body),
       });
 
       const result = await response.json();
@@ -169,264 +207,316 @@ User ID: ${userId}
         if (!taskText || taskText.trim() === "") {
           return;
         }
-        
-        const payload = { 
-          text: taskText.trim() 
+
+        const payload = {
+          text: taskText.trim(),
         };
-        sendApiRequest('/add_task', payload, addTaskStatus, "Завдання успішно додано!");
+        sendApiRequest(
+          "/add_task",
+          payload,
+          addTaskStatus,
+          "Завдання успішно додано!"
+        );
       });
     }
   }
-  
+
   // =======================================================================
   //                 КІНЕЦЬ ЧАСТИНИ, ЩО СТОСУЄТЬСЯ БОТА
   // =======================================================================
 
   // ===== Режим концентрації (Таймер Помодоро) =====
+  // (Запускаємо, тільки якщо ми на index.html)
   const timerDisplay = document.getElementById("timer-display");
-  const startBtn = document.getElementById("start-btn");
-  const pauseBtn = document.getElementById("pause-btn");
-  const stopBtn = document.getElementById("stop-btn");
+  if (timerDisplay) {
+    const startBtn = document.getElementById("start-btn");
+    const pauseBtn = document.getElementById("pause-btn");
+    const stopBtn = document.getElementById("stop-btn");
 
-  let countdown;
-  let timeLeft = 25 * 60; // 25 хвилин
-  let isPaused = true;
+    let countdown;
+    let timeLeft = 25 * 60; // 25 хвилин
+    let isPaused = true;
 
-  function updateTimerDisplay() {
-    const minutes = Math.floor(timeLeft / 60);
-    const seconds = timeLeft % 60;
-    timerDisplay.textContent = `${minutes.toString().padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
-  }
-
-  function startTimer() {
-    if (isPaused) {
-      isPaused = false;
-      countdown = setInterval(() => {
-        timeLeft--;
-        updateTimerDisplay();
-        if (timeLeft <= 0) {
-          clearInterval(countdown);
-          alert("Сесія концентрації завершена!");
-        }
-      }, 1000);
+    function updateTimerDisplay() {
+      const minutes = Math.floor(timeLeft / 60);
+      const seconds = timeLeft % 60;
+      timerDisplay.textContent = `${minutes
+        .toString()
+        .padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
     }
+
+    function startTimer() {
+      if (isPaused) {
+        isPaused = false;
+        countdown = setInterval(() => {
+          timeLeft--;
+          updateTimerDisplay();
+          if (timeLeft <= 0) {
+            clearInterval(countdown);
+            alert("Сесія концентрації завершена!");
+          }
+        }, 1000);
+      }
+    }
+
+    function pauseTimer() {
+      isPaused = true;
+      clearInterval(countdown);
+    }
+
+    function stopTimer() {
+      isPaused = true;
+      clearInterval(countdown);
+      timeLeft = 25 * 60;
+      updateTimerDisplay();
+    }
+
+    startBtn.addEventListener("click", startTimer);
+    pauseBtn.addEventListener("click", pauseTimer);
+    stopBtn.addEventListener("click", stopTimer);
   }
 
-  function pauseTimer() {
-    isPaused = true;
-    clearInterval(countdown);
-  }
-
-  function stopTimer() {
-    isPaused = true;
-    clearInterval(countdown);
-    timeLeft = 25 * 60;
-    updateTimerDisplay();
-  }
-
-  startBtn.addEventListener("click", startTimer);
-  pauseBtn.addEventListener("click", pauseTimer);
-  stopBtn.addEventListener("click", stopTimer);
-// ==================================================
-  //          НОВА ЛОГІКА: КАЛЕНДАР
   // ==================================================
-  
-  // 1. Отримуємо елементи
+  //          НОВА ЛОГІКА: КАЛЕНДАР
+  // (Запускаємо, тільки якщо ми на index.html)
+  // ==================================================
   const monthYearDisplay = document.getElementById("month-year-display");
-  const calendarGrid = document.getElementById("calendar-grid");
-  const prevMonthBtn = document.getElementById("prev-month-btn");
-  const nextMonthBtn = document.getElementById("next-month-btn");
-  
-  // Елементи модального вікна
-  // (Використовуємо Bootstrap 5 API для керування)
-  const addEventModalEl = document.getElementById('addEventModal');
-  const addEventModal = new bootstrap.Modal(addEventModalEl);
-  
-  const saveEventBtn = document.getElementById("save-event-btn");
-  const eventTitleInput = document.getElementById("event-title");
-  const eventDateInput = document.getElementById("event-date");
-  const eventTimeInput = document.getElementById("event-time");
-  
-  // Використаємо той самий елемент статусу, що і для завдань, щоб не плодити сутності
-  // (Він знаходиться у секції #tasks, але це не страшно)
-  const calendarStatus = document.getElementById("add-task-status"); 
+  if (monthYearDisplay) {
+    // 1. Отримуємо елементи
+    const calendarGrid = document.getElementById("calendar-grid");
+    const prevMonthBtn = document.getElementById("prev-month-btn");
+    const nextMonthBtn = document.getElementById("next-month-btn");
 
-  // 2. Поточна дата, яку ми відображаємо
-  let currentDate = new Date(); // Сьогоднішня дата
+    // Елементи модального вікна
+    // (Використовуємо Bootstrap 5 API для керування)
+    const addEventModalEl = document.getElementById("addEventModal");
+    const addEventModal = new bootstrap.Modal(addEventModalEl);
 
-  /**
-   * 3. Головна функція рендеру (малювання) календаря
-   */
-  function renderCalendar() {
-    const year = currentDate.getFullYear();
-    const month = currentDate.getMonth(); // 0-11
+    const saveEventBtn = document.getElementById("save-event-btn");
+    const eventTitleInput = document.getElementById("event-title");
+    const eventDateInput = document.getElementById("event-date");
+    const eventTimeInput = document.getElementById("event-time");
 
-    // Встановлюємо заголовок (наприклад, "Листопад 2025")
-    // 'uk-UA' - для української мови
-    const monthName = new Date(year, month).toLocaleString('uk-UA', {
-      month: 'long'
-    });
-    // Робимо першу літеру великою
-    monthYearDisplay.textContent = `${monthName.charAt(0).toUpperCase() + monthName.slice(1)} ${year}`;
+    // Використаємо той самий елемент статусу, що і для завдань, щоб не плодити сутності
+    // (Він знаходиться у секції #tasks, але це не страшно)
+    const calendarStatus = document.getElementById("add-task-status");
 
-    // Очищуємо сітку від старих днів
-    calendarGrid.innerHTML = "";
+    // 2. Поточна дата, яку ми відображаємо
+    let currentDate = new Date(); // Сьогоднішня дата
 
-    // --- Магія розрахунку дат ---
-    const firstDayOfMonth = new Date(year, month, 1);
-    const lastDayOfMonth = new Date(year, month + 1, 0); // 0-й день наступного місяця = останній день поточного
+    /**
+     * 3. Головна функція рендеру (малювання) календаря
+     */
+    function renderCalendar() {
+      const year = currentDate.getFullYear();
+      const month = currentDate.getMonth(); // 0-11
 
-    const daysInMonth = lastDayOfMonth.getDate();
-    
-    // День тижня (0=Нд, 1=Пн, ..., 6=Сб). 
-    // Нам треба, щоб тиждень починався з Понеділка (1).
-    let startDayOfWeek = firstDayOfMonth.getDay(); 
-    if (startDayOfWeek === 0) {
-        startDayOfWeek = 7; // Робимо Неділю 7-м днем, а не 0-м
-    }
-    // Тепер у нас Пн=1, Вт=2, ..., Нд=7.
-    // Нам потрібні "пусті" комірки для днів до 1-го числа.
-    const paddingDays = startDayOfWeek - 1; 
-
-    // --- Малюємо "пусті" комірки для днів попереднього місяця ---
-    for (let i = 0; i < paddingDays; i++) {
-      const emptyCell = document.createElement("div");
-      emptyCell.classList.add("calendar-day", "other-month");
-      calendarGrid.appendChild(emptyCell);
-    }
-
-    // --- Малюємо комірки для поточного місяця ---
-    for (let day = 1; day <= daysInMonth; day++) {
-      const dayCell = document.createElement("div");
-      dayCell.classList.add("calendar-day");
-      dayCell.textContent = day;
-
-      // Форматуємо дату для data-атрибуту (YYYY-MM-DD)
-      const cellDateISO = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-      dayCell.dataset.date = cellDateISO;
-
-      // Додаємо обробник, щоб відкрити модалку при кліку на день
-      dayCell.addEventListener("click", () => {
-        openAddEventModal(cellDateISO);
+      // Встановлюємо заголовок (наприклад, "Листопад 2025")
+      // 'uk-UA' - для української мови
+      const monthName = new Date(year, month).toLocaleString("uk-UA", {
+        month: "long",
       });
+      // Робимо першу літеру великою
+      monthYearDisplay.textContent = `${
+        monthName.charAt(0).toUpperCase() + monthName.slice(1)
+      } ${year}`;
 
-      calendarGrid.appendChild(dayCell);
+      // Очищуємо сітку від старих днів
+      calendarGrid.innerHTML = "";
+
+      // --- Магія розрахунку дат ---
+      const firstDayOfMonth = new Date(year, month, 1);
+      const lastDayOfMonth = new Date(year, month + 1, 0); // 0-й день наступного місяця = останній день поточного
+
+      const daysInMonth = lastDayOfMonth.getDate();
+
+      // День тижня (0=Нд, 1=Пн, ..., 6=Сб).
+      // Нам треба, щоб тиждень починався з Понеділка (1).
+      let startDayOfWeek = firstDayOfMonth.getDay();
+      if (startDayOfWeek === 0) {
+        startDayOfWeek = 7; // Робимо Неділю 7-м днем, а не 0-м
+      }
+      // Тепер у нас Пн=1, Вт=2, ..., Нд=7.
+      // Нам потрібні "пусті" комірки для днів до 1-го числа.
+      const paddingDays = startDayOfWeek - 1;
+
+      // --- Малюємо "пусті" комірки для днів попереднього місяця ---
+      for (let i = 0; i < paddingDays; i++) {
+        const emptyCell = document.createElement("div");
+        emptyCell.classList.add("calendar-day", "other-month");
+        calendarGrid.appendChild(emptyCell);
+      }
+
+      // --- Малюємо комірки для поточного місяця ---
+      for (let day = 1; day <= daysInMonth; day++) {
+        const dayCell = document.createElement("div");
+        dayCell.classList.add("calendar-day");
+        dayCell.textContent = day;
+
+        // Форматуємо дату для data-атрибуту (YYYY-MM-DD)
+        const cellDateISO = `${year}-${String(month + 1).padStart(
+          2,
+          "0"
+        )}-${String(day).padStart(2, "0")}`;
+        dayCell.dataset.date = cellDateISO;
+
+        // Додаємо обробник, щоб відкрити модалку при кліку на день
+        dayCell.addEventListener("click", () => {
+          openAddEventModal(cellDateISO);
+        });
+
+        calendarGrid.appendChild(dayCell);
+      }
     }
-  }
 
-  /**
-   * 4. Функція відкриття модалки (з авто-заповненням дати)
-   * @param {string} date - Дата у форматі 'YYYY-MM-DD'
-   */
-  function openAddEventModal(date) {
-    // Очищуємо форму
-    document.getElementById("add-event-form").reset();
-    
-    // Встановлюємо дату, на яку клікнули
-    eventDateInput.value = date;
-    
-    // Показуємо модальне вікно
-    addEventModal.show();
-  }
+    /**
+     * 4. Функція відкриття модалки (з авто-заповненням дати)
+     * @param {string} date - Дата у форматі 'YYYY-MM-DD'
+     */
+    function openAddEventModal(date) {
+      // Очищуємо форму
+      document.getElementById("add-event-form").reset();
 
-  // 5. Обробники кнопок "вперед/назад"
-  prevMonthBtn.addEventListener("click", () => {
-    // Встановлюємо 1-ше число, щоб уникнути проблем з переходом (напр. з 31-го)
-    currentDate.setDate(1); 
-    currentDate.setMonth(currentDate.getMonth() - 1);
-    renderCalendar();
-  });
+      // Встановлюємо дату, на яку клікнули
+      eventDateInput.value = date;
 
-  nextMonthBtn.addEventListener("click", () => {
-    currentDate.setDate(1);
-    currentDate.setMonth(currentDate.getMonth() + 1);
-    renderCalendar();
-  });
-
-  /**
-   * 6. Обробник кнопки "Зберегти" в модалці
-   */
-  saveEventBtn.addEventListener("click", () => {
-    const title = eventTitleInput.value;
-    const date = eventDateInput.value;
-    const time = eventTimeInput.value;
-
-    // Проста валідація
-    if (!title || !date) {
-      // Використовуємо твій Telegram Alert
-      tg.showAlert("Будь ласка, заповніть назву події та дату.");
-      return;
+      // Показуємо модальне вікно
+      addEventModal.show();
     }
 
-    const payload = {
-      title: title,
-      date: date,
-      time: time || null // Відправляємо null, якщо час не вказано
-    };
+    // 5. Обробники кнопок "вперед/назад"
+    prevMonthBtn.addEventListener("click", () => {
+      // Встановлюємо 1-ше число, щоб уникнути проблем з переходом (напр. з 31-го)
+      currentDate.setDate(1);
+      currentDate.setMonth(currentDate.getMonth() - 1);
+      renderCalendar();
+    });
 
-    // 🚀 Використовуємо твою існуючу функцію!
-    // Тобі треба буде створити цей ендпоінт '/add_event' на своєму Flask-сервері
-    sendApiRequest('/add_event', payload, calendarStatus, "Подію успішно додано!");
-    
-    // Ховаємо модальне вікно після спроби збереження
-    addEventModal.hide();
-  });
+    nextMonthBtn.addEventListener("click", () => {
+      currentDate.setDate(1);
+      currentDate.setMonth(currentDate.getMonth() + 1);
+      renderCalendar();
+    });
 
-  // 7. Перший запуск
-  renderCalendar();
-  
+    /**
+     * 6. Обробник кнопки "Зберегти" в модалці
+     */
+    saveEventBtn.addEventListener("click", () => {
+      const title = eventTitleInput.value;
+      const date = eventDateInput.value;
+      const time = eventTimeInput.value;
+
+      // Проста валідація
+      if (!title || !date) {
+        // Використовуємо твій Telegram Alert
+        tg.showAlert("Будь ласка, заповніть назву події та дату.");
+        return;
+      }
+
+      const payload = {
+        title: title,
+        date: date,
+        time: time || null, // Відправляємо null, якщо час не вказано
+      };
+
+      // 🚀 Використовуємо твою існуючу функцію!
+      // Тобі треба буде створити цей ендпоінт '/add_event' на своєму Flask-сервері
+      sendApiRequest(
+        "/add_event",
+        payload,
+        calendarStatus,
+        "Подію успішно додано!"
+      );
+
+      // Ховаємо модальне вікно після спроби збереження
+      addEventModal.hide();
+    });
+
+    // 7. Перший запуск
+    renderCalendar();
+  }
   // ==================================================
   //          КІНЕЦЬ ЛОГІКИ КАЛЕНДАРЯ
   // ==================================================
 
-  // ===== Завдання та Аналітика (Клієнтська сторона) - БЕЗ ЗМІН =====
-  const taskListContainer = document.getElementById("task-list");
-  const progressFill = document.getElementById("progress-fill");
-  const progressText = document.getElementById("progress-text");
+  // ===================================================================
+  // ===== 2. ЗАВДАННЯ ТА АНАЛІТИКА (ОНОВЛЕНІ СЕЛЕКТОРИ) =====
+  // ===================================================================
+  // (Запускаємо, тільки якщо ми на index.html)
+  
+  // Раніше було: getElementById("task-list"), що невірно
+  const taskListContainer = document.querySelector("#tasks ul"); 
 
-  let tasks = [
-    { text: "Практична з математики", done: true },
-    { text: "Реферат з історії", done: false },
-    { text: "Підготуватись до семінару", done: false },
-  ];
+  if (taskListContainer) {
+    // Раніше було: getElementById("progress-fill")
+    const progressFill = document.querySelector(".custom-progress-fill"); 
+    // Раніше було: getElementById("progress-text")
+    const progressText = document.querySelector("#analytics p:last-of-type");
 
-  function renderTasks() {
-    taskListContainer.innerHTML = "";
-    if (tasks.length === 0) {
-      taskListContainer.innerHTML = "<p>Немає завдань. Чудовий день!</p>";
+    // Цей масив тепер буде керувати твоїм списком завдань
+    let tasks = [
+      { text: "Практична з математики", done: true },
+      { text: "Реферат з історії", done: false },
+      { text: "Підготуватись до семінару", done: false },
+    ];
+
+    function renderTasks() {
+      taskListContainer.innerHTML = ""; // Очищуємо статичний HTML
+      if (tasks.length === 0) {
+        taskListContainer.innerHTML = "<p>Немає завдань. Чудовий день!</p>";
+      }
+
+      // Прибираємо маркування списку, оскільки у нас чекбокси
+      taskListContainer.style.listStyleType = "none";
+      taskListContainer.style.paddingLeft = "0.5rem"; // Компенсуємо відсутність маркерів
+
+      tasks.forEach((task, index) => {
+        const li = document.createElement("li");
+        li.style.textDecoration = task.done ? "line-through" : "none";
+        li.style.opacity = task.done ? 0.6 : 1;
+        li.style.cursor = "pointer";
+        li.style.margin = "5px 0";
+
+        const checkbox = document.createElement("input");
+        checkbox.type = "checkbox";
+        checkbox.checked = task.done;
+        checkbox.style.marginRight = "10px";
+        checkbox.addEventListener("change", () => {
+          tasks[index].done = checkbox.checked;
+          renderTasks(); // Перемалювати все
+        });
+
+        li.appendChild(checkbox);
+        li.append(` ${task.text}`);
+        
+        // Додамо обробник на клік по тексту (для зручності)
+        li.addEventListener("click", (e) => {
+            if (e.target !== checkbox) { // Щоб не спрацювало двічі
+                tasks[index].done = !tasks[index].done;
+                renderTasks();
+            }
+        });
+
+        taskListContainer.appendChild(li);
+      });
+      updateAnalytics();
     }
 
-    const ul = document.createElement("ul");
-    tasks.forEach((task, index) => {
-      const li = document.createElement("li");
-      li.style.textDecoration = task.done ? "line-through" : "none";
-      li.style.cursor = "pointer";
+    function updateAnalytics() {
+      const totalTasks = tasks.length;
+      const completedTasks = tasks.filter((task) => task.done).length;
+      const percentage =
+        totalTasks === 0 ? 0 : Math.round((completedTasks / totalTasks) * 100);
 
-      const checkbox = document.createElement("input");
-      checkbox.type = "checkbox";
-      checkbox.checked = task.done;
-      checkbox.addEventListener("change", () => {
-        tasks[index].done = checkbox.checked;
-        renderTasks(); // Перемалювати все
-      });
+      if (progressFill) {
+        progressFill.style.width = `${percentage}%`;
+        progressFill.textContent = `${percentage}%`;
+      }
+      if (progressText) {
+        progressText.textContent = `Виконано ${completedTasks} з ${totalTasks} завдань`;
+      }
+    }
 
-      li.appendChild(checkbox);
-      li.append(` ${task.text}`);
-      ul.appendChild(li);
-    });
-    taskListContainer.appendChild(ul);
-    updateAnalytics();
+    renderTasks(); // Перший запуск, щоб замінити статичний HTML на динамічний
   }
-
-  function updateAnalytics() {
-    const totalTasks = tasks.length;
-    const completedTasks = tasks.filter((task) => task.done).length;
-    const percentage = totalTasks === 0 ? 0 : Math.round((completedTasks / totalTasks) * 100);
-
-    progressFill.style.width = `${percentage}%`;
-    progressFill.textContent = `${percentage}%`;
-    progressText.textContent = `Виконано ${completedTasks} з ${totalTasks} завдань`;
-  }
-  
-  renderTasks();
 });
