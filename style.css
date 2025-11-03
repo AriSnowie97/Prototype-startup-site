@@ -91,7 +91,9 @@ button:active {
 }
 
 /* ===== Прогрес-бар (контрастніший) ===== */
-.progress-bar {
+/* Зміни ці назви у style.css */
+
+.custom-progress-track {
   width: 100%;
   background: rgba(255,255,255,0.25);
   border: 1px solid rgba(255,255,255,0.4);
@@ -102,7 +104,7 @@ button:active {
               inset -2px -2px 6px rgba(255,255,255,0.4);
 }
 
-.progress {
+.custom-progress-fill {
   background: linear-gradient(90deg, #4a90e2, #1f3b73);
   color: white;
   padding: 0.3rem;
@@ -110,8 +112,13 @@ button:active {
   text-align: center;
   font-size: 0.9rem;
   font-weight: bold;
-  min-width: 3.5rem; /* <-- ДОДАНО: Мінімальна ширина для тексту */
-  /* width: 65%; <-- ВИДАЛЕНО: Цим керує JavaScript */
+  min-width: 3.5rem; 
+/* === ДОДАНО === */
+  /* Це ідеально центрує текст "70%" */
+  display: flex;
+  align-items: center; /* Центрування по вертикалі */
+  justify-content: center; /* Центрування по горизонталі */
+height: 100%; /* Змушуємо зайняти всю висоту батька (25px) */
 }
 /* ===== Стилізація селекта ===== */
 select {
