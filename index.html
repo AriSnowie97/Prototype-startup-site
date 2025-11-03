@@ -27,7 +27,6 @@
     </header>
 
     <main>
-      <!-- Секції -->
       <section id="tasks">
         <h2>Завдання</h2>
         <form id="add-task-form" class="mb-3">
@@ -45,134 +44,128 @@
         </form>
         <p>Список завдань з дедлайнами</p>
         <ul>
-          <li>Практична з математики — дедлайн 10.10</li>
-          <li>Реферат з історії — дедлайн 12.10</li>
-          <li>Лабораторна з програмування — дедлайн 15.10</li>
-        </ul>
-        <button id="add-task-btn">+ Додати завдання</button>
+          </ul>
+        <button id="add-task-btn">+ Додати завдання (GCal)</button>
         <p id="add-task-status" style="margin-top: 10px; font-weight: bold"></p>
       </section>
 
       <section id="calendar">
-  <h2>Календар</h2>
-
-  <div id="calendar-controls" class="d-flex justify-content-between align-items-center mb-3 p-2" style="background: rgba(0,0,0,0.05); border-radius: 12px;">
-    <button id="prev-month-btn" title="Попередній місяць">&lt;</button>
-    
-    <h3 id="month-year-display" class="mb-0 mx-3" style="color: inherit; font-weight: bold;"></h3>
-    
-    <button id="next-month-btn" title="Наступний місяць">&gt;</button>
-  </div>
-
-  <div id="calendar-container">
-    <div id="calendar-header" class="calendar-grid">
-      <div>Пн</div>
-      <div>Вт</div>
-      <div>Ср</div>
-      <div>Чт</div>
-      <div>Пт</div>
-      <div>Сб</div>
-      <div>Нд</div>
-    </div>
-    <div id="calendar-grid" class="calendar-grid">
-      </div>
-  </div>
-  
-  <button id="add-event-btn" class="mt-3" data-bs-toggle="modal" data-bs-target="#addEventModal">
-    + Додати подію
-  </button>
-
-</section>
-<div class="modal fade" id="addEventModal" tabindex="-1" aria-labelledby="addEventModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="addEventModalLabel">Додати нову подію</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <form id="add-event-form">
-          <div class="mb-3">
-            <label for="event-title" class="form-label">Назва події:</label>
-            <input type="text" class="form-control" id="event-title" placeholder="Наприклад, 'Лабораторна з програмування'" required>
+        <h2>Календар</h2>
+        <div id="calendar-controls" class="d-flex justify-content-between align-items-center mb-3 p-2" style="background: rgba(0,0,0,0.05); border-radius: 12px;">
+          <button id="prev-month-btn" title="Попередній місяць">&lt;</button>
+          <h3 id="month-year-display" class="mb-0 mx-3" style="color: inherit; font-weight: bold;"></h3>
+          <button id="next-month-btn" title="Наступний місяць">&gt;</button>
+        </div>
+        <div id="calendar-container">
+          <div id="calendar-header" class="calendar-grid">
+            <div>Пн</div>
+            <div>Вт</div>
+            <div>Ср</div>
+            <div>Чт</div>
+            <div>Пт</div>
+            <div>Сб</div>
+            <div>Нд</div>
           </div>
-          <div class="mb-3">
-            <label for="event-date" class="form-label">Дата:</label>
-            <input type="date" class="form-control" id="event-date" required>
+          <div id="calendar-grid" class="calendar-grid">
+            </div>
+        </div>
+        <button id="add-event-btn" class="mt-3" data-bs-toggle="modal" data-bs-target="#addEventModal">
+          + Додати подію
+        </button>
+      </section>
+
+      <div class="modal fade" id="addEventModal" tabindex="-1" aria-labelledby="addEventModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="addEventModalLabel">Додати нову подію</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <form id="add-event-form">
+                <div class="mb-3">
+                  <label for="event-title" class="form-label">Назва події:</label>
+                  <input type="text" class="form-control" id="event-title" placeholder="Наприклад, 'Лабораторна з програмування'" required>
+                </div>
+                <div class="mb-3">
+                  <label for="event-date" class="form-label">Дата:</label>
+                  <input type="date" class="form-control" id="event-date" required>
+                </div>
+                <div class="mb-3">
+                  <label for="event-time" class="form-label">Час (необов'язково):</label>
+                  <input type="time" class="form-control" id="event-time">
+                </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрити</button>
+              <button type="button" id="save-event-btn" class="btn btn-primary">Зберегти</button>
+            </div>
           </div>
-          <div class="mb-3">
-            <label for="event-time" class="form-label">Час (необов'язково):</label>
-            <input type="time" class="form-control" id="event-time">
-          </div>
-          </form>
+        </div>
       </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрити</button>
-        <button type="button" id="save-event-btn" class="btn btn-primary">Зберегти</button>
-      </div>
-    </div>
-  </div>
-</div>
 
       <section id="focus">
         <h2>Режим концентрації</h2>
         <p>Запусти таймер і сконцентруйся на навчанні</p>
-        <button>▶️ Почати сесію (25 хв)</button>
-        <button>⏸️ Пауза</button>
-        <button>⏹️ Стоп</button>
+        <h3 id="timer-display" style="font-size: 3rem; margin: 1rem 0;">25:00</h3>
+        <button id="start-btn">▶️ Почати сесію (25 хв)</button>
+        <button id="pause-btn">⏸️ Пауза</button>
+        <button id="stop-btn">⏹️ Стоп</button>
       </section>
 
-  <section id="analytics">
-  <h2>Аналітика</h2>
-  <p>Звіти та мотивація</p>
-  
-  <div class="custom-progress-track" style="height: 25px;">
-    <div class="custom-progress-fill" 
-         role="progressbar" 
-         style="width: 70%;" 
-         aria-valuenow="70" 
-         aria-valuemin="0" 
-         aria-valuemax="100">
-      70%
-    </div>
-  </div>
-  
-  <p>Виконано 7 з 10 завдань</p>
-</section>
+      <section id="analytics">
+        <h2>Аналітика</h2>
+        <p>Звіти та мотивація</p>
+        <div class="custom-progress-track" style="height: 25px;">
+          <div class="custom-progress-fill" 
+               role="progressbar" 
+               style="width: 70%;" 
+               aria-valuenow="70" 
+               aria-valuemin="0" 
+               aria-valuemax="100">
+            70%
+          </div>
+        </div>
+        <p>Виконано 7 з 10 завдань</p>
+      </section>
 
-<section id="settings">
-  <h2>Налаштування</h2>
-  <form>
-    <label>
-      Тема:
-      <select id="theme-select">
-        <option value="style.css">Світла</option>
-        <option value="dark-style.css">Темна</option>
-        <option value="green-style.css">Зелена</option>
-        <option value="pink-style.css">Рожева</option>
-        <option value="violet-style.css">Фіолетова</option>
-        <option value="red-style.css">Червона</option>
-        <option value="matrix-style.css">Matrix (Чорна)</option>
-        <option value="bw-style.css">Чорно-біла</option>
-      </select>
-    </label>
-    <label>
-      Нагадування: <input type="checkbox" id="push-cb" /> Push
-      <input type="checkbox" id="telegram-cb" /> Telegram
-      <input type="checkbox" id="email-cb" /> Email
-    </label>
-    <label>
-      Режим розробника:
-      <button
-        type="button"
-        id="dev-mode-btn"
-        onclick="window.location.href='developomde.html'"
-      >
-        Увімкнути
-      </button>
-    </label>
-  </form>
-</section>
+      <section id="settings">
+        <h2>Налаштування</h2>
+        <form>
+          <label>
+            Тема:
+            <select id="theme-select">
+              <option value="style.css">Світла</option>
+              <option value="dark-style.css">Темна</option>
+              <option value="green-style.css">Зелена</option>
+              <option value="pink-style.css">Рожева</option>
+              <option value="violet-style.css">Фіолетова</option>
+              <option value="red-style.css">Червона</option>
+              <option value="matrix-style.css">Matrix (Чорна)</option>
+              <option value="bw-style.css">Чорно-біла</option>
+            </select>
+          </label>
+          <label>
+            Нагадування:
+            <span class="checkbox-group">
+              <input type="checkbox" id="push-cb" /> Push
+              <input type="checkbox" id="telegram-cb" /> Telegram
+              <input type="checkbox" id="email-cb" /> Email
+            </span>
+          </label>
+          <label>
+            Режим розробника:
+            <button
+              type="button"
+              id="dev-mode-btn"
+              onclick="window.location.href='developomde.html'"
+            >
+              Увімкнути
+            </button>
+          </label>
+        </form>
+      </section>
     </main>
 
     <footer>
