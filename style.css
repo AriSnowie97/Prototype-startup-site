@@ -1,118 +1,14 @@
 /* ===================
-   ЦЕНТРУВАННЯ НАЛАШТУВАНЬ
+   style.css (СВІТЛА ТЕМА)
    =================== */
 
-#settings form {
-  display: flex;
-  flex-direction: column; /* Рядки один під одним */
-  align-items: center; /* Горизонтальне центрування */
-  gap: 1rem; /* Відстань між рядками (замість <br>) */
-  margin-top: 1rem;
-}
-
-#settings form label {
-  /* Робимо сам label "гнучким" */
-  display: flex;
-  flex-direction: row; /* Текст і інпут - в рядок */
-  align-items: center; /* Вертикальне центрування */
-  justify-content: center; /* Горизонтальне центрування */
-  gap: 0.5rem; /* Відстань між текстом ("Тема:") і полем вводу */
-  flex-wrap: wrap; /* Магія адаптивності: 
-                     на вузьких екранах інпут
-                     автоматично перенесеться під текст 
-                   */
-}margin: 1rem 0.5rem; /* 1rem зверху/знизу, 0.5rem з боків */
-    padding: 1.5rem 1rem; /* 1.5rem зверху/знизу, 1rem з боків */margin: 1rem 0.5rem; /* 1rem зверху/знизу, 0.5rem з боків */
-    padding: 1.5rem 1rem; /* 1.5rem зверху/знизу, 1rem з боків *//* === ДОДАЙ ЦЕЙ БЛОК === */
-  
-  /* Робимо .input-group вертикальним на мобільних */
-  .input-group {
-    flex-direction: column; /* Складаємо інпут і кнопку один під одним */
-    gap: 0.5rem; /* Додаємо відступ між ними */
-  }
-  
-  /* Переконуємось, що інпут і кнопка в групі займають всю ширину */
-  .input-group .form-control,
-  .input-group .btn {
-    width: 100%; /* Займають всю ширину батька (.input-group) */
-    margin-left: 0 !important; /* Скидаємо 'margin-left', який ми додавали раніше */
-  }
-  
-  /* === КІНЕЦЬ БЛОКУ ДЛЯ ДОДАВАННЯ === *//* ===================
-   ЦЕНТРУВАННЯ НАЛАШТУВАНЬ
-   =================== */
-
-#settings form {
-  display: flex;
-  flex-direction: column; /* Рядки один під одним */
-  align-items: center; /* Горизонтальне центрування */
-  gap: 1rem; /* Відстань між рядками (замість <br>) */
-  margin-top: 1rem;
-}
-
-#settings form label {
-  /* Робимо сам label "гнучким" */
-  display: flex;
-  flex-direction: row; /* Текст і інпут - в рядок */
-  align-items: center; /* Вертикальне центрування */
-  justify-content: center; /* Горизонтальне центрування */
-  gap: 0.5rem; /* Відстань між текстом ("Тема:") і полем вводу */
-  flex-wrap: wrap; /* Магія адаптивності: 
-                     на вузьких екранах інпут
-                     автоматично перенесеться під текст 
-                   */
-}/* ===================
-   ЦЕНТРУВАННЯ НАЛАШТУВАНЬ
-   =================== */
-
-#settings form {
-  display: flex;
-  flex-direction: column; /* Рядки один під одним */
-  align-items: center; /* Горизонтальне центрування */
-  gap: 1rem; /* Відстань між рядками (замість <br>) */
-  margin-top: 1rem;
-}
-
-#settings form label {
-  /* Робимо сам label "гнучким" */
-  display: flex;
-  flex-direction: row; /* Текст і інпут - в рядок */
-  align-items: center; /* Вертикальне центрування */
-  justify-content: center; /* Горизонтальне центрування */
-  gap: 0.5rem; /* Відстань між текстом ("Тема:") і полем вводу */
-  flex-wrap: wrap; /* Магія адаптивності: 
-                     на вузьких екранах інпут
-                     автоматично перенесеться під текст 
-                   */
-}/* ===================
-   ЦЕНТРУВАННЯ НАЛАШТУВАНЬ
-   =================== */
-
-#settings form {
-  display: flex;
-  flex-direction: column; /* Рядки один під одним */
-  align-items: center; /* Горизонтальне центрування */
-  gap: 1rem; /* Відстань між рядками (замість <br>) */
-  margin-top: 1rem;
-}
-
-#settings form label {
-  /* Робимо сам label "гнучким" */
-  display: flex;
-  flex-direction: row; /* Текст і інпут - в рядок */
-  align-items: center; /* Вертикальне центрування */
-  justify-content: center; /* Горизонтальне центрування */
-  gap: 0.5rem; /* Відстань між текстом ("Тема:") і полем вводу */
-  flex-wrap: wrap; /* Магія адаптивності: 
-                     на вузьких екранах інпут
-                     автоматично перенесеться під текст 
-                   */
-}/* ===== Базові стилі ===== */
+/* ===== Базові стилі ===== */
 body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   margin: 0;
   background: linear-gradient(135deg, #e0eafc, #cfdef3);
   color: #333;
+  overflow-x: hidden;
 }
 
 /* ===== Хедер ===== */
@@ -125,13 +21,18 @@ header {
   box-shadow: 0 4px 15px rgba(0,0,0,0.2);
 }
 
+header h1 {
+  margin-bottom: 0.5rem;
+}
+
 header nav ul {
   list-style: none;
   padding: 0;
-  margin: 0.5rem 0 0;
+  margin: 0;
   display: flex;
   justify-content: center;
   gap: 1.2rem;
+  flex-wrap: wrap;
 }
 
 header nav ul li a {
@@ -161,9 +62,9 @@ main section {
   text-align: center;
 }
 main section ul {
-  list-style-position: inside; /* щоб маркери були ближче */
-  text-align: left;          /* вирівнює текст вправо */
-  padding-right: 2rem;        /* відступ від краю */
+  list-style-position: inside; 
+  text-align: left;         
+  padding-right: 2rem;       
 }
 
 
@@ -199,9 +100,7 @@ button:active {
   transform: translateY(1px);
 }
 
-/* ===== Прогрес-бар (контрастніший) ===== */
-/* Зміни ці назви у style.css */
-
+/* ===== Прогрес-бар (кастомний) ===== */
 .custom-progress-track {
   width: 100%;
   background: rgba(255,255,255,0.25);
@@ -216,18 +115,14 @@ button:active {
 .custom-progress-fill {
   background: linear-gradient(90deg, #4a90e2, #1f3b73);
   color: white;
-  padding: 0.3rem;
   border-radius: 12px 0 0 12px;
-  text-align: center;
   font-size: 0.9rem;
   font-weight: bold;
   min-width: 3.5rem; 
-/* === ДОДАНО === */
-  /* Це ідеально центрує текст "70%" */
   display: flex;
-  align-items: center; /* Центрування по вертикалі */
-  justify-content: center; /* Центрування по горизонталі */
-height: 100%; /* Змушуємо зайняти всю висоту батька (25px) */
+  align-items: center; 
+  justify-content: center; 
+  height: 100%;
 }
 /* ===== Стилізація селекта ===== */
 select {
@@ -277,6 +172,208 @@ footer {
   font-size: 0.9rem;
 }
 
+/* ===================
+   СТИЛІ ДЛЯ ПОГОДИ В ХЕДЕРІ
+   =================== */
+.header-bottom-row {
+  display: flex;
+  flex-wrap: wrap; 
+  justify-content: space-between; 
+  align-items: center; 
+  gap: 1rem; 
+  padding: 0 1rem;
+  margin-top: 0.5rem;
+}
+
+#weather-form-header {
+  max-width: 400px; 
+  flex-grow: 1; 
+  min-width: 280px;
+  margin: 0; 
+  padding: 0; 
+  box-sizing: border-box;
+}
+
+#weather-form-header .btn {
+  background: rgba(255, 255, 255, 0.55) !important;
+  font-size: 1.2rem;
+  line-height: 1;
+  padding-top: 0.5rem;
+}
+
+/* Стили для блока результатов */
+#weather-result {
+  display: none; 
+  text-align: left;
+  margin: 1rem auto 0; 
+  padding: 1.5rem 2rem;
+  max-width: 800px;
+  border-radius: 20px;
+  backdrop-filter: blur(14px);
+  /* Кольори теми: */
+  background: rgba(255, 255, 255, 0.25);
+  border: 1px solid rgba(255,255,255,0.4);
+  box-shadow: 6px 6px 20px rgba(0,0,0,0.12),
+              -4px -4px 20px rgba(255,255,255,0.6);
+  color: #333;
+}
+
+
+/* ===================
+   Адаптація Bootstrap під наш "Глассморфізм"
+   =================== */
+body .form-control {
+  background: rgba(255, 255, 255, 0.25) !important;
+  border: 1px solid rgba(255, 255, 255, 0.4) !important;
+  border-radius: 12px !important;
+  color: #1f3b73 !important;
+  backdrop-filter: blur(5px);
+  box-shadow: 4px 4px 10px rgba(0,0,0,0.1),
+              -4px -4px 10px rgba(255,255,255,0.6) !important;
+}
+
+body .form-control::placeholder {
+  color: #1f3b73;
+  opacity: 0.7;
+}
+
+body .form-control:focus {
+  background: rgba(255, 255, 255, 0.45) !important;
+  box-shadow: 6px 6px 15px rgba(0,0,0,0.15),
+              -6px -6px 15px rgba(255,255,255,0.8) !important;
+}
+
+body .input-group .btn {
+  background: rgba(255,255,255,0.35);
+  border: 1px solid rgba(255,255,255,0.5);
+  border-radius: 12px !important;
+  color: #1f3b73;
+  font-weight: bold;
+  box-shadow: 4px 4px 10px rgba(0,0,0,0.15),
+              -4px -4px 10px rgba(255,255,255,0.6);
+  transition: all 0.3s ease;
+  margin-left: 10px;
+}
+/* Скидання для кнопки погоди (вона в .input-group) */
+#weather-form-header .btn {
+  margin-left: 0 !important;
+}
+
+
+/* ===================
+   СТИЛІ ДЛЯ КАЛЕНДАРЯ
+   =================== */
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr); 
+  gap: 5px;
+}
+
+#calendar-header div {
+  font-weight: bold;
+  padding: 0.5rem;
+  text-align: center;
+  opacity: 0.7;
+}
+
+#calendar-grid .calendar-day {
+  position: relative; /* Для точки */
+  padding: 0.5rem;
+  min-height: 80px;
+  text-align: left;
+  font-weight: bold;
+  background: rgba(255, 255, 255, 0.1); 
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+#calendar-grid .calendar-day:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+#calendar-grid .other-month {
+  opacity: 0.4;
+  background: transparent;
+  border: none;
+  cursor: default;
+}
+
+/* Стиль для поточної дати */
+#calendar-grid .calendar-day.today {
+  background: rgba(255, 255, 255, 0.45);
+  border: 2px solid #1f3b73;
+  box-shadow: 0 0 10px rgba(74, 144, 226, 0.5);
+}
+
+/* Стиль для зайнятої дати (ЗАЛИВКА) */
+#calendar-grid .calendar-day.busy-day {
+  background: rgba(74, 144, 226, 0.3); /* Полупрозрачный синий */
+  border: 1px solid rgba(74, 144, 226, 0.5);
+}
+#calendar-grid .calendar-day.today.busy-day {
+  background: rgba(74, 144, 226, 0.5); /* Комбінація */
+}
+
+
+/* ===================
+   ЦЕНТРУВАННЯ НАЛАШТУВАНЬ
+   =================== */
+#settings form {
+  display: flex;
+  flex-direction: column; 
+  align-items: center; 
+  gap: 1rem; 
+  margin-top: 1rem;
+}
+
+#settings form label {
+  display: flex;
+  flex-direction: row; 
+  align-items: center; 
+  justify-content: center; 
+  gap: 0.5rem; 
+  flex-wrap: wrap; 
+}
+
+.checkbox-group {
+  display: inline-flex; 
+  flex-wrap: wrap; 
+  justify-content: center; 
+  gap: 0.5rem 1rem; 
+  padding: 0.25rem;
+}
+
+/* ===================
+   Стилі для модального вікна Bootstrap
+   =================== */
+body .modal-content {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255,255,255,0.4);
+  border-radius: 12px;
+  color: #1f3b73;
+}
+
+body .modal-header {
+  border-bottom: 1px solid rgba(0,0,0,0.1);
+}
+
+body .modal-footer {
+  border-top: 1px solid rgba(0,0,0,0.1);
+}
+
+/* Адаптуємо кнопку закриття (Універсальний фікс) */
+body .btn-close {
+  filter: brightness(0) invert(1) !important;
+  opacity: 0.7 !important; 
+}
+body .btn-close:hover {
+  opacity: 1 !important;
+}
+
+
 /* =======================================
    Адаптація для мобільних пристроїв (ПОВНИЙ БЛОК)
    ======================================= */
@@ -299,6 +396,10 @@ footer {
     margin: 1rem 0.5rem; /* 1rem зверху/знизу, 0.5rem з боків */
     padding: 1.5rem 1rem; /* 1.5rem зверху/знизу, 1rem з боків */
   }
+  #weather-result {
+    margin: 1rem 0.5rem 0;
+    padding: 1.5rem 1rem;
+  }
 
   /* (Цей блок не змінився) */
   button, select {
@@ -308,120 +409,27 @@ footer {
   }
   
   /* === ДОДАНО (Проблема #2: Поле вводу) === */
-  
-  /* Робимо .input-group вертикальним на мобільних */
   .input-group {
     flex-direction: column; /* Складаємо інпут і кнопку один під одним */
     gap: 0.5rem; /* Додаємо відступ між ними */
   }
   
-  /* Переконуємось, що інпут і кнопка в групі займають всю ширину */
   .input-group .form-control,
   .input-group .btn {
     width: 100%; /* Займають всю ширину батька (.input-group) */
     margin-left: 0 !important; /* Скидаємо 'margin-left', який ми додавали раніше */
   }
-}
-/* Адаптація Bootstrap під наш "Глассморфізм" */
 
-/* Робимо поля вводу "скляними" */
-.form-control {
-  background: rgba(255, 255, 255, 0.25) !important;
-  border: 1px solid rgba(255, 255, 255, 0.4) !important;
-  border-radius: 12px !important;
-  color: #1f3b73 !important;
-  backdrop-filter: blur(5px);
-  box-shadow: 4px 4px 10px rgba(0,0,0,0.1),
-              -4px -4px 10px rgba(255,255,255,0.6) !important;
-}
-
-.form-control::placeholder {
-  color: #1f3b73;
-  opacity: 0.7;
-}
-
-.form-control:focus {
-  background: rgba(255, 255, 255, 0.45) !important;
-  box-shadow: 6px 6px 15px rgba(0,0,0,0.15),
-              -6px -6px 15px rgba(255,255,255,0.8) !important;
-}
-
-/* Перестилізуємо кнопку (беремо стилі з твого 'button') */
-.input-group .btn {
-  /* Копіюємо стилі з твого 'button' */
-  background: rgba(255,255,255,0.35);
-  border: 1px solid rgba(255,255,255,0.5);
-  border-radius: 12px !important; /* !important потрібен, бо Bootstrap дуже впертий */
-  color: #1f3b73;
-  font-weight: bold;
-  box-shadow: 4px 4px 10px rgba(0,0,0,0.15),
-              -4px -4px 10px rgba(255,255,255,0.6);
-  transition: all 0.3s ease;
-  margin-left: 10px; /* Дамо трохи відступу, який був у 'gap' */
-}
-/* ===================
-   СТИЛІ ДЛЯ КАЛЕНДАРЯ
-   =================== */
-
-/* Контейнер для сітки (дні тижня + дні місяця) */
-.calendar-grid {
-  display: grid;
-  /* 7 колонок однакової ширини */
-  grid-template-columns: repeat(7, 1fr); 
-  gap: 5px; /* Невеликий відступ між осередками */
-}
-
-/* Стилізація заголовків (Пн, Вт, Ср...) */
-#calendar-header div {
-  font-weight: bold;
-  padding: 0.5rem;
-  text-align: center;
-  opacity: 0.7;
-}
-
-/* Стилізація осередків з днями */
-#calendar-grid .calendar-day {
-position: relative; /* <-- ДОДАЙ ЦЕЙ РЯДОК */
-  padding: 0.5rem;
-  min-height: 80px; /* Мінімальна висота, щоб було куди клікати */
-  text-align: left;
-  font-weight: bold;
+  /* === ДОДАНО (Адаптація Хедера) === */
+  .header-bottom-row {
+    flex-direction: column; /* Ставим nav и form друг под другом */
+    align-items: center; /* Центрируем */
+    gap: 1rem;
+  }
   
-  /* Адаптивний "скляний" фон для осередку */
-  background: rgba(255, 255, 255, 0.1); 
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 8px;
-  cursor: pointer;
-  transition: background 0.3s;
-}
-
-/* Ефект при наведенні */
-#calendar-grid .calendar-day:hover {
-  background: rgba(255, 255, 255, 0.3);
-}
-
-/* Стиль для днів, що не входять в поточний місяць (зробимо їх тьмяними) */
-#calendar-grid .other-month {
-  opacity: 0.4;
-  background: transparent;
-  border: none;
-  cursor: default;
-}
-/* Стиль для поточної дати */
-#calendar-grid .calendar-day.today {
-  background: rgba(255, 255, 255, 0.45);
-  border: 2px solid #1f3b73;
-  box-shadow: 0 0 10px rgba(74, 144, 226, 0.5);
-}
-/* Стиль для зайнятої дати (точка) */
-#calendar-grid .calendar-day.busy-day::after {
-  content: '';
-  position: absolute;
-  bottom: 8px; /* Відступ знизу */
-  left: 50%; /* Центрування по горизонталі */
-  transform: translateX(-50%);
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background-color: #1f3b73; /* Головний колір теми */
+  #weather-form-header {
+    max-width: 100%; /* На мобильном - во всю ширину */
+    min-width: unset;
+    order: -1; /* Ставит погоду НАД ссылками навигации */
+  }
 }

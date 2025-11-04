@@ -15,18 +15,35 @@
   <body> 
     <header>
       <h1>Смарт-бот / Органайзер студентів</h1>
-      <nav>
-        <ul>
-          <li><a href="#tasks">Завдання</a></li>
-          <li><a href="#calendar">Календар</a></li>
-          <li><a href="#focus">Фокус</a></li>
-          <li><a href="#analytics">Аналітика</a></li>
-          <li><a href="#settings">Налаштування</a></li>
-        </ul>
-      </nav>
-    </header>
+      
+      <div class="header-bottom-row">
+      
+        <nav>
+          <ul>
+            <li><a href="#tasks">Завдання</a></li>
+            <li><a href="#calendar">Календар</a></li>
+            <li><a href="#focus">Фокус</a></li>
+            <li><a href="#analytics">Аналітика</a></li>
+            <li><a href="#settings">Налаштування</a></li>
+          </ul>
+        </nav>
+
+        <form id="weather-form-header" class="input-group">
+          <input
+            type="text"
+            id="weather-input"
+            class="form-control"
+            placeholder="Дізнатись погоду у вашому місті..."
+          />
+          <button class="btn" type="button" id="weather-btn">🌤️</button>
+        </form>
+        
+      </div> </header>
 
     <main>
+    
+      <div id="weather-result" style="display: none;"></div>
+
       <section id="tasks">
         <h2>Завдання</h2>
         <form id="add-task-form" class="mb-3">
@@ -73,49 +90,6 @@
           + Додати подію
         </button>
       </section>
-
-      <div class="modal fade" id="addEventModal" tabindex="-1" aria-labelledby="addEventModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title" id="addEventModalLabel">Додати нову подію</h5>
-              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-              <form id="add-event-form">
-			  <div class="mb-3">
-				<label for="event-title" class="form-label">Назва події:</label>
-				<input type="text" class="form-control" id="event-title" placeholder="Наприклад, 'Лабораторна з програмування'" required>
-			  </div>
-			  <div class="mb-3">
-				<label for="event-date" class="form-label">Дата:</label>
-				<input type="date" class="form-control" id="event-date" required>
-			  </div>
-
-			  <div class="mb-3 form-check">
-				<input type="checkbox" class="form-check-input" id="all-day-checkbox">
-				<label class="form-check-label" for="all-day-checkbox">
-				  На весь день
-				</label>
-			  </div>
-			  <div class="mb-3">
-				<label for="event-time" class="form-label">Час (необов'язково):</label>
-				<input type="time" class="form-control" id="event-time">
-			  </div>
-
-			  <div class="mb-3">
-				<label for="event-end-time" class="form-label">Час закінчення (необов'язково):</label>
-				<input type="time" class="form-control" id="event-end-time">
-			  </div>
-			  </form>
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрити</button>
-              <button type="button" id="save-event-btn" class="btn btn-primary">Зберегти</button>
-            </div>
-          </div>
-        </div>
-      </div>
 
       <section id="focus">
         <h2>Режим концентрації</h2>
@@ -183,6 +157,50 @@
     <footer>
       <p>© 2025 Смарт-бот для студентів</p>
     </footer>
+
+    <div class="modal fade" id="addEventModal" tabindex="-1" aria-labelledby="addEventModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="addEventModalLabel">Додати нову подію</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <form id="add-event-form">
+              <div class="mb-3">
+                <label for="event-title" class="form-label">Назва події:</label>
+                <input type="text" class="form-control" id="event-title" placeholder="Наприклад, 'Лабораторна з програмування'" required>
+              </div>
+              <div class="mb-3">
+                <label for="event-date" class="form-label">Дата:</label>
+                <input type="date" class="form-control" id="event-date" required>
+              </div>
+            
+              <div class="mb-3 form-check">
+                <input type="checkbox" class="form-check-input" id="all-day-checkbox">
+                <label class="form-check-label" for="all-day-checkbox">
+                  На весь день
+                </label>
+              </div>
+            
+              <div class="mb-3">
+                <label for="event-time" class="form-label">Час (необов'язково):</label>
+                <input type="time" class="form-control" id="event-time">
+              </div>
+              
+              <div class="mb-3">
+                <label for="event-end-time" class="form-label">Час закінчення (необов'язково):</label>
+                <input type="time" class="form-control" id="event-end-time">
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрити</button>
+            <button type="button" id="save-event-btn" class="btn btn-primary">Зберегти</button>
+          </div>
+        </div>
+      </div>
+    </div>
     <script
       src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
       integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"

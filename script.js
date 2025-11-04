@@ -1,5 +1,5 @@
 ﻿// ==========================================================
-//           ПОВНИЙ SCRIPT.JS (з часом закінчення)
+//           ПОВНИЙ SCRIPT.JS (з погодою в хедері)
 // ==========================================================
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -131,10 +131,8 @@ document.addEventListener("DOMContentLoaded", () => {
       const apiUrl = `${backendUrl}${endpoint}`;
       const body = { ...payload, userId };
 
-      // const alertMessage = `...`; // ДЕБАГ-АЛЕРТ ВИМКНЕНО
-
-      // Показуємо нативний алерт Telegram
-      // tg.showAlert(alertMessage); // <--- ВИМКНЕНО
+      // АЛЕРТ ВИМКНЕНО
+      // tg.showAlert(alertMessage);
       
       const response = await fetch(apiUrl, {
         method: "POST",
@@ -185,6 +183,81 @@ document.addEventListener("DOMContentLoaded", () => {
       });
     }
   }
+
+  // ==================================================
+  //          ЛОГІКА: ПОГОДА (ОНОВЛЕНО)
+  // ==================================================
+  const weatherInput = document.getElementById("weather-input");
+  const weatherBtn = document.getElementById("weather-btn");
+  const weatherResultDiv = document.getElementById("weather-result");
+
+  if (weatherBtn) {
+    weatherBtn.addEventListener("click", fetchWeather);
+
+    // (Для удобства, чтобы Enter тоже работал)
+    weatherInput.addEventListener("keypress", (e) => {
+      if (e.key === "Enter") {
+        e.preventDefault(); // Запобігаємо надсиланню форми (якщо вона є)
+        fetchWeather();
+      }
+    });
+  }
+
+  async function fetchWeather() {
+    const city = weatherInput.value.trim();
+    if (!city) {
+      weatherResultDiv.innerHTML = "Будь ласка, введіть назву міста.";
+      weatherResultDiv.style.color = "red";
+      weatherResultDiv.style.display = "block";
+      return;
+    }
+
+    const userId = tg.initDataUnsafe?.user?.id;
+    if (!backendUrl || !userId) {
+      weatherResultDiv.innerHTML = "❌ Помилка: Не вдалося отримати ID користувача.";
+      weatherResultDiv.style.color = "red";
+      weatherResultDiv.style.display = "block";
+      return;
+    }
+
+    weatherResultDiv.innerHTML = "Завантаження...";
+    weatherResultDiv.style.color = "orange"; // Цвет из твоих старых стилей
+    weatherResultDiv.style.display = "block"; // ПОКАЗУЄМО БЛОК
+
+    const payload = {
+      userId: userId,
+      city: city,
+    };
+
+    try {
+      const response = await fetch(`${backendUrl}/get_weather_for_site`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+
+      if (!response.ok) {
+        throw new Error("Помилка мережі");
+      }
+
+      const result = await response.json();
+
+      if (result.status === "success") {
+        weatherResultDiv.innerHTML = result.formatted_weather;
+        weatherResultDiv.style.color = ""; // Сбрасываем цвет ошибки
+      } else {
+        throw new Error(result.message);
+      }
+    } catch (error) {
+      console.error("Помилка fetchWeather:", error);
+      weatherResultDiv.innerHTML = `❌ Помилка: ${error.message}`;
+      weatherResultDiv.style.color = "red";
+    }
+  }
+  // ==================================================
+  //          КІНЕЦЬ ЛОГІКИ ПОГОДИ
+  // ==================================================
+
 
   // ===== Режим концентрації (Таймер Помодоро) =====
   const timerDisplay = document.getElementById("timer-display");
@@ -239,7 +312,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // ==================================================
-  //          ЛОГІКА КАЛЕНДАРЯ (ОНОВЛЕНО)
+  //          ЛОГІКА КАЛЕНДАРЯ (з часом закінчення)
   // ==================================================
   const monthYearDisplay = document.getElementById("month-year-display");
   if (monthYearDisplay) {
@@ -255,10 +328,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const eventTitleInput = document.getElementById("event-title");
     const eventDateInput = document.getElementById("event-date");
     const eventTimeInput = document.getElementById("event-time");
-    // === ДОДАНО ===
     const eventEndTimeInput = document.getElementById("event-end-time");
     const allDayCheckbox = document.getElementById("all-day-checkbox");
-    // === КІНЕЦЬ ===
     
     const calendarStatus = document.getElementById("add-task-status");
     let currentDate = new Date();
@@ -333,22 +404,20 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     /**
-     * 4. (ОНОВЛЕНО) Функція відкриття модалки
+     * 4. Функція відкриття модалки
      */
     function openAddEventModal(date) {
       document.getElementById("add-event-form").reset();
       eventDateInput.value = date;
       
-      // === ДОДАНО: Сброс блокировки полей ===
       eventTimeInput.disabled = false;
       eventEndTimeInput.disabled = false;
-      // === КІНЕЦЬ ===
       
       addEventModal.show();
     }
     
     /**
-     * (НОВА) Логіка для чекбокса "На весь день"
+     * Логіка для чекбокса "На весь день"
      */
     allDayCheckbox.addEventListener('change', () => {
       if (allDayCheckbox.checked) {
@@ -379,32 +448,28 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     /**
-     * 6. (ОНОВЛЕНО) Обробник кнопки "Зберегти" в модалці
+     * 6. Обробник кнопки "Зберегти" в модалці
      */
     saveEventBtn.addEventListener("click", async () => { 
       const title = eventTitleInput.value;
       const date = eventDateInput.value;
       
-      // === НОВІ ЗМІННІ ===
       const time = eventTimeInput.value;
       const endTime = eventEndTimeInput.value;
       const isAllDay = allDayCheckbox.checked;
-      // === КІНЕЦЬ ===
 
       if (!title || !date) {
         tg.showAlert("Будь ласка, заповніть назву події та дату.");
         return;
       }
 
-      // === ОНОВЛЕНИЙ PAYLOAD ===
       const payload = {
         title: title,
         date: date,
         time: isAllDay ? null : (time || null),
-        end_time: isAllDay ? null : (endTime || null), // Нове поле
-        all_day: isAllDay // Нове поле
+        end_time: isAllDay ? null : (endTime || null), 
+        all_day: isAllDay 
       };
-      // === КІНЕЦЬ ===
 
       sendApiRequest(
         "/add_event",
@@ -415,12 +480,11 @@ document.addEventListener("DOMContentLoaded", () => {
       
       addEventModal.hide();
       
-      // Оновлюємо календар, щоб одразу побачити зміни
       await renderCalendar();
     });
     
     /**
-     * 7. (НОВА) Функція для завантаження "зайнятих" дат
+     * 7. Функція для завантаження "зайнятих" дат
      */
     async function fetchEventDates(year, month) {
       const userId = tg.initDataUnsafe?.user?.id;
