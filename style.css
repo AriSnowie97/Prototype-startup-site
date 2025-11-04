@@ -376,6 +376,7 @@ body .btn-close:hover {
 
 /* =======================================
    Адаптація для мобільних пристроїв (ПОВНИЙ БЛОК)
+   (Встав це в кінець green-style.css, pink-style.css і т.д.)
    ======================================= */
 @media (max-width: 768px) {
   h1 {
@@ -391,7 +392,7 @@ body .btn-close:hover {
     gap: 0.5rem; /* Зменшуємо відступ */
   }
 
-  /* === ВИПРАВЛЕНО (Проблема #1: Ширина блоку) === */
+  /* === Ширина блоків === */
   main section {
     margin: 1rem 0.5rem; /* 1rem зверху/знизу, 0.5rem з боків */
     padding: 1.5rem 1rem; /* 1.5rem зверху/знизу, 1rem з боків */
@@ -401,26 +402,26 @@ body .btn-close:hover {
     padding: 1.5rem 1rem;
   }
 
-  /* (Цей блок не змінився) */
+  /* === Ширина кнопок === */
   button, select {
-    padding: 0.7rem 1.2rem; /* Робимо кнопки трохи компактнішими */
-    width: 90%; /* Кнопки займають більшу частину ширини */
-    box-sizing: border-box; /* Щоб padding не впливав на ширину */
+    padding: 0.7rem 1.2rem; 
+    width: 90%; 
+    box-sizing: border-box; 
   }
   
-  /* === ДОДАНО (Проблема #2: Поле вводу) === */
+  /* === Поля вводу (стають вертикально) === */
   .input-group {
-    flex-direction: column; /* Складаємо інпут і кнопку один під одним */
-    gap: 0.5rem; /* Додаємо відступ між ними */
+    flex-direction: column; 
+    gap: 0.5rem; 
   }
   
   .input-group .form-control,
   .input-group .btn {
-    width: 100%; /* Займають всю ширину батька (.input-group) */
-    margin-left: 0 !important; /* Скидаємо 'margin-left', який ми додавали раніше */
+    width: 100%; 
+    margin-left: 0 !important; 
   }
 
-  /* === ДОДАНО (Адаптація Хедера) === */
+  /* === Адаптація Хедера === */
   .header-bottom-row {
     flex-direction: column; /* Ставим nav и form друг под другом */
     align-items: center; /* Центрируем */
