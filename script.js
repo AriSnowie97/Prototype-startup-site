@@ -46,10 +46,10 @@ document.addEventListener("DOMContentLoaded", () => {
   if (devModeBtn) {
     devModeBtn.addEventListener("click", () => {
       const currentBackendUrl = backendUrl;
-      let devPageUrl = "developomde.html";
+      let devPageUrl = "developmode.html";
 
       if (currentBackendUrl) {
-        devPageUrl = `developomde.html?backendUrl=${encodeURIComponent(
+        devPageUrl = `developmode.html?backendUrl=${encodeURIComponent(
           currentBackendUrl
         )}`;
       }
@@ -57,7 +57,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // --- 2. Кнопка "Вимкнути" (яка є на developomde.html) ---
+  // --- 2. Кнопка "Вимкнути" (яка є на developmode.html) ---
   const exitDevModeBtn = document.getElementById("exit-dev-mode-btn");
   if (exitDevModeBtn) {
     exitDevModeBtn.addEventListener("click", () => {
