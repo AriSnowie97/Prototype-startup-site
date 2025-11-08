@@ -172,6 +172,7 @@ footer {
 
 /* =======================================
    Адаптація для мобільних пристроїв (ПОВНИЙ БЛОК)
+   (Встав це в кінець green-style.css, pink-style.css і т.д.)
    ======================================= */
 @media (max-width: 768px) {
   h1 {
@@ -187,32 +188,46 @@ footer {
     gap: 0.5rem; /* Зменшуємо відступ */
   }
 
-  /* === ВИПРАВЛЕНО (Проблема #1: Ширина блоку) === */
+  /* === Ширина блоків === */
   main section {
     margin: 1rem 0.5rem; /* 1rem зверху/знизу, 0.5rem з боків */
     padding: 1.5rem 1rem; /* 1.5rem зверху/знизу, 1rem з боків */
   }
+  #weather-result {
+    margin: 1rem 0.5rem 0;
+    padding: 1.5rem 1rem;
+  }
 
-  /* (Цей блок не змінився) */
+  /* === Ширина кнопок === */
   button, select {
-    padding: 0.7rem 1.2rem; /* Робимо кнопки трохи компактнішими */
-    width: 90%; /* Кнопки займають більшу частину ширини */
-    box-sizing: border-box; /* Щоб padding не впливав на ширину */
+    padding: 0.7rem 1.2rem; 
+    width: 90%; 
+    box-sizing: border-box; 
   }
   
-  /* === ДОДАНО (Проблема #2: Поле вводу) === */
-  
-  /* Робимо .input-group вертикальним на мобільних */
+  /* === Поля вводу (стають вертикально) === */
   .input-group {
-    flex-direction: column; /* Складаємо інпут і кнопку один під одним */
-    gap: 0.5rem; /* Додаємо відступ між ними */
+    flex-direction: column; 
+    gap: 0.5rem; 
   }
   
-  /* Переконуємось, що інпут і кнопка в групі займають всю ширину */
   .input-group .form-control,
   .input-group .btn {
-    width: 100%; /* Займають всю ширину батька (.input-group) */
-    margin-left: 0 !important; /* Скидаємо 'margin-left', який ми додавали раніше */
+    width: 100%; 
+    margin-left: 0 !important; 
+  }
+
+  /* === Адаптація Хедера === */
+  .header-bottom-row {
+    flex-direction: column; /* Ставим nav и form друг под другом */
+    align-items: center; /* Центрируем */
+    gap: 1rem;
+  }
+  
+  #weather-form-header {
+    max-width: 100%; /* На мобильном - во всю ширину */
+    min-width: unset;
+    order: -1; /* Ставит погоду НАД ссылками навигации */
   }
 }
 /* ========================================================
