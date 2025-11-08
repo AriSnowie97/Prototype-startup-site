@@ -276,7 +276,43 @@ footer {
   color: #555;
   font-size: 0.9rem;
 }
+/* ===================
+   СТИЛИ ДЛЯ ПОГОДЫ В ХЕДЕРЕ
+   =================== */
+#weather-form-header {
+  max-width: 600px;
+  margin: 1rem auto 0; /* Отступ сверху */
+  padding: 0 1rem; /* Чтобы на мобильном не прилипало к краям */
+  box-sizing: border-box;
+}
 
+/* Мы должны "перебить" стили .input-group .btn из 
+  "Адаптации Bootstrap", иначе кнопка будет прозрачной
+*/
+#weather-form-header .btn {
+  background: rgba(255, 255, 255, 0.55) !important;
+  font-size: 1.2rem;
+  line-height: 1;
+  padding-top: 0.5rem;
+}
+
+/* Стили для блока результатов.
+  Он будет выглядеть как обычная "стеклянная" секция.
+*/
+#weather-result {
+  display: none; /* Прячем, пока он пустой */
+  text-align: left;
+  
+  /* Копируем стили из 'main section', чтобы было красиво */
+  margin: 1rem auto 0; /* Уменьшен margin-top, чтобы было ближе к хедеру */
+  padding: 1.5rem 2rem;
+  max-width: 800px;
+  border-radius: 20px;
+  backdrop-filter: blur(14px);
+
+  /* Эти стили должны быть УНИКАЛЬНЫМИ для каждой темы! */
+  /* Скопируй их из 'main section' твоего файла */
+}
 /* =======================================
    Адаптація для мобільних пристроїв (ПОВНИЙ БЛОК)
    ======================================= */

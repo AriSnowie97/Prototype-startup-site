@@ -1,5 +1,5 @@
 ﻿// ==========================================================
-//           ПОВНИЙ SCRIPT.JS (з часом закінчення)
+//           ПОВНИЙ SCRIPT.JS (v7, з погодою в хедері)
 // ==========================================================
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -185,6 +185,81 @@ document.addEventListener("DOMContentLoaded", () => {
       });
     }
   }
+  
+  // ==================================================
+  //          НОВА ЛОГІКА: ПОГОДА (в хедері)
+  // ==================================================
+  const weatherInput = document.getElementById("weather-input");
+  const weatherBtn = document.getElementById("weather-btn");
+  const weatherResultDiv = document.getElementById("weather-result");
+
+  if (weatherBtn) {
+    weatherBtn.addEventListener("click", fetchWeather);
+
+    // (Для удобства, чтобы Enter тоже работал)
+    weatherInput.addEventListener("keypress", (e) => {
+      if (e.key === "Enter") {
+        e.preventDefault(); // Запобігаємо відправці форми, якщо вона є
+        fetchWeather();
+      }
+    });
+  }
+
+  async function fetchWeather() {
+    const city = weatherInput.value.trim();
+    if (!city) {
+      weatherResultDiv.innerHTML = "Будь ласка, введіть назву міста.";
+      weatherResultDiv.style.color = "red";
+      weatherResultDiv.style.display = "block"; // ПОКАЗАТИ БЛОК
+      return;
+    }
+
+    const userId = tg.initDataUnsafe?.user?.id;
+    if (!backendUrl || !userId) {
+      weatherResultDiv.innerHTML = "❌ Помилка: Не вдалося отримати ID користувача.";
+      weatherResultDiv.style.color = "red";
+      weatherResultDiv.style.display = "block"; // ПОКАЗАТИ БЛОК
+      return;
+    }
+
+    weatherResultDiv.innerHTML = "Завантаження...";
+    weatherResultDiv.style.color = "orange";
+    weatherResultDiv.style.display = "block"; // ПОКАЗАТИ БЛОК
+
+    const payload = {
+      userId: userId,
+      city: city,
+    };
+
+    try {
+      const response = await fetch(`${backendUrl}/get_weather_for_site`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+
+      if (!response.ok) {
+        throw new Error("Помилка мережі");
+      }
+
+      const result = await response.json();
+
+      if (result.status === "success") {
+        weatherResultDiv.innerHTML = result.formatted_weather;
+        weatherResultDiv.style.color = ""; // Скидаємо колір помилки
+      } else {
+        throw new Error(result.message);
+      }
+    } catch (error) {
+      console.error("Помилка fetchWeather:", error);
+      weatherResultDiv.innerHTML = `❌ Помилка: ${error.message}`;
+      weatherResultDiv.style.color = "red";
+    }
+  }
+  // ==================================================
+  //          КІНЕЦЬ ЛОГІКИ ПОГОДИ
+  // ==================================================
+
 
   // ===== Режим концентрації (Таймер Помодоро) =====
   const timerDisplay = document.getElementById("timer-display");
@@ -255,10 +330,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const eventTitleInput = document.getElementById("event-title");
     const eventDateInput = document.getElementById("event-date");
     const eventTimeInput = document.getElementById("event-time");
-    // === ДОДАНО ===
     const eventEndTimeInput = document.getElementById("event-end-time");
     const allDayCheckbox = document.getElementById("all-day-checkbox");
-    // === КІНЕЦЬ ===
     
     const calendarStatus = document.getElementById("add-task-status");
     let currentDate = new Date();
