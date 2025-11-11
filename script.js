@@ -1,5 +1,5 @@
 ﻿// ==========================================================
-//           ПОВНИЙ SCRIPT.JS (v7, з погодою в хедері)
+//           ПОВНИЙ SCRIPT.JS (v9, з авто-погодою)
 // ==========================================================
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -13,7 +13,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const themeSelect = document.getElementById("theme-select");
   const themeLink = document.getElementById("theme-link");
 
-  const savedThemeFile = localStorage.getItem("themeFile") || "style.css"; 
+  const savedThemeFile = localStorage.getItem("themeFile") || "style.css";
 
   if (themeLink) {
     themeLink.href = savedThemeFile;
@@ -84,7 +84,8 @@ document.addEventListener("DOMContentLoaded", () => {
   if (testFlaskBtn && flaskStatus) {
     if (!backendUrl) {
       testFlaskBtn.disabled = true;
-      flaskStatus.textContent = "❌ Помилка: Відкрийте додаток через кнопку в боті.";
+      flaskStatus.textContent =
+        "❌ Помилка: Відкрийте додаток через кнопку в боті.";
       flaskStatus.style.color = "red";
     } else {
       testFlaskBtn.disabled = false;
@@ -104,6 +105,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   /**
    * ✅ ГОЛОВНА ФУНКЦІЯ для відправки будь-яких запитів на бекенд.
+   * (ОНОВЛЕНО: тепер безпечно працює, якщо statusElement = null)
    */
   async function sendApiRequest(
     endpoint,
@@ -112,20 +114,27 @@ document.addEventListener("DOMContentLoaded", () => {
     successMessage
   ) {
     if (!backendUrl) {
-      statusElement.textContent = "❌ Помилка: URL бекенду не знайдено.";
-      statusElement.style.color = "red";
+      if (statusElement) {
+        statusElement.textContent = "❌ Помилка: URL бекенду не знайдено.";
+        statusElement.style.color = "red";
+      }
       return;
     }
 
     const userId = tg.initDataUnsafe?.user?.id;
     if (!userId) {
-      statusElement.textContent = "❌ Помилка: Не вдалося отримати ID користувача.";
-      statusElement.style.color = "red";
+      if (statusElement) {
+        statusElement.textContent =
+          "❌ Помилка: Не вдалося отримати ID користувача.";
+        statusElement.style.color = "red";
+      }
       return;
     }
 
-    statusElement.textContent = "Обробка запиту...";
-    statusElement.style.color = "orange";
+    if (statusElement) {
+      statusElement.textContent = "Обробка запиту...";
+      statusElement.style.color = "orange";
+    }
 
     try {
       const apiUrl = `${backendUrl}${endpoint}`;
@@ -133,7 +142,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       // АЛЕРТ ВИМКНЕНО
       // tg.showAlert(alertMessage);
-      
+
       const response = await fetch(apiUrl, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -142,16 +151,51 @@ document.addEventListener("DOMContentLoaded", () => {
 
       const result = await response.json();
 
-      if (response.ok && result.status === 'success') {
-        statusElement.textContent = `✅ ${successMessage}`;
-        statusElement.style.color = "green";
+      if (response.ok && result.status === "success") {
+        if (statusElement) {
+          statusElement.textContent = `✅ ${successMessage}`;
+          statusElement.style.color = "green";
+        }
       } else {
         throw new Error(result.message || "Невідома помилка сервера");
       }
     } catch (error) {
       console.error(`API Request Error to ${endpoint}:`, error);
-      statusElement.textContent = `❌ Помилка: ${error.message}`;
-      statusElement.style.color = "red";
+      if (statusElement) {
+        statusElement.textContent = `❌ Помилка: ${error.message}`;
+        statusElement.style.color = "red";
+      }
+    }
+  }
+
+  /**
+   * ✅ НОВА ФУНКЦІЯ для запитів, що повертають дані.
+   * Очікує, що бекенд поверне { status: 'success', data: [...] }
+   */
+  async function fetchApi(endpoint, payload) {
+    if (!backendUrl) {
+      throw new Error("URL бекенду не знайдено.");
+    }
+    const userId = tg.initDataUnsafe?.user?.id;
+    if (!userId) {
+      throw new Error("Не вдалося отримати ID користувача.");
+    }
+
+    const apiUrl = `${backendUrl}${endpoint}`;
+    const body = { ...payload, userId };
+
+    const response = await fetch(apiUrl, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(body),
+    });
+
+    const result = await response.json();
+
+    if (response.ok && result.status === "success") {
+      return result.data; // Повертаємо саме дані
+    } else {
+      throw new Error(result.message || "Невідома помилка сервера");
     }
   }
 
@@ -183,13 +227,22 @@ document.addEventListener("DOMContentLoaded", () => {
       });
     }
   }
-  
+
   // ==================================================
   //          ЛОГІКА: ПОГОДА (ОНОВЛЕНО)
   // ==================================================
   const weatherInput = document.getElementById("weather-input");
   const weatherBtn = document.getElementById("weather-btn");
   const weatherResultDiv = document.getElementById("weather-result");
+
+  // === НОВИЙ КОД: Авто-завантаження погоди при старті ===
+  // (Функція fetchWeather "спливає" (hoisted), тому ми можемо її тут викликати)
+  const savedCity = localStorage.getItem("savedCity");
+  if (savedCity && weatherInput) {
+    weatherInput.value = savedCity;
+    fetchWeather(); // Викликаємо одразу
+  }
+  // === КІНЕЦЬ НОВОГО КОДУ ===
 
   if (weatherBtn) {
     weatherBtn.addEventListener("click", fetchWeather);
@@ -214,7 +267,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const userId = tg.initDataUnsafe?.user?.id;
     if (!backendUrl || !userId) {
-      weatherResultDiv.innerHTML = "❌ Помилка: Не вдалося отримати ID користувача.";
+      weatherResultDiv.innerHTML =
+        "❌ Помилка: Не вдалося отримати ID користувача.";
       weatherResultDiv.style.color = "red";
       weatherResultDiv.style.display = "block";
       return;
@@ -245,6 +299,10 @@ document.addEventListener("DOMContentLoaded", () => {
       if (result.status === "success") {
         weatherResultDiv.innerHTML = result.formatted_weather;
         weatherResultDiv.style.color = ""; // Сбрасываем цвет ошибки
+
+        // === НОВИЙ КОД: Збереження успішного міста ===
+        localStorage.setItem("savedCity", city);
+        // === КІНЕЦЬ НОВОГО КОДУ ===
       } else {
         throw new Error(result.message);
       }
@@ -258,7 +316,6 @@ document.addEventListener("DOMContentLoaded", () => {
   //          КІНЕЦЬ ЛОГІКИ ПОГОДИ
   // ==================================================
 
-
   // ===== Режим концентрації (Таймер Помодоро) =====
   const timerDisplay = document.getElementById("timer-display");
   if (timerDisplay) {
@@ -267,7 +324,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const stopBtn = document.getElementById("stop-btn");
 
     let countdown;
-    let timeLeft = 25 * 60; 
+    let timeLeft = 25 * 60;
     let isPaused = true;
 
     function updateTimerDisplay() {
@@ -307,7 +364,7 @@ document.addEventListener("DOMContentLoaded", () => {
     startBtn.addEventListener("click", startTimer);
     pauseBtn.addEventListener("click", pauseTimer);
     stopBtn.addEventListener("click", stopTimer);
-    
+
     updateTimerDisplay();
   }
 
@@ -323,14 +380,14 @@ document.addEventListener("DOMContentLoaded", () => {
     const addEventModalEl = document.getElementById("addEventModal");
     const addEventModal = new bootstrap.Modal(addEventModalEl);
     const saveEventBtn = document.getElementById("save-event-btn");
-    
+
     // Елементи форми
     const eventTitleInput = document.getElementById("event-title");
     const eventDateInput = document.getElementById("event-date");
     const eventTimeInput = document.getElementById("event-time");
     const eventEndTimeInput = document.getElementById("event-end-time");
     const allDayCheckbox = document.getElementById("all-day-checkbox");
-    
+
     const calendarStatus = document.getElementById("add-task-status");
     let currentDate = new Date();
 
@@ -339,7 +396,7 @@ document.addEventListener("DOMContentLoaded", () => {
      */
     async function renderCalendar() {
       const year = currentDate.getFullYear();
-      const month = currentDate.getMonth(); 
+      const month = currentDate.getMonth();
 
       const monthName = new Date(year, month).toLocaleString("uk-UA", {
         month: "long",
@@ -347,7 +404,7 @@ document.addEventListener("DOMContentLoaded", () => {
       monthYearDisplay.textContent = `${
         monthName.charAt(0).toUpperCase() + monthName.slice(1)
       } ${year}`;
-      
+
       const busyDates = await fetchEventDates(year, month + 1);
 
       calendarGrid.innerHTML = "";
@@ -361,7 +418,7 @@ document.addEventListener("DOMContentLoaded", () => {
         startDayOfWeek = 7;
       }
       const paddingDays = startDayOfWeek - 1;
-      
+
       const realToday = new Date();
       realToday.setHours(0, 0, 0, 0);
 
@@ -379,7 +436,7 @@ document.addEventListener("DOMContentLoaded", () => {
         dayCell.textContent = day;
 
         const cellDate = new Date(year, month, day);
-        cellDate.setHours(0, 0, 0, 0); 
+        cellDate.setHours(0, 0, 0, 0);
 
         if (cellDate.getTime() === realToday.getTime()) {
           dayCell.classList.add("today");
@@ -390,7 +447,7 @@ document.addEventListener("DOMContentLoaded", () => {
           "0"
         )}-${String(day).padStart(2, "0")}`;
         dayCell.dataset.date = cellDateISO;
-        
+
         if (busyDates.includes(cellDateISO)) {
           dayCell.classList.add("busy-day");
         }
@@ -409,28 +466,27 @@ document.addEventListener("DOMContentLoaded", () => {
     function openAddEventModal(date) {
       document.getElementById("add-event-form").reset();
       eventDateInput.value = date;
-      
+
       eventTimeInput.disabled = false;
       eventEndTimeInput.disabled = false;
-      
+
       addEventModal.show();
     }
-    
+
     /**
      * Логіка для чекбокса "На весь день"
      */
-    allDayCheckbox.addEventListener('change', () => {
+    allDayCheckbox.addEventListener("change", () => {
       if (allDayCheckbox.checked) {
         eventTimeInput.disabled = true;
         eventEndTimeInput.disabled = true;
-        eventTimeInput.value = '';
-        eventEndTimeInput.value = '';
+        eventTimeInput.value = "";
+        eventEndTimeInput.value = "";
       } else {
         eventTimeInput.disabled = false;
         eventEndTimeInput.disabled = false;
       }
     });
-
 
     /**
      * 5. Обробники кнопок "вперед/назад"
@@ -438,22 +494,22 @@ document.addEventListener("DOMContentLoaded", () => {
     prevMonthBtn.addEventListener("click", async () => {
       currentDate.setDate(1);
       currentDate.setMonth(currentDate.getMonth() - 1);
-      await renderCalendar(); 
+      await renderCalendar();
     });
 
     nextMonthBtn.addEventListener("click", async () => {
       currentDate.setDate(1);
       currentDate.setMonth(currentDate.getMonth() + 1);
-      await renderCalendar(); 
+      await renderCalendar();
     });
 
     /**
      * 6. Обробник кнопки "Зберегти" в модалці
      */
-    saveEventBtn.addEventListener("click", async () => { 
+    saveEventBtn.addEventListener("click", async () => {
       const title = eventTitleInput.value;
       const date = eventDateInput.value;
-      
+
       const time = eventTimeInput.value;
       const endTime = eventEndTimeInput.value;
       const isAllDay = allDayCheckbox.checked;
@@ -466,9 +522,9 @@ document.addEventListener("DOMContentLoaded", () => {
       const payload = {
         title: title,
         date: date,
-        time: isAllDay ? null : (time || null),
-        end_time: isAllDay ? null : (endTime || null), 
-        all_day: isAllDay 
+        time: isAllDay ? null : time || null,
+        end_time: isAllDay ? null : endTime || null,
+        all_day: isAllDay,
       };
 
       sendApiRequest(
@@ -477,51 +533,52 @@ document.addEventListener("DOMContentLoaded", () => {
         calendarStatus,
         "Подію успішно додано!"
       );
-      
+
       addEventModal.hide();
-      
+
       await renderCalendar();
     });
-    
+
     /**
      * 7. Функція для завантаження "зайнятих" дат
      */
     async function fetchEventDates(year, month) {
       const userId = tg.initDataUnsafe?.user?.id;
       if (!backendUrl || !userId) {
-        console.warn("Не можу завантажити події: відсутній backendUrl або userId.");
-        return []; 
+        console.warn(
+          "Не можу завантажити події: відсутній backendUrl або userId."
+        );
+        return [];
       }
 
       const payload = {
         userId: userId,
         year: year,
-        month: month
+        month: month,
       };
 
       try {
         const response = await fetch(`${backendUrl}/get_events`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(payload)
+          body: JSON.stringify(payload),
         });
 
         if (!response.ok) {
-          throw new Error('Помилка мережі при завантаженні подій');
+          throw new Error("Помилка мережі при завантаженні подій");
         }
 
         const result = await response.json();
-        
-        if (result.status === 'success' && Array.isArray(result.event_dates)) {
-          return result.event_dates; 
-        } else {
-          throw new Error(result.message || 'Неправильний формат відповіді');
-        }
 
+        if (result.status === "success" && Array.isArray(result.event_dates)) {
+          return result.event_dates;
+        } else {
+          throw new Error(result.message || "Неправильний формат відповіді");
+        }
       } catch (error) {
         console.error("Помилка fetchEventDates:", error);
         tg.showAlert(`Не вдалося завантажити події: ${error.message}`);
-        return []; 
+        return [];
       }
     }
 
@@ -533,34 +590,32 @@ document.addEventListener("DOMContentLoaded", () => {
   // ==================================================
 
   // ===================================================================
-  // ===== 2. ЗАВДАННЯ ТА АНАЛІТИКА (з кирилицею) =====
+  // ===== 2. ЗАВДАННЯ ТА АНАЛІТИКА (ОНОВЛЕНО З БЕКЕНДОМ) =====
   // ===================================================================
-  
-  const taskListContainer = document.querySelector("#tasks ul"); 
+
+  const taskListContainer = document.querySelector("#tasks ul");
 
   if (taskListContainer) {
-    const progressFill = document.querySelector(".custom-progress-fill"); 
+    const progressFill = document.querySelector(".custom-progress-fill");
     const progressText = document.querySelector("#analytics p:last-of-type");
-    const addTaskForm = document.getElementById('add-task-form');
-    const newTaskInput = document.getElementById('new-task-input');
+    const addTaskForm = document.getElementById("add-task-form");
+    const newTaskInput = document.getElementById("new-task-input");
 
-    let tasks = [
-      { text: "Практична з математики", done: true },
-      { text: "Реферат з історії", done: false },
-      { text: "Підготуватись до семінару", done: false },
-    ];
+    let tasks = []; // Починаємо з порожнього масиву
 
+    // --- 1. Рендер завдань (оновлено з ID) ---
     function renderTasks() {
-      taskListContainer.innerHTML = ""; 
+      taskListContainer.innerHTML = "";
       if (tasks.length === 0) {
         taskListContainer.innerHTML = "<p>Немає завдань. Чудовий день!</p>";
       }
 
       taskListContainer.style.listStyleType = "none";
-      taskListContainer.style.paddingLeft = "0.5rem"; 
+      taskListContainer.style.paddingLeft = "0.5rem";
 
-      tasks.forEach((task, index) => {
+      tasks.forEach((task) => {
         const li = document.createElement("li");
+        li.dataset.taskId = task.id; // Зберігаємо ID
         li.style.textDecoration = task.done ? "line-through" : "none";
         li.style.opacity = task.done ? 0.6 : 1;
         li.style.cursor = "pointer";
@@ -569,20 +624,48 @@ document.addEventListener("DOMContentLoaded", () => {
         const checkbox = document.createElement("input");
         checkbox.type = "checkbox";
         checkbox.checked = task.done;
+        checkbox.dataset.taskId = task.id; // Зберігаємо ID
         checkbox.style.marginRight = "10px";
+
         checkbox.addEventListener("change", () => {
-          tasks[index].done = checkbox.checked;
-          renderTasks();
+          const taskId = checkbox.dataset.taskId;
+          const isDone = checkbox.checked;
+
+          // Оновлюємо локальний масив
+          const aTask = tasks.find((t) => t.id == taskId);
+          if (aTask) aTask.done = isDone;
+
+          renderTasks(); // Перемальовуємо
+
+          // Надсилаємо оновлення на бекенд "у фоні"
+          sendApiRequest(
+            "/update_webtask",
+            { taskId: taskId, done: isDone },
+            null,
+            null
+          );
         });
 
         li.appendChild(checkbox);
         li.append(` ${task.text}`);
-        
+
         li.addEventListener("click", (e) => {
-            if (e.target !== checkbox) { 
-                tasks[index].done = !tasks[index].done;
-                renderTasks();
+          if (e.target !== checkbox) {
+            const taskId = li.dataset.taskId;
+            const aTask = tasks.find((t) => t.id == taskId);
+            if (aTask) {
+              aTask.done = !aTask.done; // Інвертуємо стан
+              renderTasks(); // Перемальовуємо
+
+              // Надсилаємо оновлення на бекенд "у фоні"
+              sendApiRequest(
+                "/update_webtask",
+                { taskId: taskId, done: aTask.done },
+                null,
+                null
+              );
             }
+          }
         });
 
         taskListContainer.appendChild(li);
@@ -590,6 +673,7 @@ document.addEventListener("DOMContentLoaded", () => {
       updateAnalytics();
     }
 
+    // --- 2. Оновлення аналітики (без змін) ---
     function updateAnalytics() {
       const totalTasks = tasks.length;
       const completedTasks = tasks.filter((task) => task.done).length;
@@ -604,19 +688,45 @@ document.addEventListener("DOMContentLoaded", () => {
         progressText.textContent = `Виконано ${completedTasks} з ${totalTasks} завдань`;
       }
     }
-    
+
+    // --- 3. Додавання завдання (оновлено з async/await) ---
     if (addTaskForm && newTaskInput) {
-      addTaskForm.addEventListener('submit', (e) => {
-        e.preventDefault(); 
+      addTaskForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
         const taskText = newTaskInput.value.trim();
         if (taskText) {
-          tasks.push({ text: taskText, done: false }); 
-          newTaskInput.value = ''; 
-          renderTasks(); 
+          try {
+            // Надсилаємо на бек і чекаємо на відповідь з новим завданням
+            // Очікуємо, що бек поверне {id: ..., text: ..., done: ...}
+            const newTask = await fetchApi("/add_webtask", { text: taskText });
+
+            tasks.push(newTask);
+            newTaskInput.value = "";
+            renderTasks();
+          } catch (error) {
+            console.error("Помилка додавання завдання:", error);
+            tg.showAlert(`Не вдалося додати завдання: ${error.message}`);
+          }
         }
       });
     }
 
-    renderTasks(); // Перший запуск
+    // --- 4. Початкове завантаження завдань ---
+    async function initializeTasks() {
+      try {
+        taskListContainer.innerHTML = "<p>Завантаження завдань...</p>";
+        // Очікуємо, що бек поверне масив завдань
+        const fetchedTasks = await fetchApi("/get_webtasks", {});
+        tasks = fetchedTasks || []; // На випадок, якщо data буде null
+        renderTasks();
+      } catch (error)
+      {
+        console.error("Помилка завантаження завдань:", error);
+        taskListContainer.innerHTML = `<p style="color: red;">❌ Не вдалося завантажити завдання: ${error.message}</p>`;
+        updateAnalytics(); // Оновити аналітику (покаже 0 з 0)
+      }
+    }
+
+    initializeTasks(); // Перший запуск
   }
 });
