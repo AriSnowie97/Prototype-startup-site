@@ -639,7 +639,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
           // Надсилаємо оновлення на бекенд "у фоні"
           sendApiRequest(
-            "/update_webtask",
+            "/api/update_webtask",
             { taskId: taskId, done: isDone },
             null,
             null
@@ -659,7 +659,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
               // Надсилаємо оновлення на бекенд "у фоні"
               sendApiRequest(
-                "/update_webtask",
+                "/api/update_webtask",
                 { taskId: taskId, done: aTask.done },
                 null,
                 null
@@ -698,7 +698,7 @@ document.addEventListener("DOMContentLoaded", () => {
           try {
             // Надсилаємо на бек і чекаємо на відповідь з новим завданням
             // Очікуємо, що бек поверне {id: ..., text: ..., done: ...}
-            const newTask = await fetchApi("/add_webtask", { text: taskText });
+            const newTask = await fetchApi("/api/add_webtask", { text: taskText });
 
             tasks.push(newTask);
             newTaskInput.value = "";
@@ -716,7 +716,7 @@ document.addEventListener("DOMContentLoaded", () => {
       try {
         taskListContainer.innerHTML = "<p>Завантаження завдань...</p>";
         // Очікуємо, що бек поверне масив завдань
-        const fetchedTasks = await fetchApi("/get_webtasks", {});
+        const fetchedTasks = await fetchApi("/api/get_webtasks", {});
         tasks = fetchedTasks || []; // На випадок, якщо data буде null
         renderTasks();
       } catch (error)
