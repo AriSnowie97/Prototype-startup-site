@@ -590,7 +590,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // ==================================================
 
   // ===================================================================
-  // ===== 2. ЗАВДАННЯ ТА АНАЛІТИКА (ОНОВЛЕНО З БЕКЕНДОМ) =====
+  // ===== 2. ЗАВДАННЯ ТА АНАЛІТИКА (ОНОВЛЕНО v2) =====
   // ===================================================================
 
   const taskListContainer = document.querySelector("#tasks ul");
@@ -601,71 +601,95 @@ document.addEventListener("DOMContentLoaded", () => {
     const addTaskForm = document.getElementById("add-task-form");
     const newTaskInput = document.getElementById("new-task-input");
 
-    let tasks = []; // Починаємо з порожнього масиву
+    let tasks = []; 
 
-    // --- 1. Рендер завдань (оновлено з ID) ---
+    // --- 1. Рендер завдань (З кнопками та стилями) ---
     function renderTasks() {
       taskListContainer.innerHTML = "";
       if (tasks.length === 0) {
-        taskListContainer.innerHTML = "<p>Немає завдань. Чудовий день!</p>";
+        taskListContainer.innerHTML = "<p style='opacity: 0.7; text-align: center;'>Сьогодні завдань немає. Відпочивай! 😎</p>";
       }
 
+      // Скидаємо стилі списку, щоб керувати ними через CSS/JS
       taskListContainer.style.listStyleType = "none";
-      taskListContainer.style.paddingLeft = "0.5rem";
+      taskListContainer.style.paddingLeft = "0";
 
-      tasks.forEach((task) => {
+      tasks.forEach((task, index) => {
         const li = document.createElement("li");
-        li.dataset.taskId = task.id; // Зберігаємо ID
-        li.style.textDecoration = task.done ? "line-through" : "none";
-        li.style.opacity = task.done ? 0.6 : 1;
-        li.style.cursor = "pointer";
-        li.style.margin = "5px 0";
+        li.dataset.taskId = task.id;
+        
+        // Клас для стилізації
+        li.classList.add("task-item");
+        
+        // Зебра (парні/непарні) - додаємо класи
+        // index % 2 === 0 ? "even" : "odd"
+        // Але краще це зробимо через CSS :nth-child, тут просто структура
 
+        // Основний контейнер контенту
+        const contentDiv = document.createElement("div");
+        contentDiv.style.display = "flex";
+        contentDiv.style.alignItems = "center";
+        contentDiv.style.width = "100%";
+
+        // Чекбокс
         const checkbox = document.createElement("input");
         checkbox.type = "checkbox";
         checkbox.checked = task.done;
-        checkbox.dataset.taskId = task.id; // Зберігаємо ID
         checkbox.style.marginRight = "10px";
+        checkbox.style.cursor = "pointer";
+        
+        // Текст
+        const span = document.createElement("span");
+        span.textContent = task.text;
+        span.style.flexGrow = "1"; // Розтягує текст, штовхаючи кнопки вправо
+        span.style.marginLeft = "5px";
+        if (task.done) {
+            span.style.textDecoration = "line-through";
+            span.style.opacity = "0.6";
+        }
 
+        // Блок кнопок (редагування/видалення)
+        const actionsDiv = document.createElement("div");
+        actionsDiv.className = "task-actions";
+        actionsDiv.style.display = "flex";
+        actionsDiv.style.gap = "8px";
+
+        // Кнопка Редагувати (✏️)
+        const editBtn = document.createElement("button");
+        editBtn.textContent = "✏️";
+        editBtn.className = "icon-btn"; 
+        editBtn.title = "Редагувати";
+        editBtn.onclick = (e) => {
+            e.stopPropagation(); // Щоб не спрацював клік по li
+            editTask(task.id, task.text);
+        };
+
+        // Кнопка Видалити (🗑️)
+        const deleteBtn = document.createElement("button");
+        deleteBtn.textContent = "🗑️";
+        deleteBtn.className = "icon-btn delete-btn";
+        deleteBtn.title = "Видалити";
+        deleteBtn.onclick = (e) => {
+            e.stopPropagation();
+            deleteTask(task.id);
+        };
+
+        // Збираємо все до купи
+        actionsDiv.appendChild(editBtn);
+        actionsDiv.appendChild(deleteBtn);
+
+        contentDiv.appendChild(checkbox);
+        contentDiv.appendChild(span);
+        contentDiv.appendChild(actionsDiv);
+        li.appendChild(contentDiv);
+
+        // Логіка чекбокса
         checkbox.addEventListener("change", () => {
-          const taskId = checkbox.dataset.taskId;
           const isDone = checkbox.checked;
-
-          // Оновлюємо локальний масив
-          const aTask = tasks.find((t) => t.id == taskId);
+          const aTask = tasks.find((t) => t.id == task.id);
           if (aTask) aTask.done = isDone;
-
-          renderTasks(); // Перемальовуємо
-
-          // Надсилаємо оновлення на бекенд "у фоні"
-          sendApiRequest(
-            "/update_webtask",
-            { taskId: taskId, done: isDone },
-            null,
-            null
-          );
-        });
-
-        li.appendChild(checkbox);
-        li.append(` ${task.text}`);
-
-        li.addEventListener("click", (e) => {
-          if (e.target !== checkbox) {
-            const taskId = li.dataset.taskId;
-            const aTask = tasks.find((t) => t.id == taskId);
-            if (aTask) {
-              aTask.done = !aTask.done; // Інвертуємо стан
-              renderTasks(); // Перемальовуємо
-
-              // Надсилаємо оновлення на бекенд "у фоні"
-              sendApiRequest(
-                "/update_webtask",
-                { taskId: taskId, done: aTask.done },
-                null,
-                null
-              );
-            }
-          }
+          renderTasks();
+          sendApiRequest("/api/update_webtask", { taskId: task.id, done: isDone }, null, null);
         });
 
         taskListContainer.appendChild(li);
@@ -673,12 +697,38 @@ document.addEventListener("DOMContentLoaded", () => {
       updateAnalytics();
     }
 
-    // --- 2. Оновлення аналітики (без змін) ---
+    // --- Логіка Редагування ---
+    async function editTask(id, oldText) {
+        const newText = prompt("Відредагуйте завдання:", oldText);
+        if (newText && newText.trim() !== "" && newText !== oldText) {
+            // Оновлюємо локально
+            const task = tasks.find(t => t.id == id);
+            if (task) {
+                task.text = newText.trim();
+                renderTasks();
+            }
+            // Відправляємо на сервер
+            await sendApiRequest("/api/edit_webtask", { taskId: id, text: newText.trim() }, null, null);
+        }
+    }
+
+    // --- Логіка Видалення ---
+    async function deleteTask(id) {
+        if(confirm("Видалити це завдання?")) {
+            // Видаляємо локально
+            tasks = tasks.filter(t => t.id != id);
+            renderTasks();
+            
+            // Відправляємо на сервер
+            await sendApiRequest("/api/delete_webtask", { taskId: id }, null, null);
+        }
+    }
+
+    // --- 2. Оновлення аналітики ---
     function updateAnalytics() {
       const totalTasks = tasks.length;
       const completedTasks = tasks.filter((task) => task.done).length;
-      const percentage =
-        totalTasks === 0 ? 0 : Math.round((completedTasks / totalTasks) * 100);
+      const percentage = totalTasks === 0 ? 0 : Math.round((completedTasks / totalTasks) * 100);
 
       if (progressFill) {
         progressFill.style.width = `${percentage}%`;
@@ -689,44 +739,40 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     }
 
-    // --- 3. Додавання завдання (оновлено з async/await) ---
+    // --- 3. Додавання завдання ---
     if (addTaskForm && newTaskInput) {
       addTaskForm.addEventListener("submit", async (e) => {
         e.preventDefault();
         const taskText = newTaskInput.value.trim();
         if (taskText) {
           try {
-            // Надсилаємо на бек і чекаємо на відповідь з новим завданням
-            // Очікуємо, що бек поверне {id: ..., text: ..., done: ...}
-            const newTask = await fetchApi("/add_webtask", { text: taskText });
-
+            // Оптимістичне додавання (спочатку показуємо, потім шлемо)
+            // Але оскільки нам треба ID від бази, краще дочекатись відповіді.
+            const newTask = await fetchApi("/api/add_webtask", { text: taskText });
             tasks.push(newTask);
             newTaskInput.value = "";
             renderTasks();
           } catch (error) {
             console.error("Помилка додавання завдання:", error);
-            tg.showAlert(`Не вдалося додати завдання: ${error.message}`);
+            tg.showAlert(`Не вдалося додати: ${error.message}`);
           }
         }
       });
     }
 
-    // --- 4. Початкове завантаження завдань ---
+    // --- 4. Початкове завантаження (як погода) ---
     async function initializeTasks() {
       try {
         taskListContainer.innerHTML = "<p>Завантаження завдань...</p>";
-        // Очікуємо, що бек поверне масив завдань
-        const fetchedTasks = await fetchApi("/get_webtasks", {});
-        tasks = fetchedTasks || []; // На випадок, якщо data буде null
+        const fetchedTasks = await fetchApi("/api/get_webtasks", {});
+        tasks = fetchedTasks || [];
         renderTasks();
-      } catch (error)
-      {
+      } catch (error) {
         console.error("Помилка завантаження завдань:", error);
-        taskListContainer.innerHTML = `<p style="color: red;">❌ Не вдалося завантажити завдання: ${error.message}</p>`;
-        updateAnalytics(); // Оновити аналітику (покаже 0 з 0)
+        taskListContainer.innerHTML = `<p style="color: red;">❌ Не вдалося завантажити.</p>`;
       }
     }
 
-    initializeTasks(); // Перший запуск
+    initializeTasks(); // Запускається одразу при відкритті сторінки
   }
 });
