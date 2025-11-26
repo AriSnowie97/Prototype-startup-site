@@ -513,3 +513,20 @@ body .btn-close:hover {
 .delete-btn:hover {
   color: red; /* Червоний при наведенні на видалення */
 }
+   .login-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 80vh;
+      }
+      .login-box {
+        width: 100%;
+        max-width: 400px;
+        padding: 2rem;
+        backdrop-filter: blur(14px);
+        background: rgba(255, 255, 255, 0.25);
+        border: 1px solid rgba(255, 255, 255, 0.4);
+        border-radius: 20px;
+        box-shadow: 6px 6px 20px rgba(0,0,0,0.12), -4px -4px 20px rgba(255,255,255,0.6);
+        text-align: center;
+      }
