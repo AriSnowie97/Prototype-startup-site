@@ -688,10 +688,6 @@ document.addEventListener("DOMContentLoaded", () => {
           const isDone = checkbox.checked;
           const aTask = tasks.find((t) => t.id == task.id);
           if (aTask) aTask.done = isDone;
-<<<<<<< HEAD
-          renderTasks();
-          sendApiRequest("/api/update_webtask", { taskId: task.id, done: isDone }, null, null);
-=======
 
           renderTasks(); // Перемальовуємо
 
@@ -724,7 +720,6 @@ document.addEventListener("DOMContentLoaded", () => {
               );
             }
           }
->>>>>>> 99e6efb91e0df1b84b38185b540580cd2258d28b
         });
 
         taskListContainer.appendChild(li);
@@ -781,16 +776,10 @@ document.addEventListener("DOMContentLoaded", () => {
         const taskText = newTaskInput.value.trim();
         if (taskText) {
           try {
-<<<<<<< HEAD
-            // Оптимістичне додавання (спочатку показуємо, потім шлемо)
-            // Але оскільки нам треба ID від бази, краще дочекатись відповіді.
-            const newTask = await fetchApi("/api/add_webtask", { text: taskText });
-=======
             // Надсилаємо на бек і чекаємо на відповідь з новим завданням
             // Очікуємо, що бек поверне {id: ..., text: ..., done: ...}
             const newTask = await fetchApi("/api/add_webtask", { text: taskText });
 
->>>>>>> 99e6efb91e0df1b84b38185b540580cd2258d28b
             tasks.push(newTask);
             newTaskInput.value = "";
             renderTasks();
@@ -806,14 +795,9 @@ document.addEventListener("DOMContentLoaded", () => {
     async function initializeTasks() {
       try {
         taskListContainer.innerHTML = "<p>Завантаження завдань...</p>";
-<<<<<<< HEAD
-        const fetchedTasks = await fetchApi("/api/get_webtasks", {});
-        tasks = fetchedTasks || [];
-=======
         // Очікуємо, що бек поверне масив завдань
         const fetchedTasks = await fetchApi("/api/get_webtasks", {});
         tasks = fetchedTasks || []; // На випадок, якщо data буде null
->>>>>>> 99e6efb91e0df1b84b38185b540580cd2258d28b
         renderTasks();
       } catch (error) {
         console.error("Помилка завантаження завдань:", error);
