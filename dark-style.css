@@ -24,7 +24,7 @@ header nav ul li a:hover {
   background: rgba(255,255,255,0.1);
 }
 
-/* ===== Секції ===== */
+/* ===== Секції (Головні блоки) ===== */
 main section {
   background: rgba(20, 30, 70, 0.6);
   border: 1px solid rgba(255,255,255,0.1);
@@ -35,6 +35,16 @@ main section {
 main section h2 {
   color: #88c0d0; /* Блакитний заголовок */
   text-shadow: 0 1px 3px rgba(0,0,0,0.7);
+}
+
+/* ===== Блок Погоди (Результат) ===== */
+/* Додано, щоб він не був білим у темній темі */
+#weather-result {
+  background: rgba(20, 30, 70, 0.6);
+  border: 1px solid rgba(255,255,255,0.1);
+  color: #e0e0e0;
+  box-shadow: 6px 6px 20px rgba(0,0,0,0.5),
+              -4px -4px 20px rgba(70,90,140,0.2);
 }
 
 /* ===== Кнопки ===== */

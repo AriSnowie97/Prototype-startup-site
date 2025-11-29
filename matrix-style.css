@@ -24,7 +24,7 @@ header nav ul li a:hover {
   background: rgba(0, 255, 65, 0.1);
 }
 
-/* ===== Секції ===== */
+/* ===== Секції (Головні блоки) ===== */
 main section {
   background: rgba(0, 30, 0, 0.7);
   border: 1px solid rgba(0, 255, 65, 0.3); /* Зелена рамка */
@@ -35,6 +35,16 @@ main section {
 main section h2 {
   color: #00ff41;
   text-shadow: 0 0 5px rgba(0, 255, 65, 0.5);
+}
+
+/* ===== Блок Погоди (Результат) ===== */
+/* Додано, щоб він був у стилі Matrix */
+#weather-result {
+  background: rgba(0, 30, 0, 0.7);
+  border: 1px solid rgba(0, 255, 65, 0.3);
+  color: #00ff41;
+  box-shadow: 6px 6px 20px rgba(0,0,0,0.6),
+              -4px -4px 20px rgba(0, 50, 0, 0.3);
 }
 
 /* ===== Кнопки ===== */
@@ -84,9 +94,9 @@ body .form-control:focus {
 
 .custom-progress-fill {
   background: linear-gradient(90deg, #008f11, #00ff41);
-  color: black; /* На яскравому зеленому краще чорний */
 }
 
+/* Текст прогрес-бару (Білий з чорною обводкою для читабельності) */
 #progress-text-overlay {
   color: #fff;
   text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
@@ -126,6 +136,9 @@ option {
 #calendar-grid .calendar-day.busy-day {
   background: rgba(0, 255, 65, 0.3);
   border: 1px solid rgba(0, 255, 65, 0.5);
+}
+#calendar-grid .calendar-day.busy-day::after {
+  background-color: #00ff41; /* Крапка події */
 }
 
 /* ===== Модальне вікно ===== */
