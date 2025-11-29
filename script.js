@@ -728,7 +728,7 @@ document.addEventListener("DOMContentLoaded", () => {
           // Надсилаємо оновлення на бекенд "у фоні"
           sendApiRequest(
             "/api/update_webtask",
-            { taskId: taskId, done: isDone },
+            { taskId: task.id, done: isDone }, // <--- ТУТ БУЛА ПОМИЛКА (було taskId, стало task.id)
             null,
             null
           );
