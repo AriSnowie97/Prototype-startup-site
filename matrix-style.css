@@ -1,478 +1,147 @@
 /* ===================
-   matrix-style.css (ТЕМА MATRIX)
+   matrix-style.css (ТЕМА MATRIX - DARK STRUCTURE)
+   Базується на dark-style.css, але з зеленим акцентом
    =================== */
 
-/* ===== Базові стилі ===== */
+/* ===== Фон та основний колір тексту ===== */
 body {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  margin: 0;
-  background: linear-gradient(135deg, #0d0d0d, #1a1a1a); 
-  color: #00ff41;
-  overflow-x: hidden;
+  background: #0d0d0d; /* Майже чорний */
+  color: #00ff41; /* Matrix Green */
 }
 
 /* ===== Хедер ===== */
 header {
-  backdrop-filter: blur(10px);
-  background: rgba(10, 30, 10, 0.85);
+  background: rgba(0, 20, 0, 0.9);
   color: #00ff41;
-  padding: 1rem;
-  text-align: center;
   box-shadow: 0 4px 15px rgba(0,0,0,0.5);
-}
-
-header h1 {
-  margin-bottom: 0.5rem;
-}
-
-header nav ul {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  display: flex;
-  justify-content: center;
-  gap: 1.2rem;
-  flex-wrap: wrap;
 }
 
 header nav ul li a {
   color: #00ff41;
-  text-decoration: none;
-  font-weight: bold;
-  padding: 0.5rem 1rem;
-  border-radius: 12px;
-  transition: background 0.3s;
 }
 
 header nav ul li a:hover {
   background: rgba(0, 255, 65, 0.1);
 }
 
-/* ===== Секції (темний глазморфізм) ===== */
+/* ===== Секції ===== */
 main section {
-  margin: 2rem auto;
-  padding: 2rem;
-  max-width: 800px;
-  border-radius: 20px;
-  background: rgba(10, 40, 10, 0.6);
-  backdrop-filter: blur(14px);
-  border: 1px solid rgba(0, 255, 65, 0.2);
-  box-shadow: 6px 6px 20px rgba(0,0,0,0.5), -4px -4px 20px rgba(0,50,0,0.2);
-  text-align: center;
-}
-
-main section ul {
-  list-style-position: inside;
-  text-align: left;
-  padding-right: 2rem;
+  background: rgba(0, 30, 0, 0.7);
+  border: 1px solid rgba(0, 255, 65, 0.3); /* Зелена рамка */
+  box-shadow: 6px 6px 20px rgba(0,0,0,0.6),
+              -4px -4px 20px rgba(0, 50, 0, 0.3);
 }
 
 main section h2 {
-  color: #38d067; 
-  margin-bottom: 1rem;
-  text-shadow: 0 1px 3px rgba(0,0,0,0.7);
+  color: #00ff41;
+  text-shadow: 0 0 5px rgba(0, 255, 65, 0.5);
 }
 
 /* ===== Кнопки ===== */
-button {
-  margin: 0.5rem;
-  padding: 0.8rem 1.6rem;
-  background: rgba(0, 60, 20, 0.7);
-  border: 1px solid rgba(0, 255, 65, 0.3);
-  border-radius: 12px;
+button, 
+body .input-group .btn {
+  background: rgba(0, 50, 0, 0.7);
+  border: 1px solid rgba(0, 255, 65, 0.4);
   color: #00ff41;
-  font-weight: bold;
-  cursor: pointer;
-  box-shadow: 4px 4px 10px rgba(0,0,0,0.6), -4px -4px 10px rgba(0,100,20,0.2);
-  transition: all 0.3s ease;
+  box-shadow: 4px 4px 10px rgba(0,0,0,0.6),
+              -4px -4px 10px rgba(0, 100, 0, 0.2);
 }
 
-button:hover {
-  background: rgba(0, 80, 30, 0.9);
-  transform: translateY(-2px);
+button:hover,
+body .input-group .btn:hover {
+  background: rgba(0, 80, 0, 0.8);
   box-shadow: 6px 6px 15px rgba(0,0,0,0.7),
-              -6px -6px 15px rgba(120,140,200,0.2);
+              -6px -6px 15px rgba(0, 150, 0, 0.2);
 }
 
-button:active {
-  transform: translateY(1px);
-}
-
-/* ===== Прогрес-бар ===== */
-.custom-progress-track {
-  width: 100%;
-  background: rgba(0, 60, 20, 0.5);
-  border: 1px solid rgba(0, 255, 65, 0.1);
-  border-radius: 12px;
-  margin: 1rem 0;
-  overflow: hidden;
-  box-shadow: inset 2px 2px 6px rgba(0,0,0,0.6),
-              inset -2px -2px 6px rgba(100,120,180,0.2);
-}
-
-.custom-progress-fill {
-  background: linear-gradient(90deg, #38d067, #00ff41);
-  color: white;
-  border-radius: 12px 0 0 12px;
-  font-size: 0.9rem;
-  font-weight: bold;
-  /* min-width: 3.5rem;  */
-  display: flex;
-  align-items: center; 
-  justify-content: center; 
-  height: 100%;
-}
-
-/* ===== Стилізація селекта ===== */
-select {
-  appearance: none;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  
-  padding: 0.6rem 1.2rem;
-  border-radius: 12px;
-  border: 1px solid rgba(0, 255, 65, 0.2);
-  background: rgba(0, 50, 10, 0.6);
-  color: #00ff41;
-  font-weight: bold;
-  cursor: pointer;
-  box-shadow: 4px 4px 10px rgba(0,0,0,0.4),
-              -4px -4px 10px rgba(100,120,180,0.2);
-  transition: all 0.3s ease;
-  position: relative;
-}
-
-select:hover {
-  background: rgba(0, 80, 30, 0.9);
-  transform: translateY(-2px);
-  box-shadow: 6px 6px 15px rgba(0,0,0,0.5),
-              -6px -6px 15px rgba(120,140,200,0.2);
-}
-
-select:focus {
-  outline: none;
-  background: rgba(0, 80, 30, 0.9);
-  box-shadow: inset 2px 2px 5px rgba(0,0,0,0.5),
-              inset -2px -2px 5px rgba(120,140,200,0.2);
-}
-
-option {
-  background: #0a1a0f;
-  color: #00ff41;
-  font-weight: normal;
-}
-
-/* ===== Футер ===== */
-footer {
-  text-align: center;
-  padding: 1rem;
-  margin-top: 2rem;
-  color: #00ff41;
-  opacity: 0.7;
-  font-size: 0.9rem;
-}
-
-/* ===================
-   СТИЛІ ДЛЯ ПОГОДИ В ХЕДЕРІ
-   =================== */
-.header-bottom-row {
-  display: flex;
-  flex-wrap: wrap; 
-  justify-content: space-between; 
-  align-items: center; 
-  gap: 1rem; 
-  padding: 0 1rem;
-  margin-top: 0.5rem;
-}
-
-#weather-form-header {
-  max-width: 400px; 
-  flex-grow: 1; 
-  min-width: 280px;
-  margin: 0; 
-  padding: 0; 
-  box-sizing: border-box;
-}
-
-#weather-form-header .btn {
-  background: rgba(0, 255, 65, 0.2) !important;
-  font-size: 1.2rem;
-  line-height: 1;
-  padding-top: 0.5rem;
-}
-
-/* Стили для блока результатов */
-#weather-result {
-  display: none; 
-  text-align: left;
-  margin: 1rem auto 0; 
-  padding: 1.5rem 2rem;
-  max-width: 800px;
-  border-radius: 20px;
-  backdrop-filter: blur(14px);
-  /* Кольори теми: */
-  background: rgba(10, 40, 10, 0.6);
-  border: 1px solid rgba(0, 255, 65, 0.2);
-  box-shadow: 6px 6px 20px rgba(0,0,0,0.5), -4px -4px 20px rgba(0,50,0,0.2);
-  color: #00ff41;
-}
-
-
-/* ========================================================
-   Адаптація Bootstrap під наш "Глассморфізм"
-   ======================================================== */
+/* ===== Поля вводу ===== */
 body .form-control {
-  background: rgba(0, 50, 10, 0.6) !important;
-  border: 1px solid rgba(0, 255, 65, 0.2) !important;
-  border-radius: 12px !important;
+  background: rgba(0, 40, 0, 0.7) !important;
+  border: 1px solid rgba(0, 255, 65, 0.4) !important;
   color: #00ff41 !important;
-  backdrop-filter: blur(5px);
   box-shadow: 4px 4px 10px rgba(0,0,0,0.4),
-              -4px -4px 10px rgba(100,120,180,0.2) !important;
+              -4px -4px 10px rgba(0, 100, 0, 0.2) !important;
 }
 
 body .form-control::placeholder {
   color: #00ff41;
-  opacity: 0.7;
+  opacity: 0.6;
 }
 
 body .form-control:focus {
-  background: rgba(0, 80, 30, 0.9) !important;
+  background: rgba(0, 60, 0, 0.9) !important;
   box-shadow: inset 2px 2px 5px rgba(0,0,0,0.5),
-              inset -2px -2px 5px rgba(120,140,200,0.2) !important;
+              inset -2px -2px 5px rgba(0, 150, 0, 0.2) !important;
 }
 
-body .input-group .btn {
-  background: rgba(0, 60, 20, 0.7);
-  border: 1px solid rgba(0, 255, 65, 0.3);
-  border-radius: 12px !important; 
+/* ===== Прогрес-бар ===== */
+.custom-progress-track {
+  background: rgba(0, 50, 0, 0.5);
+  border: 1px solid rgba(0, 255, 65, 0.2);
+  box-shadow: inset 2px 2px 6px rgba(0,0,0,0.6),
+              inset -2px -2px 6px rgba(0, 100, 0, 0.2);
+}
+
+.custom-progress-fill {
+  background: linear-gradient(90deg, #008f11, #00ff41);
+  color: black; /* На яскравому зеленому краще чорний */
+}
+
+#progress-text-overlay {
+  color: #fff;
+  text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+}
+
+/* ===== Селект ===== */
+select {
+  border: 1px solid rgba(0, 255, 65, 0.4);
+  background: rgba(0, 40, 0, 0.7);
   color: #00ff41;
-  font-weight: bold;
-  box-shadow: 4px 4px 10px rgba(0,0,0,0.6),
-              -4px -4px 10px rgba(0,100,20,0.2);
-  transition: all 0.3s ease;
-  margin-left: 10px;
-}
-/* Скидання для кнопки погоди (вона в .input-group) */
-#weather-form-header .btn {
-  margin-left: 0 !important;
+  box-shadow: 4px 4px 10px rgba(0,0,0,0.4),
+              -4px -4px 10px rgba(0, 100, 0, 0.2);
 }
 
-/* ===================
-   СТИЛІ ДЛЯ КАЛЕНДАРЯ
-   =================== */
-.calendar-grid {
-  display: grid;
-  grid-template-columns: repeat(7, 1fr); 
-  gap: 5px;
+select:hover {
+  background: rgba(0, 60, 0, 0.8);
 }
 
-#calendar-header div {
-  font-weight: bold;
-  padding: 0.5rem;
-  text-align: center;
-  opacity: 0.7;
+option {
+  background: #0d0d0d;
+  color: #00ff41;
 }
 
+/* ===== Календар ===== */
 #calendar-grid .calendar-day {
-  position: relative;
-  padding: 0.5rem;
-  min-height: 80px;
-  text-align: left;
-  font-weight: bold;
-  background: rgba(0, 255, 65, 0.05); 
+  background: rgba(0, 255, 65, 0.05);
   border: 1px solid rgba(0, 255, 65, 0.1);
-  border-radius: 8px;
-  cursor: pointer;
-  transition: background 0.3s;
 }
-
 #calendar-grid .calendar-day:hover {
-  background: rgba(0, 255, 65, 0.15);
+  background: rgba(0, 255, 65, 0.2);
 }
-
-#calendar-grid .other-month {
-  opacity: 0.4;
-  background: transparent;
-  border: none;
-  cursor: default;
-}
-
-/* Стиль для поточної дати */
 #calendar-grid .calendar-day.today {
   background: rgba(0, 255, 65, 0.15);
-  border: 2px solid #38d067;
+  border: 2px solid #00ff41;
   box-shadow: 0 0 10px rgba(0, 255, 65, 0.5);
 }
-
-/* Стиль для зайнятої дати (ЗАЛИВКА) */
 #calendar-grid .calendar-day.busy-day {
-  background: rgba(0, 255, 65, 0.25); 
-  border: 1px solid rgba(0, 255, 65, 0.4);
-}
-#calendar-grid .calendar-day.today.busy-day {
-  background: rgba(0, 255, 65, 0.4); /* Комбінація */
+  background: rgba(0, 255, 65, 0.3);
+  border: 1px solid rgba(0, 255, 65, 0.5);
 }
 
-
-/* =========================================
-   Стилі для модального вікна Bootstrap
-   ========================================= */
+/* ===== Модальне вікно ===== */
 body .modal-content {
-  background: rgba(10, 40, 10, 0.8);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(0, 255, 65, 0.2);
-  border-radius: 12px;
+  background: rgba(0, 20, 0, 0.95);
+  border: 1px solid rgba(0, 255, 65, 0.3);
   color: #00ff41;
 }
-
-body .modal-header {
-  border-bottom: 1px solid rgba(0, 255, 65, 0.2);
+body .modal-header, body .modal-footer {
+  border-color: rgba(0, 255, 65, 0.2);
 }
-
-body .modal-footer {
-  border-top: 1px solid rgba(0, 255, 65, 0.2);
-}
-
-/* Адаптуємо кнопку закриття (Універсальний фікс) */
 body .btn-close {
   filter: brightness(0) invert(1) !important;
-  opacity: 0.7 !important; 
-}
-body .btn-close:hover {
-  opacity: 1 !important;
 }
 
-/* ===================
-   ЦЕНТРУВАННЯ НАЛАШТУВАНЬ
-   =================== */
-#settings form {
-  display: flex;
-  flex-direction: column; 
-  align-items: center; 
-  gap: 1rem; 
-  margin-top: 1rem;
-}
-
-#settings form label {
-  display: flex;
-  flex-direction: row; 
-  align-items: center; 
-  justify-content: center; 
-  gap: 0.5rem; 
-  flex-wrap: wrap; 
-}
-
-.checkbox-group {
-  display: inline-flex; 
-  flex-wrap: wrap; 
-  justify-content: center; 
-  gap: 0.5rem 1rem; 
-  padding: 0.25rem;
-}
-
-
-/* =======================================
-   Адаптація для мобільних пристроїв (ПОВНИЙ БЛОК)
-   ======================================= */
-@media (max-width: 768px) {
-  h1 {
-    font-size: 1.8rem;
-  }
-
-  h2 {
-    font-size: 1.4rem;
-  }
-  
-  header nav ul {
-    flex-direction: column; /* Ставимо посилання в стовпчик */
-    gap: 0.5rem; /* Зменшуємо відступ */
-  }
-
-  /* === Ширина блоків === */
-  main section {
-    margin: 1rem 0.5rem; /* 1rem зверху/знизу, 0.5rem з боків */
-    padding: 1.5rem 1rem; /* 1.5rem зверху/знизу, 1rem з боків */
-  }
-  #weather-result {
-    margin: 1rem 0.5rem 0;
-    padding: 1.5rem 1rem;
-  }
-
-  /* === Ширина кнопок === */
-  button, select {
-    padding: 0.7rem 1.2rem; 
-    width: 90%; 
-    box-sizing: border-box; 
-  }
-  
-  /* === Поля вводу (стають вертикально) === */
-  .input-group {
-    flex-direction: column; 
-    gap: 0.5rem; 
-  }
-  
-  .input-group .form-control,
-  .input-group .btn {
-    width: 100%; 
-    margin-left: 0 !important; 
-  }
-
-  /* === Адаптація Хедера === */
-  .header-bottom-row {
-    flex-direction: column; /* Ставим nav и form друг под другом */
-    align-items: center; /* Центрируем */
-    gap: 1rem;
-  }
-  
-  #weather-form-header {
-    max-width: 100%; /* На мобильном - во всю ширину */
-    min-width: unset;
-    order: -1; /* Ставит погоду НАД ссылками навигации */
-  }
-}
-/* =========================================
-   СТИЛІ ДЛЯ СПИСКУ ЗАВДАНЬ (НОВІ)
-   ========================================= */
-
-/* Загальний вигляд елемента списку */
-.task-item {
-  padding: 8px 12px;
-  margin-bottom: 5px;
-  border-radius: 8px;
-  transition: background 0.2s;
-}
-
-/* ЕФЕКТ ЗЕБРИ (Парні/Непарні) */
-/* Використовуємо дуже легке затемнення для парних елементів */
+/* ===== Зебра ===== */
 .task-item:nth-child(even) {
-  background-color: rgba(255, 255, 255, 0.07); 
-}
-/* Для темних тем (dark-style, matrix) краще висвітлювати */
-/* Якщо цей код в dark-style.css, замініть попередній блок на: */
-/* .task-item:nth-child(even) { background-color: rgba(255, 255, 255, 0.05); } */
-
-
-/* Кнопки редагування та видалення */
-.icon-btn {
-  background: transparent !important; /* Прибираємо фон кнопки теми */
-  border: none !important;
-  box-shadow: none !important;
-  cursor: pointer;
-  font-size: 1.1rem;
-  padding: 2px 6px;
-  margin: 0 !important;
-  opacity: 0.7;
-  transition: opacity 0.2s, transform 0.2s;
-}
-
-.icon-btn:hover {
-  opacity: 1;
-  transform: scale(1.1);
-  background: rgba(255, 255, 255, 0.2) !important; /* Легке підсвічування при наведенні */
-  border-radius: 5px !important;
-}
-
-.delete-btn:hover {
-  color: red; /* Червоний при наведенні на видалення */
+  background-color: rgba(0, 255, 65, 0.07); 
 }
