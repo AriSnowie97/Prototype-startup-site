@@ -405,7 +405,16 @@ document.addEventListener("DOMContentLoaded", () => {
         monthName.charAt(0).toUpperCase() + monthName.slice(1)
       } ${year}`;
 
+      // 1. Завантажуємо дати
       const busyDates = await fetchEventDates(year, month + 1);
+
+      // === НОВА ПЕРЕВІРКА ===
+      // Якщо повернувся null, значить ми показали кнопку логіну.
+      // Зупиняємо функцію, щоб не стерти цю кнопку!
+      if (busyDates === null) {
+          return;
+      }
+      // ======================
 
       calendarGrid.innerHTML = "";
 
@@ -567,19 +576,18 @@ document.addEventListener("DOMContentLoaded", () => {
             const result = await response.json();
             console.warn("Потрібна авторизація Google:", result.login_url);
             
-            // Варіант А: Показати кнопку прямо в календарі замість дат
             const calendarGrid = document.getElementById("calendar-grid");
             if(calendarGrid) {
+                // Використовуємо 1 / -1, щоб розтягнути на всю ширину
                 calendarGrid.innerHTML = `
-                    <div style="grid-column: span 7; text-align: center; padding: 20px;">
-                        <p>⚠️ Потрібен доступ до Google Calendar</p>
-                        <a href="${result.login_url}" class="btn btn-primary" style="margin-top: 10px;">🔐 Увійти через Google</a>
+                    <div style="grid-column: 1 / -1; text-align: center; padding: 30px 10px; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+                        <p style="margin-bottom: 15px; font-weight: bold;">⚠️ Для перегляду календаря потрібен доступ</p>
+                        <a href="${result.login_url}" class="btn btn-primary" style="text-decoration: none; color: white; padding: 10px 20px; border-radius: 8px;">🔐 Увійти через Google</a>
                     </div>
                 `;
             }
-            // Повертаємо порожній масив, щоб решта коду не ламалася, 
-            // але ми вже переписали HTML грідки, тому календар не буде пустим, він покаже кнопку.
-            return [];
+            // ПОВЕРТАЄМО null, А НЕ [], ЩОБ renderCalendar ЗНАВ, ЩО ТРЕБА ЗУПИНИТИСЬ
+            return null; 
         }
         // =====================================
 
