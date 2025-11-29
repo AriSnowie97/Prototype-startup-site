@@ -578,15 +578,22 @@ document.addEventListener("DOMContentLoaded", () => {
             
             const calendarGrid = document.getElementById("calendar-grid");
             if(calendarGrid) {
-                // Використовуємо 1 / -1, щоб розтягнути на всю ширину
+                // ВИПРАВЛЕННЯ: Використовуємо Telegram.WebApp.openLink()
+                // Це змушує Телеграм відкрити посилання у зовнішньому браузері,
+                // де Google не блокуватиме вхід.
                 calendarGrid.innerHTML = `
                     <div style="grid-column: 1 / -1; text-align: center; padding: 30px 10px; display: flex; flex-direction: column; align-items: center; justify-content: center;">
                         <p style="margin-bottom: 15px; font-weight: bold;">⚠️ Для перегляду календаря потрібен доступ</p>
-                        <a href="${result.login_url}" class="btn btn-primary" style="text-decoration: none; color: white; padding: 10px 20px; border-radius: 8px;">🔐 Увійти через Google</a>
+                        <button 
+                            onclick="Telegram.WebApp.openLink('${result.login_url}')" 
+                            class="btn btn-primary" 
+                            style="padding: 10px 20px; border-radius: 8px; border: none; color: white;">
+                            🔐 Увійти через Google
+                        </button>
                     </div>
                 `;
             }
-            // ПОВЕРТАЄМО null, А НЕ [], ЩОБ renderCalendar ЗНАВ, ЩО ТРЕБА ЗУПИНИТИСЬ
+            // Повертаємо null, щоб renderCalendar знав, що треба зупинитись
             return null; 
         }
         // =====================================
