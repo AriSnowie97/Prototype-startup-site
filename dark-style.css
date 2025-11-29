@@ -115,7 +115,7 @@ button:active {
   /* text-align: center; (Прибрано для flex-центрування) */
   font-size: 0.9rem;
   font-weight: bold;
-  min-width: 3.5rem; 
+  /* min-width: 3.5rem;  */
   display: flex;
   align-items: center; /* Центрування по вертикалі */
   justify-content: center; /* Центрування по горизонталі */

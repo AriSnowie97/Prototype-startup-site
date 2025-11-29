@@ -118,11 +118,21 @@ button:active {
   border-radius: 12px 0 0 12px;
   font-size: 0.9rem;
   font-weight: bold;
-  min-width: 3.5rem; 
+  
+  /* ВИДАЛИ АБО ЗАКОМЕНТУЙ ЦЕЙ РЯДОК: */
+  /* min-width: 3.5rem; */
+  
+  /* ЗАМІСТЬ НЬОГО ДОДАЙ ЦЕ (щоб текст не ламав смужку при 0%): */
+  width: 0;
+  min-width: 0;
+  overflow: hidden; /* Ховає текст, якщо смужка занадто вузька */
+  white-space: nowrap; /* Текст в один рядок */
+  
   display: flex;
   align-items: center; 
   justify-content: center; 
   height: 100%;
+  transition: width 0.6s ease; /* Додаємо плавність анімації */
 }
 /* ===== Стилізація селекта ===== */
 select {
@@ -181,11 +191,6 @@ footer {
   box-sizing: border-box;
 }
 
-<<<<<<< HEAD
-/* Мы должны "перебить" стили .input-group .btn из 
-  "Адаптации Bootstrap", иначе кнопка будет прозрачной
-*/
-=======
 /* ===================
    СТИЛІ ДЛЯ ПОГОДИ В ХЕДЕРІ
    =================== */
@@ -208,7 +213,6 @@ footer {
   box-sizing: border-box;
 }
 
->>>>>>> f05335ed7256411f9f26c288582d6bd4aac9c4f4
 #weather-form-header .btn {
   background: rgba(255, 255, 255, 0.55) !important;
   font-size: 1.2rem;
@@ -216,33 +220,15 @@ footer {
   padding-top: 0.5rem;
 }
 
-<<<<<<< HEAD
-/* Стили для блока результатов.
-  Он будет выглядеть как обычная "стеклянная" секция.
-*/
-#weather-result {
-  display: none; /* Прячем, пока он пустой */
-  text-align: left;
-  
-  /* Копируем стили из 'main section', чтобы было красиво */
-  margin: 1rem auto 0; /* Уменьшен margin-top, чтобы было ближе к хедеру */
-=======
 /* Стили для блока результатов */
 #weather-result {
   display: none; 
   text-align: left;
   margin: 1rem auto 0; 
->>>>>>> f05335ed7256411f9f26c288582d6bd4aac9c4f4
   padding: 1.5rem 2rem;
   max-width: 800px;
   border-radius: 20px;
   backdrop-filter: blur(14px);
-<<<<<<< HEAD
-
-  /* Эти стили должны быть УНИКАЛЬНЫМИ для каждой темы! */
-  /* Скопируй их из 'main section' твоего файла */
-}
-=======
   /* Кольори теми: */
   background: rgba(255, 255, 255, 0.25);
   border: 1px solid rgba(255,255,255,0.4);
@@ -407,7 +393,6 @@ body .btn-close:hover {
 }
 
 
->>>>>>> f05335ed7256411f9f26c288582d6bd4aac9c4f4
 /* =======================================
    Адаптація для мобільних пристроїв (ПОВНИЙ БЛОК)
    (Встав це в кінець green-style.css, pink-style.css і т.д.)

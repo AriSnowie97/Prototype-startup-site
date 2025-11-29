@@ -792,14 +792,26 @@ document.addEventListener("DOMContentLoaded", () => {
     function updateAnalytics() {
       const totalTasks = tasks.length;
       const completedTasks = tasks.filter((task) => task.done).length;
+      
+      // Рахуємо відсоток (якщо завдань 0, то 0%)
       const percentage = totalTasks === 0 ? 0 : Math.round((completedTasks / totalTasks) * 100);
 
+      // Оновлюємо смужку
       if (progressFill) {
         progressFill.style.width = `${percentage}%`;
-        progressFill.textContent = `${percentage}%`;
+        progressFill.setAttribute("aria-valuenow", percentage);
+        
+        // Якщо відсоток більше 5, показуємо текст всередині, інакше - пусто
+        progressFill.textContent = percentage > 5 ? `${percentage}%` : "";
       }
+
+      // Оновлюємо текст під смужкою
       if (progressText) {
-        progressText.textContent = `Виконано ${completedTasks} з ${totalTasks} завдань`;
+         if (totalTasks === 0) {
+             progressText.textContent = "У вас поки немає завдань";
+         } else {
+             progressText.textContent = `Виконано ${completedTasks} з ${totalTasks} завдань`;
+         }
       }
     }
 
