@@ -545,9 +545,7 @@ document.addEventListener("DOMContentLoaded", () => {
     async function fetchEventDates(year, month) {
       const userId = tg.initDataUnsafe?.user?.id;
       if (!backendUrl || !userId) {
-        console.warn(
-          "Не можу завантажити події: відсутній backendUrl або userId."
-        );
+        console.warn("Не можу завантажити події: відсутній backendUrl або userId.");
         return [];
       }
 
@@ -564,6 +562,27 @@ document.addEventListener("DOMContentLoaded", () => {
           body: JSON.stringify(payload),
         });
 
+        // === ОБРОБКА 401 (ВІДСУТНІЙ ЛОГІН) ===
+        if (response.status === 401) {
+            const result = await response.json();
+            console.warn("Потрібна авторизація Google:", result.login_url);
+            
+            // Варіант А: Показати кнопку прямо в календарі замість дат
+            const calendarGrid = document.getElementById("calendar-grid");
+            if(calendarGrid) {
+                calendarGrid.innerHTML = `
+                    <div style="grid-column: span 7; text-align: center; padding: 20px;">
+                        <p>⚠️ Потрібен доступ до Google Calendar</p>
+                        <a href="${result.login_url}" class="btn btn-primary" style="margin-top: 10px;">🔐 Увійти через Google</a>
+                    </div>
+                `;
+            }
+            // Повертаємо порожній масив, щоб решта коду не ламалася, 
+            // але ми вже переписали HTML грідки, тому календар не буде пустим, він покаже кнопку.
+            return [];
+        }
+        // =====================================
+
         if (!response.ok) {
           throw new Error("Помилка мережі при завантаженні подій");
         }
@@ -577,7 +596,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
       } catch (error) {
         console.error("Помилка fetchEventDates:", error);
-        tg.showAlert(`Не вдалося завантажити події: ${error.message}`);
+        // Не показуємо алерт на кожен чих, просто в консоль
         return [];
       }
     }
