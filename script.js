@@ -80,29 +80,6 @@ document.addEventListener("DOMContentLoaded", () => {
   const addTaskViaFlaskButton = document.getElementById("add-task-btn");
   const addTaskStatus = document.getElementById("add-task-status");
 
-  // (Логіка кнопок режиму розробника...)
-  if (testFlaskBtn && flaskStatus) {
-    if (!backendUrl) {
-      testFlaskBtn.disabled = true;
-      flaskStatus.textContent =
-        "❌ Помилка: Відкрийте додаток через кнопку в боті.";
-      flaskStatus.style.color = "red";
-    } else {
-      testFlaskBtn.disabled = false;
-      testFlaskBtn.addEventListener("click", () => {
-        const payload = {
-          message: "Це тестове повідомлення з сайту GitHub Pages!",
-        };
-        sendApiRequest(
-          "/send_message",
-          payload,
-          flaskStatus,
-          "Повідомлення надіслано!"
-        );
-      });
-    }
-  }
-
   /**
    * ✅ ГОЛОВНА ФУНКЦІЯ для відправки будь-яких запитів на бекенд.
    * (ОНОВЛЕНО: тепер безпечно працює, якщо statusElement = null)
@@ -123,10 +100,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const userId = tg.initDataUnsafe?.user?.id;
     if (!userId) {
+      const errorMsg = "❌ Помилка: Немає User ID! Відкрийте через Телеграм.";
+      console.error(errorMsg);
+      
       if (statusElement) {
-        statusElement.textContent =
-          "❌ Помилка: Не вдалося отримати ID користувача.";
+        statusElement.textContent = errorMsg;
         statusElement.style.color = "red";
+      } else {
+        // Якщо статусу немає (як у видаленні), кидаємо Alert
+        alert(errorMsg); 
       }
       return;
     }
@@ -165,6 +147,29 @@ document.addEventListener("DOMContentLoaded", () => {
         statusElement.textContent = `❌ Помилка: ${error.message}`;
         statusElement.style.color = "red";
       }
+    }
+  }
+
+  // (Логіка кнопок режиму розробника...)
+  if (testFlaskBtn && flaskStatus) {
+    if (!backendUrl) {
+      testFlaskBtn.disabled = true;
+      flaskStatus.textContent =
+        "❌ Помилка: Відкрийте додаток через кнопку в боті.";
+      flaskStatus.style.color = "red";
+    } else {
+      testFlaskBtn.disabled = false;
+      testFlaskBtn.addEventListener("click", () => {
+        const payload = {
+          message: "Це тестове повідомлення з сайту GitHub Pages!",
+        };
+        sendApiRequest(
+          "/send_message",
+          payload,
+          flaskStatus,
+          "Повідомлення надіслано!"
+        );
+      });
     }
   }
 
