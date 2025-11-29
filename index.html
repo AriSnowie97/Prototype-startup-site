@@ -10,7 +10,8 @@
       integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
       crossorigin="anonymous"
     />
-    <link id="theme-link" rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="style.css" />
+    <link id="theme-link" rel="stylesheet" href="" />
   </head>
   <body> 
     <header>
@@ -103,18 +104,23 @@
       <section id="analytics">
         <h2>Аналітика</h2>
         <p>Звіти та мотивація</p>
-        <div class="custom-progress-track" style="height: 25px;">
+        
+        <div class="custom-progress-track" style="height: 25px; position: relative;">
+          
           <div class="custom-progress-fill" 
               role="progressbar" 
               style="width: 0%;" 
               aria-valuenow="0" 
               aria-valuemin="0" 
               aria-valuemax="100">
-            0%
           </div>
+
+          <span id="progress-text-overlay">0%</span>
+        
         </div>
+        
         <p id="analytics-text">Завантаження даних...</p>
-    </section>
+      </section>
 
       <section id="settings">
         <h2>Налаштування</h2>

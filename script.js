@@ -793,19 +793,23 @@ document.addEventListener("DOMContentLoaded", () => {
       const totalTasks = tasks.length;
       const completedTasks = tasks.filter((task) => task.done).length;
       
-      // Рахуємо відсоток (якщо завдань 0, то 0%)
       const percentage = totalTasks === 0 ? 0 : Math.round((completedTasks / totalTasks) * 100);
 
-      // Оновлюємо смужку
+      // Отримуємо елемент тексту окремо
+      const textOverlay = document.getElementById("progress-text-overlay");
+
+      // Оновлюємо ширину смужки
       if (progressFill) {
         progressFill.style.width = `${percentage}%`;
         progressFill.setAttribute("aria-valuenow", percentage);
-        
-        // Якщо відсоток більше 5, показуємо текст всередині, інакше - пусто
-        progressFill.textContent = percentage > 5 ? `${percentage}%` : "";
+      }
+      
+      // Оновлюємо текст по центру
+      if (textOverlay) {
+          textOverlay.textContent = `${percentage}%`;
       }
 
-      // Оновлюємо текст під смужкою
+      // Оновлюємо підпис знизу
       if (progressText) {
          if (totalTasks === 0) {
              progressText.textContent = "У вас поки немає завдань";
