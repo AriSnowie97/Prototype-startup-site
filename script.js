@@ -102,7 +102,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (!userId) {
       const errorMsg = "❌ Помилка: Немає User ID! Відкрийте через Телеграм.";
       console.error(errorMsg);
-      
+
       if (statusElement) {
         statusElement.textContent = errorMsg;
         statusElement.style.color = "red";
@@ -645,6 +645,21 @@ document.addEventListener("DOMContentLoaded", () => {
     // --- 1. Рендер завдань (З кнопками та стилями) ---
     function renderTasks() {
       taskListContainer.innerHTML = "";
+
+      const counterEl = document.getElementById("task-counter");
+      if (counterEl) {
+          const count = tasks.length;
+          counterEl.textContent = `(${count}/100)`;
+          
+          if (count >= 100) {
+              counterEl.style.color = "red";
+              counterEl.style.fontWeight = "bold";
+          } else {
+              counterEl.style.color = "gray";
+              counterEl.style.fontWeight = "normal";
+          }
+      }
+
       if (tasks.length === 0) {
         taskListContainer.innerHTML = "<p style='opacity: 0.7; text-align: center;'>Сьогодні завдань немає. Відпочивай! 😎</p>";
       }
@@ -828,6 +843,17 @@ document.addEventListener("DOMContentLoaded", () => {
     if (addTaskForm && newTaskInput) {
       addTaskForm.addEventListener("submit", async (e) => {
         e.preventDefault();
+
+        if (tasks.length >= 100) {
+            const msg = "⛔ Досягнуто ліміт у 100 завдань! Видаліть виконані, щоб додати нові.";
+            if (window.Telegram?.WebApp?.showAlert) {
+                window.Telegram.WebApp.showAlert(msg);
+            } else {
+                alert(msg);
+            }
+            return; // Зупиняємо виконання, запит не йде на сервер
+        }
+
         const taskText = newTaskInput.value.trim();
         if (taskText) {
           try {
