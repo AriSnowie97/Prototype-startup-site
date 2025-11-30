@@ -345,10 +345,6 @@ body .input-group .btn {
   position: relative; /* Для позиціонування крапки */
 }
 
-#calendar-grid .calendar-day.today.busy-day {
-  background: rgba(74, 144, 226, 0.5); /* Комбінація */
-}
-
 /* Додаємо крапку */
 #calendar-grid .calendar-day.busy-day::after {
   content: '';
