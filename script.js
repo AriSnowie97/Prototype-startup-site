@@ -39,6 +39,25 @@ document.addEventListener("DOMContentLoaded", () => {
   const tg = window.Telegram.WebApp;
   tg.ready();
 
+  const userNameDisplay = document.getElementById("user-name-display");
+  const userIdDisplay = document.getElementById("user-id-display");
+
+  if (tg.initDataUnsafe?.user) {
+    const user = tg.initDataUnsafe.user;
+    // Показуємо Ім'я або Username
+    if (userNameDisplay) {
+      userNameDisplay.textContent = user.username
+        ? `@${user.username}`
+        : `${user.first_name}`;
+    }
+    // Показуємо ID
+    if (userIdDisplay) {
+      userIdDisplay.textContent = `ID: ${user.id}`;
+    }
+  } else {
+    if (userNameDisplay) userNameDisplay.textContent = "Невідомий користувач";
+  }
+
   // ===== Обробка переходу в/з режиму розробника =====
 
   // --- 1. Кнопка "Увімкнути" (яка є на index.html) ---
@@ -108,7 +127,7 @@ document.addEventListener("DOMContentLoaded", () => {
         statusElement.style.color = "red";
       } else {
         // Якщо статусу немає (як у видаленні), кидаємо Alert
-        alert(errorMsg); 
+        alert(errorMsg);
       }
       return;
     }
@@ -417,7 +436,7 @@ document.addEventListener("DOMContentLoaded", () => {
       // Якщо повернувся null, значить ми показали кнопку логіну.
       // Зупиняємо функцію, щоб не стерти цю кнопку!
       if (busyDates === null) {
-          return;
+        return;
       }
       // ======================
 
@@ -559,7 +578,9 @@ document.addEventListener("DOMContentLoaded", () => {
     async function fetchEventDates(year, month) {
       const userId = tg.initDataUnsafe?.user?.id;
       if (!backendUrl || !userId) {
-        console.warn("Не можу завантажити події: відсутній backendUrl або userId.");
+        console.warn(
+          "Не можу завантажити події: відсутній backendUrl або userId."
+        );
         return [];
       }
 
@@ -578,15 +599,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
         // === ОБРОБКА 401 (ВІДСУТНІЙ ЛОГІН) ===
         if (response.status === 401) {
-            const result = await response.json();
-            console.warn("Потрібна авторизація Google:", result.login_url);
-            
-            const calendarGrid = document.getElementById("calendar-grid");
-            if(calendarGrid) {
-                // ВИПРАВЛЕННЯ: Використовуємо Telegram.WebApp.openLink()
-                // Це змушує Телеграм відкрити посилання у зовнішньому браузері,
-                // де Google не блокуватиме вхід.
-                calendarGrid.innerHTML = `
+          const result = await response.json();
+          console.warn("Потрібна авторизація Google:", result.login_url);
+
+          const calendarGrid = document.getElementById("calendar-grid");
+          if (calendarGrid) {
+            // ВИПРАВЛЕННЯ: Використовуємо Telegram.WebApp.openLink()
+            // Це змушує Телеграм відкрити посилання у зовнішньому браузері,
+            // де Google не блокуватиме вхід.
+            calendarGrid.innerHTML = `
                     <div style="grid-column: 1 / -1; text-align: center; padding: 30px 10px; display: flex; flex-direction: column; align-items: center; justify-content: center;">
                         <p style="margin-bottom: 15px; font-weight: bold;">⚠️ Для перегляду календаря потрібен доступ</p>
                         <button 
@@ -597,9 +618,9 @@ document.addEventListener("DOMContentLoaded", () => {
                         </button>
                     </div>
                 `;
-            }
-            // Повертаємо null, щоб renderCalendar знав, що треба зупинитись
-            return null; 
+          }
+          // Повертаємо null, щоб renderCalendar знав, що треба зупинитись
+          return null;
         }
         // =====================================
 
@@ -640,7 +661,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const addTaskForm = document.getElementById("add-task-form");
     const newTaskInput = document.getElementById("new-task-input");
 
-    let tasks = []; 
+    let tasks = [];
 
     // --- 1. Рендер завдань (З кнопками та стилями) ---
     function renderTasks() {
@@ -648,20 +669,21 @@ document.addEventListener("DOMContentLoaded", () => {
 
       const counterEl = document.getElementById("task-counter");
       if (counterEl) {
-          const count = tasks.length;
-          counterEl.textContent = `(${count}/100)`;
-          
-          if (count >= 100) {
-              counterEl.style.color = "red";
-              counterEl.style.fontWeight = "bold";
-          } else {
-              counterEl.style.color = "gray";
-              counterEl.style.fontWeight = "normal";
-          }
+        const count = tasks.length;
+        counterEl.textContent = `(${count}/100)`;
+
+        if (count >= 100) {
+          counterEl.style.color = "red";
+          counterEl.style.fontWeight = "bold";
+        } else {
+          counterEl.style.color = "gray";
+          counterEl.style.fontWeight = "normal";
+        }
       }
 
       if (tasks.length === 0) {
-        taskListContainer.innerHTML = "<p style='opacity: 0.7; text-align: center;'>Сьогодні завдань немає. Відпочивай! 😎</p>";
+        taskListContainer.innerHTML =
+          "<p style='opacity: 0.7; text-align: center;'>Сьогодні завдань немає. Відпочивай! 😎</p>";
       }
 
       // Скидаємо стилі списку, щоб керувати ними через CSS/JS
@@ -671,10 +693,10 @@ document.addEventListener("DOMContentLoaded", () => {
       tasks.forEach((task, index) => {
         const li = document.createElement("li");
         li.dataset.taskId = task.id;
-        
+
         // Клас для стилізації
         li.classList.add("task-item");
-        
+
         // Зебра (парні/непарні) - додаємо класи
         // index % 2 === 0 ? "even" : "odd"
         // Але краще це зробимо через CSS :nth-child, тут просто структура
@@ -691,15 +713,15 @@ document.addEventListener("DOMContentLoaded", () => {
         checkbox.checked = task.done;
         checkbox.style.marginRight = "10px";
         checkbox.style.cursor = "pointer";
-        
+
         // Текст
         const span = document.createElement("span");
         span.textContent = task.text;
         span.style.flexGrow = "1"; // Розтягує текст, штовхаючи кнопки вправо
         span.style.marginLeft = "5px";
         if (task.done) {
-            span.style.textDecoration = "line-through";
-            span.style.opacity = "0.6";
+          span.style.textDecoration = "line-through";
+          span.style.opacity = "0.6";
         }
 
         // Блок кнопок (редагування/видалення)
@@ -711,11 +733,11 @@ document.addEventListener("DOMContentLoaded", () => {
         // Кнопка Редагувати (✏️)
         const editBtn = document.createElement("button");
         editBtn.textContent = "✏️";
-        editBtn.className = "icon-btn"; 
+        editBtn.className = "icon-btn";
         editBtn.title = "Редагувати";
         editBtn.onclick = (e) => {
-            e.stopPropagation(); // Щоб не спрацював клік по li
-            editTask(task.id, task.text);
+          e.stopPropagation(); // Щоб не спрацював клік по li
+          editTask(task.id, task.text);
         };
 
         // Кнопка Видалити (🗑️)
@@ -724,8 +746,8 @@ document.addEventListener("DOMContentLoaded", () => {
         deleteBtn.className = "icon-btn delete-btn";
         deleteBtn.title = "Видалити";
         deleteBtn.onclick = (e) => {
-            e.stopPropagation();
-            deleteTask(task.id);
+          e.stopPropagation();
+          deleteTask(task.id);
         };
 
         // Збираємо все до купи
@@ -783,37 +805,43 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // --- Логіка Редагування ---
     async function editTask(id, oldText) {
-        const newText = prompt("Відредагуйте завдання:", oldText);
-        if (newText && newText.trim() !== "" && newText !== oldText) {
-            // Оновлюємо локально
-            const task = tasks.find(t => t.id == id);
-            if (task) {
-                task.text = newText.trim();
-                renderTasks();
-            }
-            // Відправляємо на сервер
-            await sendApiRequest("/api/edit_webtask", { taskId: id, text: newText.trim() }, null, null);
+      const newText = prompt("Відредагуйте завдання:", oldText);
+      if (newText && newText.trim() !== "" && newText !== oldText) {
+        // Оновлюємо локально
+        const task = tasks.find((t) => t.id == id);
+        if (task) {
+          task.text = newText.trim();
+          renderTasks();
         }
+        // Відправляємо на сервер
+        await sendApiRequest(
+          "/api/edit_webtask",
+          { taskId: id, text: newText.trim() },
+          null,
+          null
+        );
+      }
     }
 
     // --- Логіка Видалення ---
     async function deleteTask(id) {
-        if(confirm("Видалити це завдання?")) {
-            // Видаляємо локально
-            tasks = tasks.filter(t => t.id != id);
-            renderTasks();
-            
-            // Відправляємо на сервер
-            await sendApiRequest("/api/delete_webtask", { taskId: id }, null, null);
-        }
+      if (confirm("Видалити це завдання?")) {
+        // Видаляємо локально
+        tasks = tasks.filter((t) => t.id != id);
+        renderTasks();
+
+        // Відправляємо на сервер
+        await sendApiRequest("/api/delete_webtask", { taskId: id }, null, null);
+      }
     }
 
     // --- 2. Оновлення аналітики ---
     function updateAnalytics() {
       const totalTasks = tasks.length;
       const completedTasks = tasks.filter((task) => task.done).length;
-      
-      const percentage = totalTasks === 0 ? 0 : Math.round((completedTasks / totalTasks) * 100);
+
+      const percentage =
+        totalTasks === 0 ? 0 : Math.round((completedTasks / totalTasks) * 100);
 
       // Отримуємо елемент тексту окремо
       const textOverlay = document.getElementById("progress-text-overlay");
@@ -823,19 +851,19 @@ document.addEventListener("DOMContentLoaded", () => {
         progressFill.style.width = `${percentage}%`;
         progressFill.setAttribute("aria-valuenow", percentage);
       }
-      
+
       // Оновлюємо текст по центру
       if (textOverlay) {
-          textOverlay.textContent = `${percentage}%`;
+        textOverlay.textContent = `${percentage}%`;
       }
 
       // Оновлюємо підпис знизу
       if (progressText) {
-         if (totalTasks === 0) {
-             progressText.textContent = "У вас поки немає завдань";
-         } else {
-             progressText.textContent = `Виконано ${completedTasks} з ${totalTasks} завдань`;
-         }
+        if (totalTasks === 0) {
+          progressText.textContent = "У вас поки немає завдань";
+        } else {
+          progressText.textContent = `Виконано ${completedTasks} з ${totalTasks} завдань`;
+        }
       }
     }
 
@@ -845,13 +873,14 @@ document.addEventListener("DOMContentLoaded", () => {
         e.preventDefault();
 
         if (tasks.length >= 100) {
-            const msg = "⛔ Досягнуто ліміт у 100 завдань! Видаліть виконані, щоб додати нові.";
-            if (window.Telegram?.WebApp?.showAlert) {
-                window.Telegram.WebApp.showAlert(msg);
-            } else {
-                alert(msg);
-            }
-            return; // Зупиняємо виконання, запит не йде на сервер
+          const msg =
+            "⛔ Досягнуто ліміт у 100 завдань! Видаліть виконані, щоб додати нові.";
+          if (window.Telegram?.WebApp?.showAlert) {
+            window.Telegram.WebApp.showAlert(msg);
+          } else {
+            alert(msg);
+          }
+          return; // Зупиняємо виконання, запит не йде на сервер
         }
 
         const taskText = newTaskInput.value.trim();
@@ -859,7 +888,9 @@ document.addEventListener("DOMContentLoaded", () => {
           try {
             // Надсилаємо на бек і чекаємо на відповідь з новим завданням
             // Очікуємо, що бек поверне {id: ..., text: ..., done: ...}
-            const newTask = await fetchApi("/api/add_webtask", { text: taskText });
+            const newTask = await fetchApi("/api/add_webtask", {
+              text: taskText,
+            });
 
             tasks.push(newTask);
             newTaskInput.value = "";
@@ -887,5 +918,24 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     initializeTasks(); // Запускається одразу при відкритті сторінки
+  }
+
+  // =====================================================================
+  const logoutBtn = document.getElementById("logout-btn");
+  if (logoutBtn) {
+    logoutBtn.addEventListener("click", () => {
+      // 1. Очищаємо локальні налаштування (якщо треба)
+      // localStorage.removeItem("themeFile"); // Тему краще залишити
+
+      // 2. Показуємо повідомлення
+      if (
+        confirm(
+          "Ви дійсно хочете вийти з меню налаштувань? Дані залишаться збереженими."
+        )
+      ) {
+        // 3. Закриваємо WebApp (найлогічніший вихід для Telegram Mini App)
+        tg.close();
+      }
+    });
   }
 });
