@@ -340,13 +340,27 @@ body .input-group .btn {
 
 /* Стиль для зайнятої дати (ЗАЛИВКА) */
 #calendar-grid .calendar-day.busy-day {
-  background: rgba(74, 144, 226, 0.3); /* Полупрозрачный синий */
-  border: 1px solid rgba(74, 144, 226, 0.5);
+  background: rgba(74, 144, 226, 0.2); /* Легкий синій фон */
+  border: 1px solid #4a90e2; /* Синя рамка */
+  position: relative; /* Для позиціонування крапки */
 }
+
 #calendar-grid .calendar-day.today.busy-day {
   background: rgba(74, 144, 226, 0.5); /* Комбінація */
 }
 
+/* Додаємо крапку */
+#calendar-grid .calendar-day.busy-day::after {
+  content: '';
+  position: absolute;
+  bottom: 5px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 6px;
+  height: 6px;
+  background-color: #1f3b73; /* Темно-синя крапка */
+  border-radius: 50%;
+}
 
 /* ===================
    ЦЕНТРУВАННЯ НАЛАШТУВАНЬ
