@@ -1,6 +1,6 @@
 /* =========================================
-   dark-glass.css (NEW DARK THEME - FINAL FIXED)
-   Виправлено: Календарна сітка та меню
+   dark-glass.css (NEW DARK THEME - FIXED SIZES)
+   Білий текст + Розміри як у світлій темі
    ========================================= */
 
 /* --- Основа --- */
@@ -8,7 +8,7 @@ body {
   background: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%);
   background-attachment: fixed;
   font-family: 'Segoe UI', sans-serif;
-  color: #ecf0f1;
+  color: #ffffff; /* Чисто білий текст */
   margin: 0;
 }
 
@@ -17,7 +17,7 @@ header {
   background: rgba(0, 0, 0, 0.3);
   backdrop-filter: blur(15px);
   -webkit-backdrop-filter: blur(15px);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
   box-shadow: 0 4px 20px rgba(0,0,0,0.4);
   padding: 1rem;
   text-align: center;
@@ -26,6 +26,7 @@ header {
 header h1 {
   margin: 0 0 1rem 0;
   font-weight: 700;
+  color: #ffffff;
 }
 
 /* --- Контейнер хедера --- */
@@ -56,19 +57,20 @@ header nav ul {
 }
 header nav ul li a {
   display: inline-block;
-  background: rgba(255, 255, 255, 0.05);
-  color: #ecf0f1;
-  padding: 0.6rem 1.2rem;
+  background: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+  padding: 0.6rem 1.2rem; /* Розмір як у світлій */
   border-radius: 30px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
   transition: all 0.3s;
   text-decoration: none;
   font-size: 0.95rem;
+  font-weight: 600;
 }
 header nav ul li a:hover {
-  background: rgba(255, 255, 255, 0.15);
-  border-color: rgba(255, 255, 255, 0.3);
-  box-shadow: 0 0 15px rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.25);
+  border-color: #ffffff;
+  box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
 }
 
 /* --- Пошук --- */
@@ -77,21 +79,24 @@ header nav ul li a:hover {
   max-width: 350px;
 }
 #weather-form-header .form-control {
-  background: rgba(0, 0, 0, 0.4) !important;
+  background: rgba(255, 255, 255, 0.1) !important;
   border-radius: 20px 0 0 20px !important;
-  border: 1px solid rgba(255, 255, 255, 0.1) !important;
-  color: #fff !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  color: #ffffff !important;
+}
+#weather-form-header .form-control::placeholder {
+  color: rgba(255, 255, 255, 0.7);
 }
 #weather-form-header .btn {
   border-radius: 0 20px 20px 0 !important;
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255,255,255,0.1);
-  color: white;
+  background: rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255,255,255,0.2);
+  color: #ffffff;
 }
 
 /* --- Секции --- */
 main section, .login-box, #weather-result {
-  background: rgba(16, 26, 38, 0.6);
+  background: rgba(16, 26, 38, 0.75);
   border-radius: 24px;
   padding: 2.5rem;
   margin: 2rem auto;
@@ -99,86 +104,91 @@ main section, .login-box, #weather-result {
   box-shadow: 0 10px 40px rgba(0,0,0,0.5);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  color: #ecf0f1;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #ffffff;
   text-align: center;
 }
 main section h2 {
-  color: #fff;
+  color: #ffffff;
   text-shadow: 0 2px 10px rgba(0,0,0,0.5);
 }
 
 /* --- Завдання --- */
 .task-item {
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.05);
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 16px;
-  color: #ecf0f1;
+  color: #ffffff;
   text-align: left;
+  margin-bottom: 0.8rem;
+  padding: 10px 15px;
 }
 .task-item:hover {
-  background: rgba(255, 255, 255, 0.1);
-  border-color: rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.3);
 }
 
 /* Поля ввода */
 .form-control, select {
-  background: rgba(0, 0, 0, 0.4) !important;
-  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  background: rgba(255, 255, 255, 0.1) !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
   border-radius: 12px !important;
-  color: #fff !important;
+  color: #ffffff !important;
+  padding: 0.7rem 1rem;
 }
 .form-control:focus {
-  background: rgba(0, 0, 0, 0.6) !important;
-  border-color: #4facfe !important;
-  box-shadow: 0 0 10px rgba(79, 172, 254, 0.3) !important;
+  background: rgba(255, 255, 255, 0.2) !important;
+  border-color: #ffffff !important;
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.3) !important;
+}
+select option {
+  background: #203a43;
+  color: #ffffff;
 }
 
 /* --- Кнопки --- */
 button {
-  background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%);
-  color: #ecf0f1;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: linear-gradient(135deg, rgba(255,255,255,0.15) 0%, rgba(255,255,255,0.05) 100%);
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 12px;
-  padding: 0.8rem 1.5rem;
+  padding: 0.8rem 1.5rem; /* Стандартний розмір */
+  font-weight: 600;
 }
 button:hover {
-  background: rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.25);
   transform: translateY(-2px);
-  box-shadow: 0 0 15px rgba(255, 255, 255, 0.1);
+  box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
 }
+/* Акцентные кнопки */
 #add-task-form button, #start-btn, #save-event-btn, #auto-login-btn {
-  background: linear-gradient(to right, #434343 0%, black 100%);
-  border: none;
-  color: white;
+  background: linear-gradient(to right, #434343 0%, #1a1a1a 100%);
+  border: 1px solid rgba(255,255,255,0.3);
+  color: #ffffff;
 }
 
-.icon-btn { color: #aaa; background: transparent !important; border: none; }
-.icon-btn:hover { color: #fff; }
+.icon-btn { color: #ccc; background: transparent !important; border: none; }
+.icon-btn:hover { color: #ffffff; }
 
-/* --- КАЛЕНДАР (ВИПРАВЛЕНО!) --- */
+/* --- КАЛЕНДАР --- */
 .calendar-grid {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
   gap: 8px;
   margin-bottom: 1rem;
 }
-
-/* Заголовки днів тижня */
 #calendar-header div {
   font-weight: bold;
-  color: #4facfe;
+  color: #87cefa;
   text-transform: uppercase;
   font-size: 0.85rem;
   padding-bottom: 5px;
 }
-
-/* Клітинки */
 #calendar-grid .calendar-day {
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.05);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 12px;
-  color: #ccc;
+  color: #e0e0e0;
   min-height: 80px;
   padding: 5px;
   cursor: pointer;
@@ -187,59 +197,46 @@ button:hover {
   justify-content: flex-start;
   transition: all 0.3s;
 }
-
 #calendar-grid .calendar-day:hover {
-  background: rgba(255, 255, 255, 0.1);
-  color: white;
+  background: rgba(255, 255, 255, 0.2);
+  color: #ffffff;
   transform: scale(1.05);
   z-index: 2;
   box-shadow: 0 5px 15px rgba(0,0,0,0.3);
 }
-
 #calendar-grid .calendar-day.today {
-  border: 2px solid #4facfe;
-  background: rgba(79, 172, 254, 0.1);
-  color: #4facfe;
+  border: 2px solid #87cefa;
+  background: rgba(135, 206, 250, 0.15);
+  color: #ffffff;
 }
-
-/* Крапка події */
-#calendar-grid .calendar-day.busy-day {
-  position: relative;
-}
+#calendar-grid .calendar-day.busy-day { position: relative; }
 #calendar-grid .calendar-day.busy-day::after {
-  content: '';
-  width: 6px;
-  height: 6px;
-  background-color: #4facfe;
-  border-radius: 50%;
-  position: absolute;
-  bottom: 8px;
-  left: 50%;
+  content: ''; width: 6px; height: 6px;
+  background-color: #87cefa; border-radius: 50%;
+  position: absolute; bottom: 8px; left: 50%;
   transform: translateX(-50%);
 }
-#calendar-grid .other-month {
-  opacity: 0.3;
-  pointer-events: none;
-}
+#calendar-grid .other-month { opacity: 0.3; pointer-events: none; }
 
 /* --- Прогресс --- */
 .custom-progress-track {
   background: rgba(0, 0, 0, 0.4);
   border-radius: 20px;
+  height: 25px;
 }
 .custom-progress-fill {
   background: linear-gradient(to right, #243949 0%, #517fa4 100%);
   border-radius: 20px;
 }
 #progress-text-overlay {
-  color: #fff;
+  color: #ffffff;
   text-shadow: 0 1px 2px black;
 }
-
 /* --- Модальное окно --- */
 .modal-content {
   background: #1e2a36;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  color: #ecf0f1;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+  border-radius: 20px;
 }
 .btn-close { filter: invert(1); }

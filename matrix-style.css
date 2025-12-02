@@ -1,22 +1,21 @@
 /* =========================================
-   matrix-glass.css (NEW MATRIX THEME)
-   Стиль Матрицы в стеклянном дизайне
+   matrix-glass.css (NEW MATRIX THEME - WHITE TEXT)
+   Білий текст для читабельності + Стиль Матриці
    ========================================= */
 
 /* --- Основа --- */
 body {
   background: black;
-  /* Легкий зеленый градиент на фоне */
   background: radial-gradient(circle at 50% 50%, #001a00 0%, #000000 90%);
   background-attachment: fixed;
-  font-family: 'Segoe UI', 'Consolas', monospace; /* Чуть более техничный шрифт */
-  color: #00ff41;
+  font-family: 'Segoe UI', 'Consolas', monospace;
+  color: #ffffff; /* Текст тепер білий */
   margin: 0;
 }
 
 /* --- Хедер --- */
 header {
-  background: rgba(0, 20, 0, 0.6);
+  background: rgba(0, 20, 0, 0.7);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   border-bottom: 1px solid rgba(0, 255, 65, 0.3);
@@ -25,13 +24,13 @@ header {
   text-align: center;
   margin-bottom: 2rem;
 }
-
 header h1 {
   margin: 0 0 1rem 0;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 2px;
-  text-shadow: 0 0 10px rgba(0, 255, 65, 0.5);
+  color: #ffffff;
+  text-shadow: 0 0 10px rgba(0, 255, 65, 0.3); /* Легке зелене світіння */
 }
 
 /* --- Контейнер хедера --- */
@@ -60,13 +59,12 @@ header nav ul {
   gap: 0.8rem;
   flex-wrap: wrap;
 }
-
 header nav ul li a {
   display: inline-block;
   background: rgba(0, 20, 0, 0.5);
-  color: #00ff41;
-  padding: 0.6rem 1.2rem;
-  border-radius: 4px; /* Более угловатые кнопки для Матрицы */
+  color: #ffffff;
+  padding: 0.6rem 1.2rem; /* Як у світлій */
+  border-radius: 4px; 
   border: 1px solid rgba(0, 255, 65, 0.3);
   transition: all 0.3s;
   text-decoration: none;
@@ -74,31 +72,33 @@ header nav ul li a {
   font-size: 0.95rem;
   letter-spacing: 1px;
 }
-
 header nav ul li a:hover {
   background: rgba(0, 255, 65, 0.2);
   box-shadow: 0 0 15px rgba(0, 255, 65, 0.4);
   border-color: #00ff41;
+  color: #ffffff;
 }
 
-/* --- Поиск --- */
+/* --- Пошук --- */
 #weather-form-header {
   width: 100%;
   max-width: 350px;
 }
-
 #weather-form-header .form-control {
   background: rgba(0, 20, 0, 0.6) !important;
   border-radius: 4px 0 0 4px !important;
   border: 1px solid rgba(0, 255, 65, 0.3) !important;
-  color: #00ff41 !important;
+  color: #ffffff !important;
   font-family: monospace;
+}
+#weather-form-header .form-control::placeholder {
+  color: rgba(255, 255, 255, 0.6);
 }
 #weather-form-header .btn {
   border-radius: 0 4px 4px 0 !important;
   background: rgba(0, 40, 0, 0.8);
   border: 1px solid rgba(0, 255, 65, 0.3);
-  color: #00ff41;
+  color: #ffffff;
 }
 
 /* --- Секции --- */
@@ -111,13 +111,12 @@ main section, .login-box, #weather-result {
   box-shadow: 0 0 20px rgba(0, 255, 65, 0.1);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
-  border: 1px solid rgba(0, 255, 65, 0.2);
-  color: #00ff41;
+  border: 1px solid rgba(0, 255, 65, 0.3);
+  color: #ffffff;
   text-align: center;
 }
-
 main section h2 {
-  color: #fff;
+  color: #ffffff;
   text-shadow: 0 0 5px rgba(0, 255, 65, 0.8);
   border-bottom: 1px solid rgba(0, 255, 65, 0.3);
   padding-bottom: 10px;
@@ -127,11 +126,13 @@ main section h2 {
 /* --- Задачи --- */
 .task-item {
   background: rgba(0, 255, 65, 0.05);
-  border: 1px solid rgba(0, 255, 65, 0.1);
+  border: 1px solid rgba(0, 255, 65, 0.2);
   border-radius: 6px;
-  color: #00ff41;
+  color: #ffffff;
   text-align: left;
   font-family: monospace;
+  margin-bottom: 0.8rem;
+  padding: 10px 15px;
 }
 .task-item:hover {
   background: rgba(0, 255, 65, 0.15);
@@ -144,7 +145,8 @@ main section h2 {
   background: rgba(0, 20, 0, 0.6) !important;
   border: 1px solid rgba(0, 255, 65, 0.3) !important;
   border-radius: 6px !important;
-  color: #00ff41 !important;
+  color: #ffffff !important;
+  padding: 0.7rem 1rem;
   font-family: monospace;
 }
 .form-control:focus {
@@ -156,28 +158,27 @@ main section h2 {
 /* --- Кнопки --- */
 button {
   background: rgba(0, 30, 0, 0.8);
-  color: #00ff41;
+  color: #ffffff;
   border: 1px solid rgba(0, 255, 65, 0.4);
   border-radius: 6px;
-  padding: 0.8rem 1.5rem;
+  padding: 0.8rem 1.5rem; /* Стандартний розмір */
   font-family: monospace;
   font-weight: bold;
   text-transform: uppercase;
   transition: all 0.3s;
 }
-
 button:hover {
   background: rgba(0, 255, 65, 0.2);
   box-shadow: 0 0 15px rgba(0, 255, 65, 0.5);
   border-color: #00ff41;
-  color: #fff;
+  color: #ffffff;
 }
 
 /* Акцентные кнопки */
 #add-task-form button, #start-btn, #save-event-btn, #auto-login-btn {
   background: #003300;
   border: 1px solid #00ff41;
-  color: #00ff41;
+  color: #ffffff;
 }
 #add-task-form button:hover, #start-btn:hover {
   background: #00ff41;
@@ -185,8 +186,8 @@ button:hover {
   box-shadow: 0 0 20px rgba(0, 255, 65, 0.8);
 }
 
-.icon-btn { color: #00aa22; background: transparent !important; border: none; }
-.icon-btn:hover { color: #00ff41; text-shadow: 0 0 5px #00ff41; }
+.icon-btn { color: #ccc; background: transparent !important; border: none; }
+.icon-btn:hover { color: #ffffff; text-shadow: 0 0 5px #ffffff; }
 
 /* --- КАЛЕНДАРЬ --- */
 .calendar-grid {
@@ -195,21 +196,19 @@ button:hover {
   gap: 8px;
   margin-bottom: 1rem;
 }
-
 #calendar-header div {
   font-weight: bold;
-  color: #fff;
+  color: #ffffff;
   text-transform: uppercase;
   font-size: 0.85rem;
   padding-bottom: 5px;
   text-shadow: 0 0 5px #00ff41;
 }
-
 #calendar-grid .calendar-day {
   background: rgba(0, 255, 65, 0.05);
-  border: 1px solid rgba(0, 255, 65, 0.1);
+  border: 1px solid rgba(0, 255, 65, 0.2);
   border-radius: 6px;
-  color: #00cc33;
+  color: #cccccc;
   min-height: 80px;
   padding: 5px;
   cursor: pointer;
@@ -218,49 +217,36 @@ button:hover {
   justify-content: flex-start;
   transition: all 0.3s;
 }
-
 #calendar-grid .calendar-day:hover {
   background: rgba(0, 255, 65, 0.2);
-  color: #fff;
+  color: #ffffff;
   transform: scale(1.05);
   z-index: 2;
   box-shadow: 0 0 15px rgba(0, 255, 65, 0.4);
   border-color: #00ff41;
 }
-
 #calendar-grid .calendar-day.today {
   border: 2px solid #00ff41;
-  background: rgba(0, 255, 65, 0.1);
-  color: #fff;
+  background: rgba(0, 255, 65, 0.15);
+  color: #ffffff;
   box-shadow: inset 0 0 10px rgba(0, 255, 65, 0.3);
 }
-
-/* Точка события */
-#calendar-grid .calendar-day.busy-day {
-  position: relative;
-}
+#calendar-grid .calendar-day.busy-day { position: relative; }
 #calendar-grid .calendar-day.busy-day::after {
-  content: '';
-  width: 6px;
-  height: 6px;
-  background-color: #00ff41;
-  border-radius: 50%; /* Можно сделать квадратным для стиля: border-radius: 0; */
-  position: absolute;
-  bottom: 8px;
-  left: 50%;
+  content: ''; width: 6px; height: 6px;
+  background-color: #00ff41; border-radius: 50%;
+  position: absolute; bottom: 8px; left: 50%;
   transform: translateX(-50%);
   box-shadow: 0 0 5px #00ff41;
 }
-#calendar-grid .other-month {
-  opacity: 0.2;
-  pointer-events: none;
-}
+#calendar-grid .other-month { opacity: 0.2; pointer-events: none; }
 
 /* --- Прогресс бар --- */
 .custom-progress-track {
   background: rgba(0, 20, 0, 0.8);
   border: 1px solid #004400;
   border-radius: 10px;
+  height: 25px;
 }
 .custom-progress-fill {
   background: linear-gradient(90deg, #004400 0%, #00ff41 100%);
@@ -268,16 +254,16 @@ button:hover {
   box-shadow: 0 0 10px rgba(0, 255, 65, 0.5);
 }
 #progress-text-overlay {
-  color: #fff;
+  color: #ffffff;
   text-shadow: 0 0 5px black;
   font-family: monospace;
 }
-
 /* --- Модальное окно --- */
 .modal-content {
   background: #001100;
   border: 1px solid #00ff41;
-  color: #00ff41;
+  color: #ffffff;
   box-shadow: 0 0 30px rgba(0, 255, 65, 0.2);
+  border-radius: 12px;
 }
 .btn-close { filter: invert(1) sepia(1) saturate(5) hue-rotate(90deg); }
