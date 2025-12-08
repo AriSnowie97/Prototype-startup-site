@@ -42,20 +42,46 @@ document.addEventListener("DOMContentLoaded", () => {
   const userNameDisplay = document.getElementById("user-name-display");
   const userIdDisplay = document.getElementById("user-id-display");
 
+  // Ця функція завантажить пошту з бекенду
+  async function loadUserProfile() {
+      const userId = tg.initDataUnsafe?.user?.id;
+      if (!userId) return;
+
+      // Спочатку показуємо те, що дає Телеграм (нікнейм) як заглушку
+      // userNameDisplay.textContent = ... (це у тебе вже є)
+
+      try {
+          // Питаємо у бекенду реальну пошту
+          // Використовуємо fetchApi, яку ми додали раніше
+          const response = await fetch(`${backendUrl}/api/get_profile`, {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ userId: userId })
+          });
+          
+          const result = await response.json();
+
+          if (result.status === "success" && result.email) {
+              // ЯКЩО ПОШТА Є - ПІДМІНЯЄМО НІКНЕЙМ
+              userNameDisplay.textContent = result.email;
+              userNameDisplay.style.color = "#4285F4"; // Можна зробити синім, як Google :)
+          } else {
+              // Якщо пошти немає в БД, пишемо "Не авторизовано" або лишаємо нік
+              if (userNameDisplay.textContent.includes("@")) {
+                   // Якщо там був нік, лишаємо його
+              } else {
+                  userNameDisplay.textContent = "Google не підключено";
+              }
+          }
+      } catch (error) {
+          console.error("Не вдалося завантажити профіль:", error);
+          userNameDisplay.textContent = userNameDisplay.textContent+" \nerror";
+      }
+  }
+
+  // Викликаємо цю функцію при старті
   if (tg.initDataUnsafe?.user) {
-    const user = tg.initDataUnsafe.user;
-    // Показуємо Ім'я або Username
-    if (userNameDisplay) {
-      userNameDisplay.textContent = user.username
-        ? `@${user.username}`
-        : `${user.first_name}`;
-    }
-    // Показуємо ID
-    if (userIdDisplay) {
-      userIdDisplay.textContent = `ID: ${user.id}`;
-    }
-  } else {
-    if (userNameDisplay) userNameDisplay.textContent = "Невідомий користувач";
+      loadUserProfile();
   }
 
   // ===== Обробка переходу в/з режиму розробника =====
@@ -921,19 +947,31 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // =====================================================================
+  // ЛОГІКА ВИХОДУ (ОНОВЛЕНО)
+  // =====================================================================
   const logoutBtn = document.getElementById("logout-btn");
   if (logoutBtn) {
-    logoutBtn.addEventListener("click", () => {
-      // 1. Очищаємо локальні налаштування (якщо треба)
-      // localStorage.removeItem("themeFile"); // Тему краще залишити
+    logoutBtn.addEventListener("click", async () => {
+      
+      if (confirm("Ви дійсно хочете вийти? Це відключить синхронізацію з Google Calendar.")) {
+        
+        const userId = tg.initDataUnsafe?.user?.id;
+        
+        // Змінюємо текст кнопки, щоб видно було процес
+        const originalText = logoutBtn.textContent;
+        logoutBtn.textContent = "⏳ Вихід...";
+        logoutBtn.disabled = true;
 
-      // 2. Показуємо повідомлення
-      if (
-        confirm(
-          "Ви дійсно хочете вийти з меню налаштувань? Дані залишаться збереженими."
-        )
-      ) {
-        // 3. Закриваємо WebApp (найлогічніший вихід для Telegram Mini App)
+        try {
+            // Викликаємо Backend, щоб стерти сесію
+            // Backend чекає параметр 'chat_id' у /api/logout
+            await sendApiRequest("/api/logout", { chat_id: userId }, null, "Вихід успішний");
+        } catch (error) {
+            console.error("Помилка при виході:", error);
+            // Навіть якщо помилка, все одно закриваємо вікно, щоб не блокувати юзера
+        }
+
+        // Закриваємо WebApp
         tg.close();
       }
     });
