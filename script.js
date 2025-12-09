@@ -47,6 +47,8 @@ document.addEventListener("DOMContentLoaded", () => {
       const userId = tg.initDataUnsafe?.user?.id;
       if (!userId) return;
 
+      userIdDisplay.textContent = `ID: ${userId}`;
+
       // Спочатку показуємо те, що дає Телеграм (нікнейм) як заглушку
       // userNameDisplay.textContent = ... (це у тебе вже є)
 
