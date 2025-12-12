@@ -42,19 +42,14 @@ document.addEventListener("DOMContentLoaded", () => {
   const userNameDisplay = document.getElementById("user-name-display");
   const userIdDisplay = document.getElementById("user-id-display");
 
-  // Ця функція завантажить пошту з бекенду
+  // Оновлена функція завантаження профілю
   async function loadUserProfile() {
       const userId = tg.initDataUnsafe?.user?.id;
-      if (!userId) return;
+      if (!userId) return false;
 
       userIdDisplay.textContent = `ID: ${userId}`;
 
-      // Спочатку показуємо те, що дає Телеграм (нікнейм) як заглушку
-      // userNameDisplay.textContent = ... (це у тебе вже є)
-
       try {
-          // Питаємо у бекенду реальну пошту
-          // Використовуємо fetchApi, яку ми додали раніше
           const response = await fetch(`${backendUrl}/api/get_profile`, {
               method: "POST",
               headers: { "Content-Type": "application/json" },
@@ -64,21 +59,65 @@ document.addEventListener("DOMContentLoaded", () => {
           const result = await response.json();
 
           if (result.status === "success" && result.email) {
-              // ЯКЩО ПОШТА Є - ПІДМІНЯЄМО НІКНЕЙМ
               userNameDisplay.textContent = result.email;
-              userNameDisplay.style.color = "#4285F4"; // Можна зробити синім, як Google :)
+              userNameDisplay.style.color = "#4285F4"; 
+              return true; // <--- ВАЖЛИВО: Повертаємо true, якщо вхід успішний
           } else {
-              // Якщо пошти немає в БД, пишемо "Не авторизовано" або лишаємо нік
-              if (userNameDisplay.textContent.includes("@")) {
-                   // Якщо там був нік, лишаємо його
-              } else {
+              if (!userNameDisplay.textContent.includes("@")) {
                   userNameDisplay.textContent = "Google не підключено";
               }
+              return false; // <--- Повертаємо false, якщо не залогінені
           }
       } catch (error) {
           console.error("Не вдалося завантажити профіль:", error);
-          userNameDisplay.textContent = userNameDisplay.textContent+" \nerror";
+          return false;
       }
+  }
+
+  // === ЛОГІКА АВТОМАТИЧНОЇ СИНХРОНІЗАЦІЇ (POLLING) ===
+  let loginPollInterval = null;
+  let pollAttempts = 0;          // Лічильник спроб
+  const MAX_POLL_ATTEMPTS = 150; // Ліміт (150 * 4с = 600с = 10 хвилин)
+
+  function startLoginPolling() {
+    // Якщо опитування вже йде, не запускаємо друге
+    if (loginPollInterval) return;
+
+    pollAttempts = 0; // Скидаємо лічильник
+    console.log("⏳ Починаю перевірку статусу входу...");
+    
+    // Кожні 4 секунди питаємо сервер
+    loginPollInterval = setInterval(async () => {
+      pollAttempts++; // Збільшуємо лічильник
+
+      // 1. Перевірка ліміту
+      if (pollAttempts >= MAX_POLL_ATTEMPTS) {
+          console.warn("⚠️ Час очікування входу вичерпано. Зупиняю опитування.");
+          clearInterval(loginPollInterval);
+          loginPollInterval = null;
+          
+          // Можна (необов'язково) змінити текст на сторінці, щоб юзер знав
+          const calendarGrid = document.getElementById("calendar-grid");
+          if (calendarGrid) {
+             // Шукаємо наш текст підказки і міняємо його
+             const hintText = calendarGrid.querySelector("p[style*='opacity: 0.7']");
+             if (hintText) {
+                 hintText.textContent = "Час вийшов. Оновіть сторінку вручну.";
+                 hintText.style.color = "red";
+             }
+          }
+          return;
+      }
+
+      // 2. Сама перевірка
+      const isLoggedIn = await loadUserProfile();
+      
+      if (isLoggedIn) {
+        console.log("✅ Вхід виявлено! Перезавантажую сторінку...");
+        clearInterval(loginPollInterval); // Зупиняємо таймер
+        window.location.reload(); 
+      }
+    }, 4000); 
   }
 
   // Викликаємо цю функцію при старті
@@ -632,22 +671,26 @@ document.addEventListener("DOMContentLoaded", () => {
 
           const calendarGrid = document.getElementById("calendar-grid");
           if (calendarGrid) {
-            // ВИПРАВЛЕННЯ: Використовуємо Telegram.WebApp.openLink()
-            // Це змушує Телеграм відкрити посилання у зовнішньому браузері,
-            // де Google не блокуватиме вхід.
             calendarGrid.innerHTML = `
                     <div style="grid-column: 1 / -1; text-align: center; padding: 30px 10px; display: flex; flex-direction: column; align-items: center; justify-content: center;">
                         <p style="margin-bottom: 15px; font-weight: bold;">⚠️ Для перегляду календаря потрібен доступ</p>
                         <button 
                             onclick="Telegram.WebApp.openLink('${result.login_url}')" 
                             class="btn btn-primary" 
-                            style="padding: 10px 20px; border-radius: 8px; border: none; color: white;">
+                            style="padding: 10px 20px; border-radius: 8px; border: none; color: white; background: #4285F4;">
                             🔐 Увійти через Google
                         </button>
+                        <p style="margin-top: 10px; font-size: 0.8em; opacity: 0.7;">
+                           Після входу сторінка оновиться автоматично...
+                        </p>
                     </div>
                 `;
           }
-          // Повертаємо null, щоб renderCalendar знав, що треба зупинитись
+          
+          // === ОСЬ ТУТ ЗАПУСКАЄМО ПЕРЕВІРКУ ===
+          startLoginPolling(); 
+          // =====================================
+
           return null;
         }
         // =====================================
