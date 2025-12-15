@@ -1,5 +1,5 @@
 ﻿// ==========================================================
-//           ПОВНИЙ SCRIPT.JS (v10, Google Calendar Sync)
+//           ПОВНИЙ SCRIPT.JS (v11, Theme Button & Sync)
 // ==========================================================
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -8,28 +8,51 @@ document.addEventListener("DOMContentLoaded", () => {
     "https://notificationtgbotheavyapikitchen-production.up.railway.app/";
 
   // ===================================================================
-  // ===== 1. ПЕРЕМИКАЧ ТЕМ (з localStorage) =====
+  // ===== 1. ПЕРЕМИКАЧ ТЕМ (ОНОВЛЕНО: Кнопка в хедері) =====
   // ===================================================================
-  const themeSelect = document.getElementById("theme-select");
+  const themeToggleBtn = document.getElementById("theme-toggle-btn");
   const themeLink = document.getElementById("theme-link");
 
-  const savedThemeFile = localStorage.getItem("themeFile") || "style.css";
+  // Файли тем
+  const LIGHT_THEME = "style.css";
+  const DARK_THEME = "dark-style.css";
 
+  // 1. Завантаження збереженої теми
+  let currentTheme = localStorage.getItem("themeFile") || LIGHT_THEME;
+  
   if (themeLink) {
-    themeLink.href = savedThemeFile;
+    themeLink.href = currentTheme;
   }
-  if (themeSelect) {
-    themeSelect.value = savedThemeFile;
+  updateThemeIcon(currentTheme);
+
+  // 2. Обробка кліку по кнопці
+  if (themeToggleBtn) {
+    themeToggleBtn.addEventListener("click", () => {
+      // Міняємо тему на протилежну
+      if (currentTheme === LIGHT_THEME) {
+        currentTheme = DARK_THEME;
+      } else {
+        currentTheme = LIGHT_THEME;
+      }
+
+      // Застосовуємо
+      themeLink.href = currentTheme;
+      localStorage.setItem("themeFile", currentTheme);
+      updateThemeIcon(currentTheme);
+    });
   }
 
-  if (themeSelect) {
-    themeSelect.addEventListener("change", function () {
-      const selectedThemeFile = this.value;
-      if (themeLink) {
-        themeLink.href = selectedThemeFile;
-        localStorage.setItem("themeFile", selectedThemeFile);
-      }
-    });
+  // Функція для зміни іконки (Сонце/Місяць)
+  function updateThemeIcon(themeFileName) {
+    if (!themeToggleBtn) return;
+    
+    if (themeFileName === DARK_THEME) {
+      themeToggleBtn.textContent = "🌙"; // Іконка для темної теми
+      themeToggleBtn.style.background = "rgba(0,0,0,0.5)"; 
+    } else {
+      themeToggleBtn.textContent = "☀️"; // Іконка для світлої теми
+      themeToggleBtn.style.background = "rgba(255,255,255,0.5)"; 
+    }
   }
   // ===================================================================
   // ===== КІНЕЦЬ ЛОГІКИ ПЕРЕМИКАЧА ТЕМ =====
@@ -60,13 +83,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
           if (result.status === "success" && result.email) {
               userNameDisplay.textContent = result.email;
-              userNameDisplay.style.color = "#4285F4"; 
-              return true; // <--- ВАЖЛИВО: Повертаємо true, якщо вхід успішний
+              // Колір тепер керується через CSS (id #user-name-display), 
+              // тому прибираємо жорсткий стиль, або залишаємо як фолбек
+              // userNameDisplay.style.color = "#4285F4"; 
+              return true; 
           } else {
               if (!userNameDisplay.textContent.includes("@")) {
                   userNameDisplay.textContent = "Google не підключено";
               }
-              return false; // <--- Повертаємо false, якщо не залогінені
+              return false; 
           }
       } catch (error) {
           console.error("Не вдалося завантажити профіль:", error);
@@ -96,10 +121,9 @@ document.addEventListener("DOMContentLoaded", () => {
           clearInterval(loginPollInterval);
           loginPollInterval = null;
           
-          // Можна (необов'язково) змінити текст на сторінці, щоб юзер знав
+          // Можна змінити текст на сторінці
           const calendarGrid = document.getElementById("calendar-grid");
           if (calendarGrid) {
-             // Шукаємо наш текст підказки і міняємо його
              const hintText = calendarGrid.querySelector("p[style*='opacity: 0.7']");
              if (hintText) {
                  hintText.textContent = "Час вийшов. Оновіть сторінку вручну.";
@@ -163,12 +187,12 @@ document.addEventListener("DOMContentLoaded", () => {
   const testFlaskBtn = document.getElementById("test-flask-btn");
   const flaskStatus = document.getElementById("flask-status");
 
-  const addTaskViaFlaskButton = document.getElementById("add-task-btn");
+  // Цю кнопку ми видалили з HTML, але залишаємо змінну, щоб скрипт не ламався
+  const addTaskViaFlaskButton = document.getElementById("add-task-btn"); 
   const addTaskStatus = document.getElementById("add-task-status");
 
   /**
    * ✅ ГОЛОВНА ФУНКЦІЯ для відправки будь-яких запитів на бекенд.
-   * (ОНОВЛЕНО: тепер безпечно працює, якщо statusElement = null)
    */
   async function sendApiRequest(
     endpoint,
@@ -193,7 +217,6 @@ document.addEventListener("DOMContentLoaded", () => {
         statusElement.textContent = errorMsg;
         statusElement.style.color = "red";
       } else {
-        // Якщо статусу немає (як у видаленні), кидаємо Alert
         alert(errorMsg);
       }
       return;
@@ -207,9 +230,6 @@ document.addEventListener("DOMContentLoaded", () => {
     try {
       const apiUrl = `${backendUrl}${endpoint}`;
       const body = { ...payload, userId };
-
-      // АЛЕРТ ВИМКНЕНО
-      // tg.showAlert(alertMessage);
 
       const response = await fetch(apiUrl, {
         method: "POST",
@@ -233,7 +253,7 @@ document.addEventListener("DOMContentLoaded", () => {
         statusElement.textContent = `❌ Помилка: ${error.message}`;
         statusElement.style.color = "red";
       }
-      throw error; // Прокидаємо помилку далі
+      throw error; 
     }
   }
 
@@ -262,7 +282,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
   /**
    * ✅ НОВА ФУНКЦІЯ для запитів, що повертають дані.
-   * Очікує, що бекенд поверне { status: 'success', data: [...] } або { status: 'success', events: [...] }
    */
   async function fetchApi(endpoint, payload) {
     if (!backendUrl) {
@@ -285,14 +304,13 @@ document.addEventListener("DOMContentLoaded", () => {
     const result = await response.json();
 
     if (response.ok && result.status === "success") {
-      // Бекенд може повертати 'data' або 'events' або просто поля
       return result; 
     } else {
       throw new Error(result.message || "Невідома помилка сервера");
     }
   }
 
-  // (Логіка кнопки Google Calendar "Додати завдання" - та що під календарем)
+  // (Ця логіка не спрацює, бо кнопки немає, але перевірка if() захищає від помилок)
   if (addTaskViaFlaskButton && addTaskStatus) {
     if (!backendUrl) {
       addTaskViaFlaskButton.disabled = true;
@@ -322,28 +340,26 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // ==================================================
-  //          ЛОГІКА: ПОГОДА (ОНОВЛЕНО)
+  //          ЛОГІКА: ПОГОДА
   // ==================================================
   const weatherInput = document.getElementById("weather-input");
   const weatherBtn = document.getElementById("weather-btn");
   const weatherResultDiv = document.getElementById("weather-result");
 
-  // === НОВИЙ КОД: Авто-завантаження погоди при старті ===
-  // (Функція fetchWeather "спливає" (hoisted), тому ми можемо її тут викликати)
+  // Авто-завантаження погоди при старті
   const savedCity = localStorage.getItem("savedCity");
   if (savedCity && weatherInput) {
     weatherInput.value = savedCity;
-    fetchWeather(); // Викликаємо одразу
+    fetchWeather(); 
   }
-  // === КІНЕЦЬ НОВОГО КОДУ ===
 
   if (weatherBtn) {
     weatherBtn.addEventListener("click", fetchWeather);
 
-    // (Для удобства, чтобы Enter тоже работал)
+    // Enter теж працює
     weatherInput.addEventListener("keypress", (e) => {
       if (e.key === "Enter") {
-        e.preventDefault(); // Запобігаємо надсиланню форми (якщо вона є)
+        e.preventDefault(); 
         fetchWeather();
       }
     });
@@ -352,24 +368,29 @@ document.addEventListener("DOMContentLoaded", () => {
   async function fetchWeather() {
     const city = weatherInput.value.trim();
     if (!city) {
-      weatherResultDiv.innerHTML = "Будь ласка, введіть назву міста.";
-      weatherResultDiv.style.color = "red";
-      weatherResultDiv.style.display = "block";
+      if(weatherResultDiv) {
+          weatherResultDiv.innerHTML = "Будь ласка, введіть назву міста.";
+          weatherResultDiv.style.color = "red";
+          weatherResultDiv.style.display = "block";
+      }
       return;
     }
 
     const userId = tg.initDataUnsafe?.user?.id;
     if (!backendUrl || !userId) {
-      weatherResultDiv.innerHTML =
-        "❌ Помилка: Не вдалося отримати ID користувача.";
-      weatherResultDiv.style.color = "red";
-      weatherResultDiv.style.display = "block";
+      if(weatherResultDiv) {
+          weatherResultDiv.innerHTML = "❌ Помилка: Не вдалося отримати ID користувача.";
+          weatherResultDiv.style.color = "red";
+          weatherResultDiv.style.display = "block";
+      }
       return;
     }
 
-    weatherResultDiv.innerHTML = "Завантаження...";
-    weatherResultDiv.style.color = "orange"; // Цвет из твоих старых стилей
-    weatherResultDiv.style.display = "block"; // ПОКАЗУЄМО БЛОК
+    if(weatherResultDiv) {
+        weatherResultDiv.innerHTML = "Завантаження...";
+        weatherResultDiv.style.color = "orange"; 
+        weatherResultDiv.style.display = "block";
+    }
 
     const payload = {
       userId: userId,
@@ -390,24 +411,22 @@ document.addEventListener("DOMContentLoaded", () => {
       const result = await response.json();
 
       if (result.status === "success") {
-        weatherResultDiv.innerHTML = result.formatted_weather;
-        weatherResultDiv.style.color = ""; // Сбрасываем цвет ошибки
-
-        // === НОВИЙ КОД: Збереження успішного міста ===
+        if(weatherResultDiv) {
+            weatherResultDiv.innerHTML = result.formatted_weather;
+            weatherResultDiv.style.color = ""; 
+        }
         localStorage.setItem("savedCity", city);
-        // === КІНЕЦЬ НОВОГО КОДУ ===
       } else {
         throw new Error(result.message);
       }
     } catch (error) {
       console.error("Помилка fetchWeather:", error);
-      weatherResultDiv.innerHTML = `❌ Помилка: ${error.message}`;
-      weatherResultDiv.style.color = "red";
+      if(weatherResultDiv) {
+          weatherResultDiv.innerHTML = `❌ Помилка: ${error.message}`;
+          weatherResultDiv.style.color = "red";
+      }
     }
   }
-  // ==================================================
-  //          КІНЕЦЬ ЛОГІКИ ПОГОДИ
-  // ==================================================
 
   // ===== Режим концентрації (Таймер Помодоро) =====
   const timerDisplay = document.getElementById("timer-display");
@@ -454,19 +473,18 @@ document.addEventListener("DOMContentLoaded", () => {
       updateTimerDisplay();
     }
 
-    startBtn.addEventListener("click", startTimer);
-    pauseBtn.addEventListener("click", pauseTimer);
-    stopBtn.addEventListener("click", stopTimer);
+    if(startBtn) startBtn.addEventListener("click", startTimer);
+    if(pauseBtn) pauseBtn.addEventListener("click", pauseTimer);
+    if(stopBtn) stopBtn.addEventListener("click", stopTimer);
 
     updateTimerDisplay();
   }
 
   // ==================================================
-  //          ЛОГІКА КАЛЕНДАРЯ (з часом закінчення)
+  //          ЛОГІКА КАЛЕНДАРЯ
   // ==================================================
   const monthYearDisplay = document.getElementById("month-year-display");
   if (monthYearDisplay) {
-    // 1. Отримуємо елементи
     const calendarGrid = document.getElementById("calendar-grid");
     const prevMonthBtn = document.getElementById("prev-month-btn");
     const nextMonthBtn = document.getElementById("next-month-btn");
@@ -474,7 +492,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const addEventModal = new bootstrap.Modal(addEventModalEl);
     const saveEventBtn = document.getElementById("save-event-btn");
 
-    // Елементи форми
     const eventTitleInput = document.getElementById("event-title");
     const eventDateInput = document.getElementById("event-date");
     const eventTimeInput = document.getElementById("event-time");
@@ -484,9 +501,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const calendarStatus = document.getElementById("add-task-status");
     let currentDate = new Date();
 
-    /**
-     * 3. Головна функція рендеру (малювання) календаря
-     */
     async function renderCalendar() {
       const year = currentDate.getFullYear();
       const month = currentDate.getMonth();
@@ -498,20 +512,14 @@ document.addEventListener("DOMContentLoaded", () => {
         monthName.charAt(0).toUpperCase() + monthName.slice(1)
       } ${year}`;
 
-      // 1. Завантажуємо дати
       const busyDates = await fetchEventDates(year, month + 1);
 
-      // === НОВА ПЕРЕВІРКА ===
-      // Якщо повернувся null, значить ми показали кнопку логіну.
-      // Зупиняємо функцію, щоб не стерти цю кнопку!
       if (busyDates === null) {
         return;
       }
-      // ======================
 
       calendarGrid.innerHTML = "";
 
-      // --- Магія розрахунку дат ---
       const firstDayOfMonth = new Date(year, month, 1);
       const lastDayOfMonth = new Date(year, month + 1, 0);
       const daysInMonth = lastDayOfMonth.getDate();
@@ -524,14 +532,12 @@ document.addEventListener("DOMContentLoaded", () => {
       const realToday = new Date();
       realToday.setHours(0, 0, 0, 0);
 
-      // --- Малюємо "пусті" комірки ---
       for (let i = 0; i < paddingDays; i++) {
         const emptyCell = document.createElement("div");
         emptyCell.classList.add("calendar-day", "other-month");
         calendarGrid.appendChild(emptyCell);
       }
 
-      // --- Малюємо комірки для поточного місяця ---
       for (let day = 1; day <= daysInMonth; day++) {
         const dayCell = document.createElement("div");
         dayCell.classList.add("calendar-day");
@@ -562,24 +568,17 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     }
 
-    /**
-     * 4. Функція відкриття модалки (ОНОВЛЕНО: Завантаження списку + Блокування кнопки)
-     */
     async function openAddEventModal(dateStr) {
       document.getElementById("add-event-form").reset();
       eventDateInput.value = dateStr;
 
-      // Скидаємо блокування полів часу
       eventTimeInput.disabled = false;
       eventEndTimeInput.disabled = false;
 
-      // === ЛОГІКА СПИСКУ ПОДІЙ В МОДАЛЦІ ===
       const modalBody = document.querySelector("#addEventModal .modal-body");
-      // Видаляємо старий список якщо був
       const oldList = document.getElementById("modal-events-list");
       if (oldList) oldList.remove();
 
-      // Створюємо контейнер для списку
       const listContainer = document.createElement("div");
       listContainer.id = "modal-events-list";
       listContainer.innerHTML = "<p>⏳ Завантаження подій...</p>";
@@ -587,17 +586,12 @@ document.addEventListener("DOMContentLoaded", () => {
       listContainer.style.borderBottom = "1px solid rgba(255,255,255,0.2)";
       listContainer.style.paddingBottom = "15px";
 
-      // Вставляємо перед формою
       modalBody.insertBefore(listContainer, document.getElementById("add-event-form"));
 
-      // Відкриваємо модалку
       addEventModal.show();
-
-      // Блокуємо кнопку збереження поки вантажиться
       saveEventBtn.disabled = true;
 
       try {
-          // Запит на бекенд за подіями
           const result = await fetchApi("/api/get_day_events", { date: dateStr });
           
           if (result.status === "success") {
@@ -622,14 +616,11 @@ document.addEventListener("DOMContentLoaded", () => {
                   listContainer.innerHTML += "<p style='opacity:0.7'>Подій немає</p>";
               }
 
-              // === ПЕРЕВІРКА НА МИНУЛИЙ ЧАС ===
               if (result.is_past) {
                   saveEventBtn.disabled = true;
                   saveEventBtn.textContent = "Минулий час";
                   saveEventBtn.classList.remove("btn-primary");
                   saveEventBtn.classList.add("btn-secondary");
-                  
-                  // Можна також заблокувати форму
                   document.getElementById("event-title").disabled = true;
               } else {
                   saveEventBtn.disabled = false;
@@ -638,91 +629,83 @@ document.addEventListener("DOMContentLoaded", () => {
                   saveEventBtn.classList.remove("btn-secondary");
                   document.getElementById("event-title").disabled = false;
               }
-
           }
       } catch (e) {
           console.error("Помилка завантаження подій дня:", e);
           listContainer.innerHTML = "<p style='color:red'>Помилка завантаження списку</p>";
-          // На всяк випадок розблокуємо кнопку, якщо це не минуле (або заблокуємо)
           saveEventBtn.disabled = false;
       }
     }
 
-    /**
-     * Логіка для чекбокса "На весь день"
-     */
-    allDayCheckbox.addEventListener("change", () => {
-      if (allDayCheckbox.checked) {
-        eventTimeInput.disabled = true;
-        eventEndTimeInput.disabled = true;
-        eventTimeInput.value = "";
-        eventEndTimeInput.value = "";
-      } else {
-        eventTimeInput.disabled = false;
-        eventEndTimeInput.disabled = false;
-      }
-    });
+    if(allDayCheckbox) {
+        allDayCheckbox.addEventListener("change", () => {
+          if (allDayCheckbox.checked) {
+            eventTimeInput.disabled = true;
+            eventEndTimeInput.disabled = true;
+            eventTimeInput.value = "";
+            eventEndTimeInput.value = "";
+          } else {
+            eventTimeInput.disabled = false;
+            eventEndTimeInput.disabled = false;
+          }
+        });
+    }
 
-    /**
-     * 5. Обробники кнопок "вперед/назад"
-     */
-    prevMonthBtn.addEventListener("click", async () => {
-      currentDate.setDate(1);
-      currentDate.setMonth(currentDate.getMonth() - 1);
-      await renderCalendar();
-    });
+    if(prevMonthBtn) {
+        prevMonthBtn.addEventListener("click", async () => {
+          currentDate.setDate(1);
+          currentDate.setMonth(currentDate.getMonth() - 1);
+          await renderCalendar();
+        });
+    }
 
-    nextMonthBtn.addEventListener("click", async () => {
-      currentDate.setDate(1);
-      currentDate.setMonth(currentDate.getMonth() + 1);
-      await renderCalendar();
-    });
+    if(nextMonthBtn) {
+        nextMonthBtn.addEventListener("click", async () => {
+          currentDate.setDate(1);
+          currentDate.setMonth(currentDate.getMonth() + 1);
+          await renderCalendar();
+        });
+    }
 
-    /**
-     * 6. Обробник кнопки "Зберегти" в модалці (Додає в Google)
-     */
-    saveEventBtn.addEventListener("click", async () => {
-      const title = eventTitleInput.value;
-      const date = eventDateInput.value;
+    if(saveEventBtn) {
+        saveEventBtn.addEventListener("click", async () => {
+          const title = eventTitleInput.value;
+          const date = eventDateInput.value;
 
-      const time = eventTimeInput.value;
-      const endTime = eventEndTimeInput.value;
-      const isAllDay = allDayCheckbox.checked;
+          const time = eventTimeInput.value;
+          const endTime = eventEndTimeInput.value;
+          const isAllDay = allDayCheckbox.checked;
 
-      if (!title || !date) {
-        tg.showAlert("Будь ласка, заповніть назву події та дату.");
-        return;
-      }
+          if (!title || !date) {
+            tg.showAlert("Будь ласка, заповніть назву події та дату.");
+            return;
+          }
 
-      const payload = {
-        title: title,
-        date: date,
-        time: isAllDay ? null : time || null,
-        end_time: isAllDay ? null : endTime || null,
-        all_day: isAllDay,
-      };
+          const payload = {
+            title: title,
+            date: date,
+            time: isAllDay ? null : time || null,
+            end_time: isAllDay ? null : endTime || null,
+            all_day: isAllDay,
+          };
 
-      try {
-        await sendApiRequest(
-          "/add_event",
-          payload,
-          calendarStatus,
-          "Подію успішно додано!"
-        );
-        addEventModal.hide();
-        await renderCalendar(); // Оновлюємо крапки на календарі
-        
-        // Якщо додали на "Сьогодні", треба оновити й головний список завдань
-        initializeTasks(); 
+          try {
+            await sendApiRequest(
+              "/add_event",
+              payload,
+              calendarStatus,
+              "Подію успішно додано!"
+            );
+            addEventModal.hide();
+            await renderCalendar(); 
+            initializeTasks(); 
 
-      } catch (error) {
-        console.error("Помилка збереження:", error);
-      }
-    });
+          } catch (error) {
+            console.error("Помилка збереження:", error);
+          }
+        });
+    }
 
-    /**
-     * 7. Функція для завантаження "зайнятих" дат
-     */
     async function fetchEventDates(year, month) {
       const userId = tg.initDataUnsafe?.user?.id;
       if (!backendUrl || !userId) {
@@ -745,12 +728,10 @@ document.addEventListener("DOMContentLoaded", () => {
           body: JSON.stringify(payload),
         });
 
-        // === ОБРОБКА 401 (ВІДСУТНІЙ ЛОГІН) ===
         if (response.status === 401) {
           const result = await response.json();
           console.warn("Потрібна авторизація Google:", result.login_url);
 
-          const calendarGrid = document.getElementById("calendar-grid");
           if (calendarGrid) {
             calendarGrid.innerHTML = `
                     <div style="grid-column: 1 / -1; text-align: center; padding: 30px 10px; display: flex; flex-direction: column; align-items: center; justify-content: center;">
@@ -768,13 +749,9 @@ document.addEventListener("DOMContentLoaded", () => {
                 `;
           }
           
-          // === ОСЬ ТУТ ЗАПУСКАЄМО ПЕРЕВІРКУ ===
           startLoginPolling(); 
-          // =====================================
-
           return null;
         }
-        // =====================================
 
         if (!response.ok) {
           throw new Error("Помилка мережі при завантаженні подій");
@@ -789,25 +766,20 @@ document.addEventListener("DOMContentLoaded", () => {
         }
       } catch (error) {
         console.error("Помилка fetchEventDates:", error);
-        // Не показуємо алерт на кожен чих, просто в консоль
         return [];
       }
     }
 
-    // 8. Перший запуск
     renderCalendar();
   }
-  // ==================================================
-  //          КІНЕЦЬ ЛОГІКИ КАЛЕНДАРЯ
-  // ==================================================
 
   // ===================================================================
-  // ===== 2. ЗАВДАННЯ ТА АНАЛІТИКА (ОНОВЛЕНО v10: Google Sync) =====
+  // ===== 2. ЗАВДАННЯ ТА АНАЛІТИКА (Google Sync) =====
   // ===================================================================
 
   const taskListContainer = document.querySelector("#tasks ul");
-  let tasks = []; // Глобальна змінна для цього блоку
-  let initializeTasks; // Оголошуємо заздалегідь, щоб викликати з інших місць
+  let tasks = []; 
+  let initializeTasks; 
 
   if (taskListContainer) {
     const progressFill = document.querySelector(".custom-progress-fill");
@@ -815,14 +787,12 @@ document.addEventListener("DOMContentLoaded", () => {
     const addTaskForm = document.getElementById("add-task-form");
     const newTaskInput = document.getElementById("new-task-input");
 
-    // --- 1. Рендер завдань (З кнопками та стилями) ---
     function renderTasks() {
       taskListContainer.innerHTML = "";
 
       const counterEl = document.getElementById("task-counter");
       if (counterEl) {
         const count = tasks.length;
-        // Ліміт Google Calendar інший, але залишимо візуал 100 для краси
         counterEl.textContent = `(${count}/100)`;
         counterEl.style.color = count >= 100 ? "red" : "gray";
       }
@@ -837,7 +807,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       tasks.forEach((task, index) => {
         const li = document.createElement("li");
-        li.dataset.taskId = task.id; // Це тепер ID Google (стрічка)
+        li.dataset.taskId = task.id; 
         li.classList.add("task-item");
 
         const contentDiv = document.createElement("div");
@@ -845,14 +815,12 @@ document.addEventListener("DOMContentLoaded", () => {
         contentDiv.style.alignItems = "center";
         contentDiv.style.width = "100%";
 
-        // Чекбокс (для Google Events це лише візуально)
         const checkbox = document.createElement("input");
         checkbox.type = "checkbox";
         checkbox.checked = task.done;
         checkbox.style.marginRight = "10px";
         checkbox.style.cursor = "pointer";
 
-        // Текст
         const span = document.createElement("span");
         span.textContent = task.text;
         span.style.flexGrow = "1";
@@ -862,13 +830,11 @@ document.addEventListener("DOMContentLoaded", () => {
           span.style.opacity = "0.6";
         }
 
-        // Блок кнопок (редагування/видалення)
         const actionsDiv = document.createElement("div");
         actionsDiv.className = "task-actions";
         actionsDiv.style.display = "flex";
         actionsDiv.style.gap = "8px";
 
-        // Кнопка Редагувати (✏️)
         const editBtn = document.createElement("button");
         editBtn.textContent = "✏️";
         editBtn.className = "icon-btn";
@@ -878,7 +844,6 @@ document.addEventListener("DOMContentLoaded", () => {
           editTask(task.id, task.text);
         };
 
-        // Кнопка Видалити (🗑️)
         const deleteBtn = document.createElement("button");
         deleteBtn.textContent = "🗑️";
         deleteBtn.className = "icon-btn delete-btn";
@@ -896,15 +861,12 @@ document.addEventListener("DOMContentLoaded", () => {
         contentDiv.appendChild(actionsDiv);
         li.appendChild(contentDiv);
 
-        // Логіка чекбокса
         checkbox.addEventListener("change", () => {
           const isDone = checkbox.checked;
           const aTask = tasks.find((t) => t.id == task.id);
           if (aTask) aTask.done = isDone;
           renderTasks();
-          // Примітка: update_webtask не спрацює для Google ID без оновлення бекенду.
-          // Але для візуалу ми це лишаємо.
-          console.log("Status changed locally (Google API sync needed for done status)");
+          console.log("Status changed locally");
         });
 
         taskListContainer.appendChild(li);
@@ -912,10 +874,7 @@ document.addEventListener("DOMContentLoaded", () => {
       updateAnalytics();
     }
 
-    // --- Логіка Редагування (ОНОВЛЕНО ДЛЯ GOOGLE) ---
     async function editTask(id, oldText) {
-      // Якщо текст містить час у дужках [14:00], спробуємо його прибрати для редагування
-      // щоб юзер правив тільки суть.
       let cleanText = oldText;
       const timeMatch = oldText.match(/^\[\d{2}:\d{2}\]\s(.*)/);
       if (timeMatch && timeMatch[1]) {
@@ -925,33 +884,27 @@ document.addEventListener("DOMContentLoaded", () => {
       const newText = prompt("Змінити назву події:", cleanText);
       
       if (newText && newText.trim() !== "" && newText !== cleanText) {
-        // Оновлюємо локально (візуально), щоб не чекати перезавантаження
         const task = tasks.find((t) => t.id == id);
         if (task) {
-          // Якщо був час, зберігаємо його префікс
           const prefix = timeMatch ? `[${oldText.slice(1,6)}] ` : "";
           task.text = prefix + newText.trim();
           renderTasks();
         }
 
-        // Відправляємо запит на Google Calendar API
         await sendApiRequest(
           "/api/update_event_title", 
           { eventId: id, text: newText.trim() },
-          null, // statusElement не потрібен
+          null, 
           "Оновлено"
         );
       }
     }
 
-    // --- Логіка Видалення (ОНОВЛЕНО ДЛЯ GOOGLE) ---
     async function deleteTask(id) {
       if (confirm("Видалити цю подію з Google Calendar назавжди?")) {
-        // Видаляємо локально
         tasks = tasks.filter((t) => t.id != id);
         renderTasks();
 
-        // Відправляємо запит на Google Calendar API
         await sendApiRequest(
             "/api/delete_event", 
             { eventId: id }, 
@@ -961,7 +914,6 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     }
 
-    // --- 2. Оновлення аналітики ---
     function updateAnalytics() {
       const totalTasks = tasks.length;
       const completedTasks = tasks.filter((task) => task.done).length;
@@ -984,7 +936,6 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     }
 
-    // --- 3. Додавання завдання (ТЕПЕР В GOOGLE) ---
     if (addTaskForm && newTaskInput) {
       addTaskForm.addEventListener("submit", async (e) => {
         e.preventDefault();
@@ -992,11 +943,8 @@ document.addEventListener("DOMContentLoaded", () => {
         const taskText = newTaskInput.value.trim();
         if (taskText) {
           try {
-            // Використовуємо ендпоінт Google Calendar
             await sendApiRequest("/add_task", { text: taskText }, null, "Додано в Google");
             newTaskInput.value = "";
-            
-            // Перезавантажуємо список, щоб отримати правильний ID від Google
             initializeTasks(); 
 
           } catch (error) {
@@ -1007,25 +955,20 @@ document.addEventListener("DOMContentLoaded", () => {
       });
     }
 
-    // --- 4. Початкове завантаження (ТЕПЕР З GOOGLE) ---
     initializeTasks = async function() {
       try {
         taskListContainer.innerHTML = "<p>Завантаження подій з Google...</p>";
         
-        // Отримуємо сьогоднішню дату YYYY-MM-DD
         const d = new Date();
         const dateStr = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
 
-        // Викликаємо новий бекенд ендпоінт
         const response = await fetchApi("/api/get_day_events", { date: dateStr });
         
-        // Мапимо відповідь Google (events) у формат завдань сайту
         if (response.events) {
             tasks = response.events.map(ev => ({
-                id: ev.id, // String ID від Google
-                // Додаємо час до назви, якщо це не весь день
+                id: ev.id, 
                 text: `${ev.time !== 'Весь день' ? '[' + ev.time + '] ' : ''}${ev.title}`,
-                done: false // Google Events не мають статусу done, ставимо false
+                done: false 
             }));
         } else {
             tasks = [];
@@ -1038,11 +981,11 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     }
 
-    initializeTasks(); // Запускається одразу при відкритті сторінки
+    initializeTasks(); 
   }
 
   // =====================================================================
-  // ЛОГІКА ВИХОДУ (ОНОВЛЕНО)
+  // ЛОГІКА ВИХОДУ
   // =====================================================================
   const logoutBtn = document.getElementById("logout-btn");
   if (logoutBtn) {
@@ -1052,21 +995,16 @@ document.addEventListener("DOMContentLoaded", () => {
         
         const userId = tg.initDataUnsafe?.user?.id;
         
-        // Змінюємо текст кнопки, щоб видно було процес
         const originalText = logoutBtn.textContent;
         logoutBtn.textContent = "⏳ Вихід...";
         logoutBtn.disabled = true;
 
         try {
-            // Викликаємо Backend, щоб стерти сесію
-            // Backend чекає параметр 'chat_id' у /api/logout
             await sendApiRequest("/api/logout", { chat_id: userId }, null, "Вихід успішний");
         } catch (error) {
             console.error("Помилка при виході:", error);
-            // Навіть якщо помилка, все одно закриваємо вікно, щоб не блокувати юзера
         }
 
-        // Закриваємо WebApp
         tg.close();
       }
     });

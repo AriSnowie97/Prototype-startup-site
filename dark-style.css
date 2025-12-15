@@ -1,6 +1,5 @@
 /* =========================================
-   dark-glass.css (NEW DARK THEME - FIXED SIZES)
-   Білий текст + Розміри як у світлій темі
+   dark-style.css (DARK THEME - FULL FIXED v12)
    ========================================= */
 
 /* --- Основа --- */
@@ -8,8 +7,9 @@ body {
   background: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%);
   background-attachment: fixed;
   font-family: 'Segoe UI', sans-serif;
-  color: #ffffff; /* Чисто білий текст */
+  color: #ffffff;
   margin: 0;
+  overflow-x: hidden;
 }
 
 /* --- Хедер --- */
@@ -19,12 +19,13 @@ header {
   -webkit-backdrop-filter: blur(15px);
   border-bottom: 1px solid rgba(255, 255, 255, 0.15);
   box-shadow: 0 4px 20px rgba(0,0,0,0.4);
-  padding: 1rem;
+  padding: 1rem 2rem;
   text-align: center;
   margin-bottom: 2rem;
 }
+
 header h1 {
-  margin: 0 0 1rem 0;
+  margin: 0 0 1.5rem 0;
   font-weight: 700;
   color: #ffffff;
 }
@@ -34,64 +35,104 @@ header h1 {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 1rem;
-  max-width: 1000px;
+  gap: 1.5rem;
+  max-width: 1200px;
   margin: 0 auto;
 }
-@media (min-width: 768px) {
+
+@media (min-width: 992px) {
   .header-bottom-row {
     flex-direction: row;
     justify-content: space-between;
+    align-items: center;
   }
 }
 
-/* --- Навігація --- */
+/* --- Навігація - FIX --- */
+header nav { width: 100%; }
+@media (min-width: 992px) { header nav { width: auto; } }
+
 header nav ul {
-  display: flex;
+  display: flex !important;
+  flex-direction: row !important;
   justify-content: center;
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  gap: 0.8rem;
+  list-style: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  gap: 0.5rem;
   flex-wrap: wrap;
 }
+
+header nav ul li { list-style: none !important; margin: 0; }
+
 header nav ul li a {
   display: inline-block;
   background: rgba(255, 255, 255, 0.1);
   color: #ffffff;
-  padding: 0.6rem 1.2rem; /* Розмір як у світлій */
+  padding: 0.6rem 1.2rem;
   border-radius: 30px;
   border: 1px solid rgba(255, 255, 255, 0.2);
   transition: all 0.3s;
   text-decoration: none;
-  font-size: 0.95rem;
+  font-size: 0.9rem;
   font-weight: 600;
 }
+
 header nav ul li a:hover {
   background: rgba(255, 255, 255, 0.25);
   border-color: #ffffff;
   box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
 }
 
-/* --- Пошук --- */
+/* --- Права частина (Погода + Кнопка) --- */
 #weather-form-header {
   width: 100%;
-  max-width: 350px;
+  max-width: 300px;
+  margin: 0;
+  display: flex;
 }
+
 #weather-form-header .form-control {
   background: rgba(255, 255, 255, 0.1) !important;
   border-radius: 20px 0 0 20px !important;
   border: 1px solid rgba(255, 255, 255, 0.2) !important;
   color: #ffffff !important;
+  padding-left: 15px;
 }
 #weather-form-header .form-control::placeholder {
-  color: rgba(255, 255, 255, 0.7);
+  color: rgba(255, 255, 255, 0.7) !important;
 }
+
 #weather-form-header .btn {
   border-radius: 0 20px 20px 0 !important;
-  background: rgba(255, 255, 255, 0.2);
-  border: 1px solid rgba(255,255,255,0.2);
-  color: #ffffff;
+  background: rgba(255, 255, 255, 0.2) !important;
+  border: 1px solid rgba(255,255,255,0.2) !important;
+  color: #ffffff !important;
+  margin: 0 !important;
+  min-height: auto !important;
+  padding: 0.5rem 1rem !important;
+}
+
+/* Кнопка зміни теми */
+#theme-toggle-btn {
+  width: 45px !important;
+  height: 45px !important;
+  min-width: 45px !important;
+  border-radius: 50% !important;
+  padding: 0 !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.5) !important;
+  border: 1px solid rgba(255, 255, 255, 0.3) !important;
+  font-size: 1.2rem;
+  margin-left: 10px !important;
+  color: #fff !important;
+  box-shadow: none !important;
+}
+#theme-toggle-btn:hover {
+    transform: rotate(20deg);
+    background: rgba(255,255,255,0.1) !important;
 }
 
 /* --- Секции --- */
@@ -140,99 +181,78 @@ main section h2 {
   background: rgba(255, 255, 255, 0.2) !important;
   border-color: #ffffff !important;
   box-shadow: 0 0 10px rgba(255, 255, 255, 0.3) !important;
+  color: #fff !important;
 }
 select option {
   background: #203a43;
   color: #ffffff;
 }
 
-/* =========================================
-   FIX: ВІДСТУПИ ТА ГЕОМЕТРІЯ (FINAL)
-   ========================================= */
-
-/* 1. Виправлення кнопок (Стиль + Білий текст) */
+/* --- Кнопки (Глобально) --- */
 button, .btn {
-  /* Градієнт як у темній темі */
+  padding: 10px 20px !important;
+  font-size: 1rem !important;
+  min-height: 45px;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
-  color: #ffffff !important; /* Текст завжди білий */
+  color: #ffffff !important;
   border: none !important;
   border-radius: 12px !important;
-  padding: 10px 20px;
   box-shadow: 0 4px 15px rgba(118, 75, 162, 0.3);
-  
-  /* Глобальний відступ, щоб кнопки не липли одна до одної */
-  margin: 5px; 
+  margin: 5px; /* Щоб не злипались */
+  transition: transform 0.2s;
+}
+button:hover, .btn:hover {
+  background: linear-gradient(135deg, #764ba2 0%, #667eea 100%) !important;
+  transform: translateY(-2px);
+  filter: brightness(1.1);
 }
 
-/* 2. Секція "Налаштування" (щоб рядки не налізали) */
-#settings form {
-  display: flex;
-  flex-direction: column;
-  gap: 20px; /* Відстань між "Тема" і "Режим розробника" */
+.icon-btn { 
+    color: #ccc !important; 
+    background: transparent !important; 
+    box-shadow: none !important;
+    min-height: auto !important;
+    margin: 0 !important;
+    padding: 5px !important;
+}
+.icon-btn:hover { 
+    color: #ffffff !important; 
+    transform: scale(1.1);
 }
 
-#settings label {
-  display: flex; /* Робимо рядком */
-  justify-content: space-between; /* Текст зліва, кнопка справа */
-  align-items: center;
-  width: 100%;
-  margin-bottom: 5px;
-  font-weight: 600;
+/* Кнопка "Додати" біля інпуту */
+#add-task-form .input-group {
+    display: flex;
+    gap: 0;
 }
-
-#settings select, 
-#settings button {
+#add-task-form button {
+  margin: 0 !important;
+  border-radius: 0 12px 12px 0 !important;
   width: auto !important;
-  min-width: 140px;
-  margin: 0 !important; /* Прибираємо зайві відступи всередині label */
+  height: auto !important;
+}
+#new-task-input {
+    border-radius: 12px 0 0 12px !important;
 }
 
-/* 3. Секція "Фокус" (Таймер) */
+/* --- Секція ФОКУС (Кнопки) --- */
 #focus {
   display: flex;
   flex-direction: column;
   align-items: center;
 }
-
 #start-btn {
   display: block;
-  width: 90%;
+  width: 90% !important;
   max-width: 300px;
-  margin-bottom: 20px !important; /* ВІДСТУП ЗНИЗУ (щоб не налізав на Паузу) */
-  font-size: 1.1rem;
-  padding: 15px;
+  margin: 15px auto !important;
 }
-
 #pause-btn, #stop-btn {
   display: inline-block;
+  width: 45% !important;
   min-width: 100px;
-  width: 40%; /* Кнопки поруч */
+  margin: 5px 2px !important;
 }
-
-/* 4. Кнопка "Додати" в завданнях (фікс для форми) */
-#add-task-form .input-group {
-  display: flex;
-  gap: 0; /* Тут відступ не треба, вони злиті */
-}
-#add-task-form button {
-  margin: 0 !important;
-  border-radius: 0 12px 12px 0 !important; /* Рівний край */
-}
-#new-task-input {
-  border-radius: 12px 0 0 12px !important;
-}
-
-/* ВИПРАВЛЕННЯ: Поле вводу (щоб текст був білим) */
-.form-control {
-  color: #fff !important;
-  background: rgba(255, 255, 255, 0.1) !important;
-}
-.form-control::placeholder {
-  color: rgba(255, 255, 255, 0.6) !important;
-}
-
-.icon-btn { color: #ccc; background: transparent !important; border: none; }
-.icon-btn:hover { color: #ffffff; }
 
 /* --- КАЛЕНДАР --- */
 .calendar-grid {
@@ -258,7 +278,6 @@ button, .btn {
   cursor: pointer;
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
   transition: all 0.3s;
 }
 #calendar-grid .calendar-day:hover {
@@ -296,6 +315,7 @@ button, .btn {
   color: #ffffff;
   text-shadow: 0 1px 2px black;
 }
+
 /* --- Модальное окно --- */
 .modal-content {
   background: #1e2a36;
@@ -304,65 +324,35 @@ button, .btn {
   border-radius: 20px;
 }
 .btn-close { filter: invert(1); }
-/* --- ВИПРАВЛЕННЯ: Блок профілю (Email) --- */
+
+/* Блок користувача (Email) */
 .user-info-box {
   max-width: 100%;
-  overflow: hidden; /* Ховаємо все, що може стирчати */
+  overflow: hidden; 
 }
-
 #user-name-display {
-  /* Світло-блакитний колір + !important, щоб перебити налаштування з JS */
   color: #8ab4f8 !important; 
-  
-  /* Примусовий перенос довгих слів (email) */
   word-wrap: break-word;
   overflow-wrap: break-word;
   word-break: break-all;
-  
-  /* Трохи зменшимо шрифт, щоб краще влазило */
-  font-size: 1.25rem;
+  font-size: 1.2rem;
   line-height: 1.3;
-  margin-top: 10px;
+  margin-top: 5px;
+  padding: 0 10px;
 }
-
 #user-id-display {
-  color: #a0a0a0; /* Сірий колір для ID */
+  color: #a0a0a0;
   margin-top: 5px;
 }
-/* =========================================
-   ВИПРАВЛЕННЯ: Поля вводу та Кнопки (Dark Mode)
-   ========================================= */
 
-/* 1. Робимо текст у полі вводу білим */
-.form-control, 
-.form-control:focus {
-  color: #ffffff !important;      /* Текст білий */
-  caret-color: #ffffff;           /* Курсор теж білий */
-  background: rgba(255, 255, 255, 0.15) !important; /* Трохи світліший фон поля */
+/* Налаштування */
+#settings form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
 }
-
-/* Колір підказки (placeholder) - робимо світлішим */
-.form-control::placeholder {
-  color: rgba(255, 255, 255, 0.7) !important;
-  opacity: 1;
-}
-
-/* 2. Кнопка "Додати" (і інші акцентні) - робимо світлішими та помітними */
-#add-task-form button, 
-#start-btn, 
-#save-event-btn, 
-#auto-login-btn {
-  /* Замість чорного градієнта ставимо яскравий фіолетово-синій */
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
-  border: none !important;
-  color: #ffffff !important;
-  box-shadow: 0 4px 15px rgba(118, 75, 162, 0.4); /* Легке світіння */
-}
-
-/* Ефект при наведенні на кнопку */
-#add-task-form button:hover, 
-#start-btn:hover {
-  background: linear-gradient(135deg, #764ba2 0%, #667eea 100%) !important;
-  transform: translateY(-2px);
-  filter: brightness(1.1);
+#settings label {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }

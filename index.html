@@ -14,7 +14,7 @@
     <link id="theme-link" rel="stylesheet" href="" />
   </head>
   <body>
-    <header>
+   <header>
       <h1>Смарт-бот / Органайзер студентів</h1>
 
       <div class="header-bottom-row">
@@ -28,15 +28,21 @@
           </ul>
         </nav>
 
-        <form id="weather-form-header" class="input-group">
-          <input
-            type="text"
-            id="weather-input"
-            class="form-control"
-            placeholder="Дізнатись погоду у вашому місті..."
-          />
-          <button class="btn" type="button" id="weather-btn">🌤️</button>
-        </form>
+        <div class="header-right-group">
+           <form id="weather-form-header">
+             <input
+               type="text"
+               id="weather-input"
+               class="form-control"
+               placeholder="Погода..."
+             />
+             <button class="btn" type="button" id="weather-btn">🌤️</button>
+           </form>
+           
+           <button id="theme-toggle-btn" class="btn" title="Змінити тему">
+             🌓
+           </button>
+        </div>
       </div>
     </header>
 
