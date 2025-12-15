@@ -115,9 +115,7 @@ header nav ul li a:hover {
   color: #3498db;
 }
 
-/* 3. Погода */
-/* 3. Погода (Виправлено налізання) */
-/* 3. Погода (Виправлено стик та фони) */
+/* 3. Погода (Виправлено стик та фони - Світла тема) */
 #weather-form-header {
   display: flex !important;
   align-items: center !important;
@@ -128,39 +126,35 @@ header nav ul li a:hover {
 }
 
 #weather-form-header .form-control {
-  background: rgba(255, 255, 255, 0.25) !important; /* Однаковий фон з кнопкою */
-  border: 1px solid rgba(255, 255, 255, 0.6) !important;
-  border-right: none !important; /* ПРИБИРАЄМО правий борт, щоб злити з кнопкою */
   border-radius: 20px 0 0 20px !important;
-  color: #ffffff !important;
+  background: rgba(255, 255, 255, 0.6) !important; /* Однаковий фон */
+  border: 1px solid rgba(255, 255, 255, 0.9) !important;
+  border-right: none !important; /* ПРИБИРАЄМО правий борт */
   padding-left: 15px;
+  color: #2c3e50 !important;
   height: 45px !important; /* Фіксуємо висоту */
 }
 
-#weather-form-header .form-control::placeholder {
-  color: rgba(255, 255, 255, 0.75) !important;
-}
-
 #weather-form-header .btn {
-  background: rgba(255, 255, 255, 0.25) !important; /* Фон як у поля вводу */
-  border: 1px solid rgba(255, 255, 255, 0.6) !important;
-  border-left: none !important; /* ПРИБИРАЄМО лівий борт */
   border-radius: 0 20px 20px 0 !important;
-  color: #ffffff !important;
+  background: rgba(255, 255, 255, 0.6) !important; /* Такий же фон, як у поля */
+  border: 1px solid rgba(255, 255, 255, 0.9) !important;
+  border-left: none !important; /* ПРИБИРАЄМО лівий борт */
   margin: 0 !important;
   width: 50px !important;
   height: 45px !important; /* Фіксуємо висоту */
   display: flex;
   align-items: center;
   justify-content: center;
+  color: #333 !important;
 }
 
-/* При наведенні або фокусі підсвічуємо весь блок */
+/* При наведенні або фокусі робимо капсулу повністю білою */
 #weather-form-header:focus-within .form-control,
 #weather-form-header:focus-within .btn {
-  background: rgba(255, 255, 255, 0.35) !important;
+  background: #ffffff !important;
   border-color: #ffffff !important;
-  box-shadow: none !important; /* Прибираємо стандартну тінь, щоб не рвати стик */
+  box-shadow: none !important; /* Без тіні, щоб не було стику */
 }
 
 /* --- Секции --- */
