@@ -1,351 +1,190 @@
 /* =========================================
-   dark-style.css (DARK THEME - FINAL FIXED)
+   dark-style.css (ONLY COLORS / SKINS)
+   Структура та розміри беруться з style.css
    ========================================= */
 
-/* --- Основа --- */
+/* --- Основа (Фон та текст) --- */
 body {
-  background: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%);
-  background-attachment: fixed;
-  font-family: 'Segoe UI', sans-serif;
-  color: #ffffff;
-  margin: 0;
-  overflow-x: hidden;
+  /* Темний градієнт замість світлого */
+  background: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%) !important;
+  color: #ffffff !important;
 }
 
 /* --- Хедер --- */
 header {
   background: rgba(0, 0, 0, 0.3) !important;
-  backdrop-filter: blur(15px) !important;
-  -webkit-backdrop-filter: blur(15px) !important;
   border-bottom: 1px solid rgba(255, 255, 255, 0.15) !important;
   box-shadow: 0 4px 20px rgba(0,0,0,0.4) !important;
-  border-radius: 0 0 20px 20px;
-
-  display: flex !important;
-  flex-direction: column !important;
-  align-items: center !important;
-  justify-content: center !important;
-  padding: 1.5rem 1rem !important;
-  gap: 1rem !important;
-  margin-bottom: 2rem !important;
-}
-
-/* 1. Верхний ряд */
-.header-top-row {
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  gap: 15px !important;
-  width: 100%;
-  position: relative;
 }
 
 header h1 {
-  margin: 0 !important;
-  font-weight: 700;
-  color: #ffffff;
-  font-size: 1.5rem;
-  line-height: 1.2;
-  text-align: center;
+  color: #ffffff !important;
+  text-shadow: 0 2px 10px rgba(0,0,0,0.5) !important;
 }
 
 /* Кнопка теми */
 #theme-toggle-btn {
-  width: 45px !important;
-  height: 45px !important;
-  min-width: 45px !important;
-  border-radius: 50% !important;
-  padding: 0 !important;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.2rem;
-  margin: 0 !important;
-  background: rgba(255, 255, 255, 0.2) !important;
-  border: 1px solid rgba(255, 255, 255, 0.4) !important;
+  background: rgba(255, 255, 255, 0.1) !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
   color: #fff !important;
 }
 
-/* 2. Меню */
-header nav {
-  width: 100%;
-  display: flex;
-  justify-content: center;
-}
-
-header nav ul {
-  display: flex !important;
-  flex-direction: row !important;
-  flex-wrap: wrap !important;
-  justify-content: center !important;
-  align-items: center !important;
-  gap: 10px !important;
-  padding: 0 !important;
-  margin: 0 !important;
-  list-style: none !important;
-}
-
-header nav ul li {
-  list-style: none !important;
-  margin: 0 !important;
-}
-
+/* --- Навігація --- */
 header nav ul li a {
-  display: inline-block;
-  background: rgba(255, 255, 255, 0.15);
-  color: #ffffff;
-  padding: 8px 18px;
-  border-radius: 25px;
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  transition: all 0.3s;
-  text-decoration: none;
-  font-size: 0.95rem;
-  font-weight: 600;
+  background: rgba(255, 255, 255, 0.1) !important;
+  color: #ffffff !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  box-shadow: none !important;
 }
 
 header nav ul li a:hover {
-  background: rgba(255, 255, 255, 0.3);
-  box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.25) !important;
+  color: #ffffff !important;
+  box-shadow: 0 0 15px rgba(255, 255, 255, 0.1) !important;
 }
 
-/* 3. Погода (Виправлено налізання) */
-#weather-form-header {
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  width: 100%;
-  max-width: 320px;
-  /* Додали 15px зверху */
-  margin: 15px auto 0 auto !important; 
-}
-
+/* --- Пошук погоди --- */
 #weather-form-header .form-control {
   background: rgba(255, 255, 255, 0.1) !important;
-  border-radius: 20px 0 0 20px !important;
   border: 1px solid rgba(255, 255, 255, 0.2) !important;
   color: #ffffff !important;
-  padding-left: 15px;
 }
 #weather-form-header .form-control::placeholder {
-  color: rgba(255, 255, 255, 0.7) !important;
+  color: rgba(255, 255, 255, 0.6) !important;
 }
 
 #weather-form-header .btn {
-  border-radius: 0 20px 20px 0 !important;
   background: rgba(255, 255, 255, 0.2) !important;
-  border: 1px solid rgba(255,255,255,0.2) !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
   color: #ffffff !important;
-  margin: 0 !important;
-  width: 50px !important;
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }
 
-/* --- Секции --- */
+/* --- Секції (Картки) --- */
 main section, .login-box, #weather-result {
-  background: rgba(16, 26, 38, 0.75);
-  border-radius: 24px;
-  padding: 2.5rem;
-  margin: 2rem auto;
-  max-width: 800px;
-  box-shadow: 0 10px 40px rgba(0,0,0,0.5);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  color: #ffffff;
-  text-align: center;
-}
-main section h2 {
-  color: #ffffff;
-  text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+  background: rgba(16, 26, 38, 0.75) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.5) !important;
+  color: #ffffff !important;
 }
 
-/* --- Завдання --- */
+main section h2 {
+  color: #ffffff !important;
+  text-shadow: 0 2px 10px rgba(0,0,0,0.5) !important;
+}
+
+/* --- Список завдань --- */
 .task-item {
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 16px;
-  color: #ffffff;
-  text-align: left;
-  margin-bottom: 0.8rem;
-  padding: 10px 15px;
+  background: rgba(255, 255, 255, 0.08) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  color: #ffffff !important;
 }
 .task-item:hover {
-  background: rgba(255, 255, 255, 0.15);
-  border-color: rgba(255, 255, 255, 0.3);
+  background: rgba(255, 255, 255, 0.15) !important;
+  border-color: rgba(255, 255, 255, 0.3) !important;
 }
 
-/* --- ПОЛЯ ВВОДА (ВИПРАВЛЕНО: Світліші для читабельності) --- */
+/* --- Поля вводу (Inputs) --- */
 .form-control, select {
-  background: rgba(255, 255, 255, 0.25) !important; /* Світліший фон */
-  border: 1px solid rgba(255, 255, 255, 0.6) !important; /* Чіткіша рамка */
-  border-radius: 12px !important;
+  background: rgba(255, 255, 255, 0.15) !important;
+  border: 1px solid rgba(255, 255, 255, 0.3) !important;
   color: #ffffff !important;
-  padding: 0.7rem 1rem;
 }
 
-/* Підказка (Placeholder) - світло-сіра */
 .form-control::placeholder {
-  color: rgba(255, 255, 255, 0.75) !important;
+  color: rgba(255, 255, 255, 0.6) !important;
 }
 
 .form-control:focus {
-  background: rgba(255, 255, 255, 0.35) !important; /* Ще світліше при фокусі */
+  background: rgba(255, 255, 255, 0.25) !important;
   border-color: #ffffff !important;
-  box-shadow: 0 0 10px rgba(255, 255, 255, 0.4) !important;
-  color: #fff !important;
-}
-
-select option { background: #203a43; color: #ffffff; }
-
-/* --- Кнопки (Глобально) --- */
-button, .btn {
-  padding: 10px 20px !important;
-  font-size: 1rem !important;
-  min-height: 45px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.2) !important;
   color: #ffffff !important;
-  border: none !important;
-  border-radius: 12px !important;
-  box-shadow: 0 4px 15px rgba(118, 75, 162, 0.3);
-  margin: 5px;
-  transition: transform 0.2s;
-}
-button:hover, .btn:hover {
-  background: linear-gradient(135deg, #764ba2 0%, #667eea 100%) !important;
-  transform: translateY(-2px);
-  filter: brightness(1.1);
 }
 
+select option {
+  background: #203a43; /* Фон випадаючого списку */
+  color: #ffffff;
+}
+
+/* --- Кнопки (Icons) --- */
 .icon-btn { 
     color: #ccc !important; 
-    background: transparent !important; 
-    box-shadow: none !important;
-    min-height: auto !important;
-    margin: 0 !important;
-    padding: 5px !important;
 }
-.icon-btn:hover { color: #ffffff !important; transform: scale(1.1); }
-
-/* Кнопка "Додати" */
-#add-task-form .input-group { display: flex; gap: 0; }
-#add-task-form button { margin: 0 !important; border-radius: 0 12px 12px 0 !important; width: auto !important; height: auto !important; }
-#new-task-input { border-radius: 12px 0 0 12px !important; }
-
-/* --- Секція ФОКУС (ВИПРАВЛЕНО) --- */
-#focus { display: flex; flex-direction: column; align-items: center; }
-
-#start-btn { 
-  display: block; 
-  width: 100% !important; 
-  max-width: 320px; 
-  margin: 15px auto 15px auto !important; 
+.icon-btn:hover { 
+    color: #ffffff !important; 
 }
 
-/* Flex-контейнер для кнопок Пауза/Стоп */
-.timer-controls-row {
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  gap: 15px; /* Відступ */
-  width: 100%;
-  max-width: 320px;
+/* --- Календар --- */
+#calendar-header div {
+  color: #87cefa !important; /* Світло-блакитний для заголовків днів */
 }
 
-#pause-btn, #stop-btn { 
-  display: block; 
-  width: 100% !important; 
-  margin: 0 !important; 
-  min-width: auto !important; 
-}
-
-/* --- КАЛЕНДАР --- */
-.calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 8px; margin-bottom: 1rem; }
-#calendar-header div { font-weight: bold; color: #87cefa; text-transform: uppercase; font-size: 0.85rem; padding-bottom: 5px; }
 #calendar-grid .calendar-day {
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 12px;
-  color: #e0e0e0;
-  min-height: 80px;
-  padding: 5px;
-  cursor: pointer;
-  display: flex;
-  flex-direction: column;
-  transition: all 0.3s;
+  background: rgba(255, 255, 255, 0.05) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  color: #e0e0e0 !important;
 }
+
 #calendar-grid .calendar-day:hover {
-  background: rgba(255, 255, 255, 0.2);
-  color: #ffffff;
-  transform: scale(1.05);
-  z-index: 2;
-  box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-}
-#calendar-grid .calendar-day.today { border: 2px solid #87cefa; background: rgba(135, 206, 250, 0.15); color: #ffffff; }
-#calendar-grid .calendar-day.busy-day { position: relative; }
-#calendar-grid .calendar-day.busy-day::after { content: ''; width: 6px; height: 6px; background-color: #87cefa; border-radius: 50%; position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%); }
-#calendar-grid .other-month { opacity: 0.3; pointer-events: none; }
-
-/* --- Прогресс --- */
-.custom-progress-track { background: rgba(0, 0, 0, 0.4); border-radius: 20px; height: 25px; }
-.custom-progress-fill { background: linear-gradient(to right, #243949 0%, #517fa4 100%); border-radius: 20px; }
-#progress-text-overlay { color: #ffffff; text-shadow: 0 1px 2px black; }
-
-/* --- Модальное окно --- */
-.modal-content { background: #1e2a36; border: 1px solid rgba(255, 255, 255, 0.2); color: #ffffff; border-radius: 20px; }
-/* Видалено старий інверт, тепер керуємо через спец-клас */
-/* .btn-close { filter: invert(1); } */
-
-/* Блок користувача */
-.user-info-box { max-width: 100%; overflow: hidden; }
-#user-name-display { color: #8ab4f8 !important; word-wrap: break-word; overflow-wrap: break-word; word-break: break-all; font-size: 1.2rem; line-height: 1.3; margin-top: 5px; padding: 0 10px; }
-#user-id-display { color: #a0a0a0; margin-top: 5px; }
-
-/* Налаштування */
-#settings form { display: flex; flex-direction: column; gap: 15px; }
-#settings label { display: flex; justify-content: space-between; align-items: center; }
-
-/* --- КНОПКА ЗАКРИТТЯ МОДАЛКИ (ХРЕСТИК - ЗМЕНШЕНИЙ) --- */
-.modal-header .btn-close {
-  background-color: transparent !important;
-  box-shadow: none !important;
-  border: none !important;
-  padding: 0.5rem !important;
-  margin: -0.5rem -0.5rem -0.5rem auto !important;
-  
-  /* Зменшуємо розмір з 1em до 0.75em */
-  width: 0.75em !important;
-  height: 0.75em !important;
-  background-size: 0.75em !important; /* Важливо для масштабування картинки */
-  min-height: auto !important;
-  
-  /* Білий хрестик */
-  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23000'%3e%3cpath d='M.293.293a1 1 0 0 1 1.414 0L8 6.586 14.293.293a1 1 0 1 1 1.414 1.414L9.414 8l6.293 6.293a1 1 0 0 1-1.414 1.414L8 9.414l-6.293 6.293a1 1 0 0 1-1.414-1.414L6.586 8 .293 1.707a1 1 0 0 1 0-1.414z'/%3e%3c/svg%3e") !important;
-  filter: invert(1) !important;
-  opacity: 0.8;
+  background: rgba(255, 255, 255, 0.2) !important;
+  color: #ffffff !important;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.3) !important;
 }
 
-.modal-header .btn-close:hover {
-  opacity: 1;
-  transform: none; 
+#calendar-grid .calendar-day.today {
+  border: 2px solid #87cefa !important;
+  background: rgba(135, 206, 250, 0.15) !important;
+  color: #ffffff !important;
 }
 
-/* Повертаємо білий колір заголовку в темній темі */
+#calendar-grid .calendar-day.busy-day::after {
+  background-color: #87cefa !important;
+}
+
+/* --- Прогрес бар --- */
+.custom-progress-track {
+  background: rgba(0, 0, 0, 0.4) !important;
+}
+.custom-progress-fill {
+  background: linear-gradient(to right, #243949 0%, #517fa4 100%) !important;
+}
+#progress-text-overlay {
+  color: #ffffff !important;
+  text-shadow: 0 1px 2px black !important;
+}
+
+/* --- Модальне вікно --- */
+.modal-content {
+  background: #1e2a36 !important; /* Темний фон модалки */
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  color: #ffffff !important;
+}
+
+/* Заголовок модального вікна */
 .modal-header .modal-title {
     color: #ffffff !important;
 }
 
-/* =========================================
-   КАСТОМНИЙ ХРЕСТИК (Темна тема)
-   ========================================= */
-/* Міняємо колір ліній на білий */
-.modal-header .custom-close-btn span {
-    background-color: #fff !important;
-    box-shadow: 0 0 5px rgba(255,255,255,0.3); /* Додамо легке світіння */
+/* Дані користувача */
+#user-name-display {
+  color: #8ab4f8 !important;
+}
+#user-id-display {
+  color: #a0a0a0 !important;
 }
 
-/* При наведенні робимо ще яскравішим */
+/* =========================================
+   КАСТОМНИЙ ХРЕСТИК (Тільки перефарбування)
+   Розміри та позиція беруться з style.css
+   ========================================= */
+
+/* Робимо лінії білими */
+.modal-header .custom-close-btn span {
+    background-color: #ffffff !important;
+    box-shadow: 0 0 5px rgba(255,255,255,0.3); /* Легке світіння */
+}
+
+/* При наведенні - яскравіше */
 .modal-header .custom-close-btn:hover span {
    background-color: #ffffff !important;
    box-shadow: 0 0 8px rgba(255,255,255,0.6);
