@@ -171,16 +171,21 @@ select option {
   background-color: #87cefa !important;
 }
 
-/* --- Прогрес бар --- */
+/* --- Прогрес бар (Темна тема) --- */
 .custom-progress-track {
-  background: rgba(0, 0, 0, 0.4) !important;
+  background: rgba(0, 0, 0, 0.4) !important; /* Більш темний трек */
+  box-shadow: inset 0 2px 5px rgba(0,0,0,0.2) !important;
 }
+
 .custom-progress-fill {
-  background: linear-gradient(to right, #243949 0%, #517fa4 100%) !important;
+  /* Використовуємо той самий яскравий градієнт, бо він красивий */
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+  box-shadow: 0 0 15px rgba(118, 75, 162, 0.5) !important; /* Додаємо світіння в темряві */
 }
+
 #progress-text-overlay {
   color: #ffffff !important;
-  text-shadow: 0 1px 2px black !important;
+  text-shadow: 0 1px 4px rgba(0,0,0,0.8) !important;
 }
 
 /* --- Модальне вікно --- */
