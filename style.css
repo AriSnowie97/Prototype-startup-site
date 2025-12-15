@@ -373,44 +373,54 @@ button:hover, .btn:hover {
 }
 
 /* =========================================
-   КАСТОМНИЙ ХРЕСТИК МОДАЛКИ (Базові стилі + Світла тема)
+   КАСТОМНИЙ ХРЕСТИК МОДАЛКИ (FIXED)
    ========================================= */
 .custom-close-btn {
-    width: 24px;  /* Розмір кнопки */
-    height: 24px;
+    /* 1. РОЗМІРИ (Квадрат) */
+    width: 20px !important;
+    height: 20px !important;
+    min-width: 20px !important;
+    min-height: 20px !important;
+    aspect-ratio: 1 / 1;
+
+    /* 2. СККИДАННЯ ГЛОБАЛЬНИХ СТИЛІВ КНОПОК */
+    /* Це найважливіше: прибираємо фіолетовий фон, тіні та відступи */
+    background: transparent !important; 
+    border: none !important;
+    box-shadow: none !important;
+    padding: 0 !important; 
+    border-radius: 0 !important;
+    margin: -0.5rem -0.5rem -0.5rem auto !important;
+
     position: relative;
-    background: transparent;
-    border: none;
-    padding: 0;
     cursor: pointer;
-    /* Вирівнювання праворуч в хедері модалки Bootstrap */
-    margin: -0.5rem -0.5rem -0.5rem auto !important; 
     opacity: 0.6;
     transition: opacity 0.2s, transform 0.2s;
 }
 
 .custom-close-btn:hover {
     opacity: 1;
-    transform: scale(1.1); /* Невелике збільшення при наведенні */
+    transform: scale(1.1);
+    background: transparent !important; /* На всяк випадок при ховері теж */
 }
 
-/* Стилі для ліній хрестика */
+/* Лінії хрестика */
 .custom-close-btn span {
     display: block;
     position: absolute;
-    height: 3px;        /* Товщина ліній */
+    height: 2px;
     width: 100%;
-    background-color: #333; /* ТЕМНИЙ колір для світлої теми */
-    border-radius: 4px;
+    background-color: #333; /* Темний колір для світлої теми */
+    border-radius: 2px;
     left: 0;
     top: 50%;
+    margin-top: -1px; 
 }
 
-/* Повертаємо лінії, щоб утворити Хрестик (як в exam.html active стан) */
+/* Повертаємо лінії */
 .custom-close-btn span:nth-child(1) {
-    transform: translateY(-50%) rotate(45deg);
+    transform: rotate(45deg);
 }
-
 .custom-close-btn span:nth-child(2) {
-    transform: translateY(-50%) rotate(-45deg);
+    transform: rotate(-45deg);
 }
