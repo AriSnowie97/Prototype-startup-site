@@ -1,0 +1,14 @@
+/css
+  style.css
+  dark-style.css
+/js
+  ├── config.js       (Налаштування: URL, Telegram об'єкт)
+  ├── api.js          (Функції для запитів: sendApiRequest, fetchApi)
+  ├── theme.js        (Логіка перемикання теми)
+  ├── auth.js         (Логіка входу, профілю, polling)
+  ├── weather.js      (Погода)
+  ├── timer.js        (Помодоро таймер)
+  ├── calendar.js     (Календар і події)
+  ├── tasks.js        (Список завдань і Google Sync)
+  └── main.js         (Головний файл, який запускає все)
+index.html
