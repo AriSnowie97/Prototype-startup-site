@@ -226,6 +226,8 @@ button:hover, .btn:hover {
   transform: scale(1.1);
 }
 
+/* style.css */
+
 /* --- Секція ФОКУС --- */
 #focus {
   display: flex;
@@ -235,18 +237,27 @@ button:hover, .btn:hover {
 
 #start-btn {
   display: block;
-  width: 90% !important;
-  max-width: 300px;
-  margin: 15px auto !important;
+  width: 100% !important;
+  max-width: 320px;       /* Обмеження ширини як у полів вводу */
+  margin: 15px auto 15px auto !important; /* Відступ знизу 15px */
+}
+
+/* Новий клас для ряду кнопок */
+.timer-controls-row {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 15px;             /* Відстань між кнопками Пауза і Стоп */
+  width: 100%;
+  max-width: 320px;      /* Така ж ширина, як у кнопки Старт */
 }
 
 #pause-btn, #stop-btn {
-  display: inline-block;
-  width: 45% !important;
-  min-width: 100px;
-  margin: 5px 2px !important;
+  display: block;
+  width: 100% !important; /* Розтягуємо на всю доступну ширину в flex-контейнері */
+  margin: 0 !important;   /* Прибираємо старі відступи, працює gap */
+  min-width: auto !important;
 }
-
 /* Кнопка "Додати" */
 #add-task-form .input-group { display: flex; gap: 0; }
 #add-task-form button { width: auto !important; margin: 0 !important; height: auto !important; border-radius: 0 12px 12px 0 !important; }

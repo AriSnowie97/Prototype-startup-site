@@ -227,9 +227,50 @@ button:hover, .btn:hover {
 #new-task-input { border-radius: 12px 0 0 12px !important; }
 
 /* --- Секція ФОКУС --- */
-#focus { display: flex; flex-direction: column; align-items: center; }
-#start-btn { display: block; width: 90% !important; max-width: 300px; margin: 15px auto !important; }
-#pause-btn, #stop-btn { display: inline-block; width: 45% !important; min-width: 100px; margin: 5px 2px !important; }
+/* dark-style.css */
+
+/* --- Секція ФОКУС (Виправлено відступи) --- */
+#focus { 
+  display: flex; 
+  flex-direction: column; 
+  align-items: center; 
+}
+
+#start-btn { 
+  display: block; 
+  width: 100% !important; 
+  max-width: 320px; 
+  margin: 15px auto 15px auto !important; 
+}
+
+.timer-controls-row {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 15px;
+  width: 100%;
+  max-width: 320px;
+}
+
+#pause-btn, #stop-btn { 
+  display: block; 
+  width: 100% !important; 
+  margin: 0 !important; 
+  min-width: auto !important; 
+}
+
+/* --- Додатково: Робимо форми більш "білими" та помітними в темній темі --- */
+.form-control, select {
+  background: rgba(255, 255, 255, 0.15) !important; /* Трохи світліший фон */
+  border: 1px solid rgba(255, 255, 255, 0.5) !important; /* Яскравіша біла рамка */
+  color: #ffffff !important;
+}
+
+.form-control:focus {
+  background: rgba(255, 255, 255, 0.25) !important;
+  border-color: #ffffff !important;
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.5) !important;
+}
 
 /* --- КАЛЕНДАР --- */
 .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 8px; margin-bottom: 1rem; }
