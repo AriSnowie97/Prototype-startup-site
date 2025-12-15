@@ -341,11 +341,17 @@ button:hover, .btn:hover {
 }
 
 #progress-text-overlay { 
-  color: #fff; /* Білий текст виглядає краще на темному градієнті */
-  font-weight: bold;
-  text-shadow: 0 1px 3px rgba(0,0,0,0.5); /* Тінь, щоб текст було видно на світлій частині треку */
+  color: #2c3e50; /* Темний колір шрифту (добре видно на білому) */
+  font-weight: 800; /* Жирніший шрифт для кращої читабельності */
   
-  /* Центруємо текст абсолютно */
+  /* Біле "світіння" (тінь) навколо букв. 
+     Це потрібно, щоб темний текст було видно, 
+     навіть якщо він опиниться на темному фіолетовому фоні */
+  text-shadow: 
+      0 0 2px #ffffff,
+      0 0 5px #ffffff;
+
+  /* Центрування (без змін) */
   position: absolute;
   width: 100%;
   height: 100%;
@@ -354,6 +360,7 @@ button:hover, .btn:hover {
   display: flex;
   align-items: center;
   justify-content: center;
+  z-index: 5;
 }
 
 /* --- Модальне вікно --- */

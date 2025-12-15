@@ -184,8 +184,9 @@ select option {
 }
 
 #progress-text-overlay {
-  color: #ffffff !important;
-  text-shadow: 0 1px 4px rgba(0,0,0,0.8) !important;
+  color: #ffffff !important; /* Повертаємо білий колір у темній темі */
+  text-shadow: 0 1px 4px rgba(0,0,0,0.9) !important; /* Чорна тінь для контрасту */
+  font-weight: 700 !important;
 }
 
 /* --- Модальне вікно --- */
