@@ -148,32 +148,60 @@ main section h2 {
   border-color: #87cefa !important;
 }
 
-/* --- Кнопки --- */
+/* --- ВИПРАВЛЕННЯ КНОПОК (ГЛОБАЛЬНО) --- */
+
+/* Загальний стиль кнопок (щоб були як цукерочки) */
 button, .btn {
-  border-radius: 12px;
+  border: none !important;
+  border-radius: 12px !important;
   font-weight: 600;
-  letter-spacing: 0.5px;
-  transition: all 0.3s ease;
-  border: none;
-}
-button {
-  background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
-  color: #555;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-}
-button:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(0,0,0,0.1);
-  filter: brightness(1.05);
-}
-#add-task-form button, #start-btn, #save-event-btn, #auto-login-btn {
+  padding: 10px 20px;
+  /* Градієнт як у темній темі, але трохи яскравіший для світлої */
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
+  color: #ffffff !important;
   box-shadow: 0 4px 15px rgba(118, 75, 162, 0.3);
+  transition: transform 0.2s, box-shadow 0.2s;
+  
+  /* ВАЖЛИВО: Відступи, щоб не налазили одна на одну */
+  margin-top: 5px;
+  margin-bottom: 5px;
 }
-#add-task-form button:hover, #start-btn:hover {
-  background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+
+button:hover, .btn:hover {
+  transform: translateY(-2px);
   box-shadow: 0 6px 20px rgba(118, 75, 162, 0.5);
+  filter: brightness(1.1);
+}
+
+/* --- ВИПРАВЛЕННЯ: РЕЖИМ КОНЦЕНТРАЦІЇ (FOCUS) --- */
+#focus {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Кнопка "Почати сесію" - велика зверху */
+#start-btn {
+  display: block;
+  width: 80%;        /* Широка кнопка */
+  max-width: 300px;
+  font-size: 1.2rem;
+  margin: 15px auto; /* Відступ зверху і знизу */
+}
+
+/* Кнопки "Пауза" та "Стоп" - поруч знизу */
+#pause-btn, #stop-btn {
+  display: inline-block;
+  min-width: 100px;
+  margin: 5px 10px; /* Відступи по боках */
+  background: linear-gradient(135deg, #4b6cb7 0%, #182848 100%); /* Трохи інший колір для відмінності */
+}
+
+/* --- ВИПРАВЛЕННЯ: КНОПКА "ДОДАТИ" В ЗАВДАННЯХ --- */
+#add-task-form .btn {
+  border-radius: 0 12px 12px 0 !important; /* Заокруглення тільки справа */
+  margin: 0 !important; /* Тут відступ не треба, бо вона прилипає до поля */
+  height: auto;
 }
 
 .icon-btn {

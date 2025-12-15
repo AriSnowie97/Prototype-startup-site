@@ -146,25 +146,46 @@ select option {
   color: #ffffff;
 }
 
-/* --- Кнопки --- */
+/* =========================================
+   ВИПРАВЛЕННЯ: ВІДСТУПИ ТА КОЛЬОРИ КНОПОК
+   ========================================= */
+
+/* Щоб кнопки не налазили одна на одну в будь-якому блоці */
 button {
-  background: linear-gradient(135deg, rgba(255,255,255,0.15) 0%, rgba(255,255,255,0.05) 100%);
-  color: #ffffff;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 12px;
-  padding: 0.8rem 1.5rem; /* Стандартний розмір */
-  font-weight: 600;
+  margin-top: 8px !important;
+  margin-bottom: 8px !important;
 }
-button:hover {
-  background: rgba(255, 255, 255, 0.25);
-  transform: translateY(-2px);
-  box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
+
+/* Специфічне виправлення для кнопок Фокусу (щоб стояли красиво) */
+#start-btn {
+  display: block;
+  width: 90%;
+  margin: 20px auto !important; /* Великий відступ, щоб не налазити на таймер і кнопки знизу */
 }
-/* Акцентные кнопки */
-#add-task-form button, #start-btn, #save-event-btn, #auto-login-btn {
-  background: linear-gradient(to right, #434343 0%, #1a1a1a 100%);
-  border: 1px solid rgba(255,255,255,0.3);
-  color: #ffffff;
+
+#pause-btn, #stop-btn {
+  display: inline-block;
+  width: 45%; /* Щоб вони стали поруч */
+  margin: 5px 2% !important;
+}
+
+/* ВИПРАВЛЕННЯ: Кнопка "Додати" біля поля вводу (була чорна) */
+#add-task-form button {
+  /* Яскравий градієнт замість чорного */
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+  color: white !important;
+  border: none !important;
+  margin: 0 !important; /* Скидаємо марджин, щоб не розривати input-group */
+  border-radius: 0 12px 12px 0 !important;
+}
+
+/* ВИПРАВЛЕННЯ: Поле вводу (щоб текст був білим) */
+.form-control {
+  color: #fff !important;
+  background: rgba(255, 255, 255, 0.1) !important;
+}
+.form-control::placeholder {
+  color: rgba(255, 255, 255, 0.6) !important;
 }
 
 .icon-btn { color: #ccc; background: transparent !important; border: none; }
