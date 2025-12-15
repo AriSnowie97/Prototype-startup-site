@@ -912,40 +912,52 @@ document.addEventListener("DOMContentLoaded", () => {
       updateAnalytics();
     }
 
-    // --- Логіка Редагування ---
+    // --- Логіка Редагування (ОНОВЛЕНО ДЛЯ GOOGLE) ---
     async function editTask(id, oldText) {
-      const newText = prompt("Відредагуйте завдання:", oldText);
-      // Прибираємо час з тексту, якщо він там був [XX:XX], для чистого редагування - складно, залишимо як є.
+      // Якщо текст містить час у дужках [14:00], спробуємо його прибрати для редагування
+      // щоб юзер правив тільки суть.
+      let cleanText = oldText;
+      const timeMatch = oldText.match(/^\[\d{2}:\d{2}\]\s(.*)/);
+      if (timeMatch && timeMatch[1]) {
+          cleanText = timeMatch[1];
+      }
+
+      const newText = prompt("Змінити назву події:", cleanText);
       
-      if (newText && newText.trim() !== "" && newText !== oldText) {
-        // Оновлюємо локально
+      if (newText && newText.trim() !== "" && newText !== cleanText) {
+        // Оновлюємо локально (візуально), щоб не чекати перезавантаження
         const task = tasks.find((t) => t.id == id);
         if (task) {
-          task.text = newText.trim();
+          // Якщо був час, зберігаємо його префікс
+          const prefix = timeMatch ? `[${oldText.slice(1,6)}] ` : "";
+          task.text = prefix + newText.trim();
           renderTasks();
         }
-        // Відправляємо на сервер
-        // УВАГА: Тут викликається старий ендпоінт. Для повної роботи з Google 
-        // треба реалізувати /api/edit_event на бекенді.
+
+        // Відправляємо запит на Google Calendar API
         await sendApiRequest(
-          "/api/edit_webtask", 
-          { taskId: id, text: newText.trim() },
-          null,
-          null
+          "/api/update_event_title", 
+          { eventId: id, text: newText.trim() },
+          null, // statusElement не потрібен
+          "Оновлено"
         );
       }
     }
 
-    // --- Логіка Видалення ---
+    // --- Логіка Видалення (ОНОВЛЕНО ДЛЯ GOOGLE) ---
     async function deleteTask(id) {
-      if (confirm("Видалити це завдання з Google Calendar?")) {
+      if (confirm("Видалити цю подію з Google Calendar назавжди?")) {
         // Видаляємо локально
         tasks = tasks.filter((t) => t.id != id);
         renderTasks();
 
-        // Відправляємо на сервер
-        // УВАГА: Тут теж потрібен апдейт бекенду для роботи з Google ID
-        await sendApiRequest("/api/delete_webtask", { taskId: id }, null, null);
+        // Відправляємо запит на Google Calendar API
+        await sendApiRequest(
+            "/api/delete_event", 
+            { eventId: id }, 
+            null, 
+            "Видалено"
+        );
       }
     }
 
