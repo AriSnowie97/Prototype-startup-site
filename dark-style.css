@@ -265,3 +265,40 @@ button:hover {
   color: #a0a0a0; /* Сірий колір для ID */
   margin-top: 5px;
 }
+/* =========================================
+   ВИПРАВЛЕННЯ: Поля вводу та Кнопки (Dark Mode)
+   ========================================= */
+
+/* 1. Робимо текст у полі вводу білим */
+.form-control, 
+.form-control:focus {
+  color: #ffffff !important;      /* Текст білий */
+  caret-color: #ffffff;           /* Курсор теж білий */
+  background: rgba(255, 255, 255, 0.15) !important; /* Трохи світліший фон поля */
+}
+
+/* Колір підказки (placeholder) - робимо світлішим */
+.form-control::placeholder {
+  color: rgba(255, 255, 255, 0.7) !important;
+  opacity: 1;
+}
+
+/* 2. Кнопка "Додати" (і інші акцентні) - робимо світлішими та помітними */
+#add-task-form button, 
+#start-btn, 
+#save-event-btn, 
+#auto-login-btn {
+  /* Замість чорного градієнта ставимо яскравий фіолетово-синій */
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+  border: none !important;
+  color: #ffffff !important;
+  box-shadow: 0 4px 15px rgba(118, 75, 162, 0.4); /* Легке світіння */
+}
+
+/* Ефект при наведенні на кнопку */
+#add-task-form button:hover, 
+#start-btn:hover {
+  background: linear-gradient(135deg, #764ba2 0%, #667eea 100%) !important;
+  transform: translateY(-2px);
+  filter: brightness(1.1);
+}
