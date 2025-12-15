@@ -303,3 +303,35 @@ button:hover, .btn:hover {
   opacity: 1;
   transform: none !important;
 }
+/* =========================================
+   SUPER FIX: ХРЕСТИК МОДАЛКИ (DARK FINAL)
+   ========================================= */
+div.modal-header button.btn-close {
+  /* 1. Скидаємо фон */
+  background: transparent !important;
+  background-color: transparent !important;
+  
+  /* 2. Іконка (стандартна Bootstrap) */
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23000'%3e%3cpath d='M.293.293a1 1 0 0 1 1.414 0L8 6.586 14.293.293a1 1 0 1 1 1.414 1.414L9.414 8l6.293 6.293a1 1 0 0 1-1.414 1.414L8 9.414l-6.293 6.293a1 1 0 0 1-1.414-1.414L6.586 8 .293 1.707a1 1 0 0 1 0-1.414z'/%3e%3c/svg%3e") !important;
+  
+  /* 3. Розміри */
+  width: 1em !important;
+  height: 1em !important;
+  min-height: auto !important;
+  padding: 0.5rem !important;
+  margin: -0.5rem -0.5rem -0.5rem auto !important;
+  
+  /* 4. Стиль */
+  border: none !important;
+  box-shadow: none !important;
+  border-radius: 4px !important;
+  opacity: 0.8 !important;
+  
+  /* 5. РОБИМО БІЛИМ */
+  filter: invert(1) !important;
+}
+
+div.modal-header button.btn-close:hover {
+  opacity: 1 !important;
+  transform: none !important;
+}
