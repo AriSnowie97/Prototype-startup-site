@@ -293,3 +293,25 @@ button:hover {
   word-wrap: break-word;
   min-width: 0;              /* Важливо для Flexbox контейнерів */
 }
+
+/* Список подій у модальному вікні */
+#modal-events-list ul {
+    max-height: 150px;
+    overflow-y: auto;
+    margin-bottom: 15px;
+    padding-right: 5px;
+}
+
+#modal-events-list li {
+    font-size: 0.9em;
+    border-left: 3px solid #4285F4; /* Синя смужка зліва */
+}
+
+/* Скролбар для списку (щоб було красиво) */
+#modal-events-list ul::-webkit-scrollbar {
+    width: 6px;
+}
+#modal-events-list ul::-webkit-scrollbar-thumb {
+    background-color: rgba(0,0,0,0.2);
+    border-radius: 4px;
+}
