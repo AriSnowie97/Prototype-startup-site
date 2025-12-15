@@ -278,14 +278,17 @@ button:hover {
   box-shadow: 0 15px 50px rgba(0,0,0,0.1);
 }
 
-/* Для Email у налаштуваннях */
+/* Заміни старий #user-name-display на цей: */
 #user-name-display {
   overflow-wrap: break-word;
   word-wrap: break-word;
-  word-break: break-all; /* Агресивний перенос для дуже довгих слів без пробілів */
-  padding: 0 10px;       /* Додамо трохи відступів збоку */
+  word-break: break-all; /* Агресивний перенос для довгих пошт */
+  padding: 0 10px;
+  
+  /* Колір для світлої теми залишаємо темним (якщо JS не задасть свій) */
+  color: #1f3b73; 
+  font-weight: 700;
 }
-
 /* Для тексту завдань (щоб вони теж не вилазили) */
 .task-item div span {
   white-space: normal;       /* Дозволяємо тексту переноситись */
