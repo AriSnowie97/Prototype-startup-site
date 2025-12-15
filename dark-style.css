@@ -331,6 +331,10 @@ button:hover, .btn:hover {
   transform: none; 
 }
 
+/* Повертаємо білий колір заголовку в темній темі */
+.modal-header .modal-title {
+    color: #ffffff !important;
+}
 
 /* =========================================
    КАСТОМНИЙ ХРЕСТИК (Темна тема)

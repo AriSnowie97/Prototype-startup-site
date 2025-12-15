@@ -372,26 +372,38 @@ button:hover, .btn:hover {
   opacity: 1;
 }
 
+/* 1. Колір заголовка в модалці (щоб був темним у світлій темі) */
+.modal-header .modal-title {
+    color: #333 !important; /* Темно-сірий колір */
+    font-weight: 700;
+}
+
 /* =========================================
-   КАСТОМНИЙ ХРЕСТИК МОДАЛКИ (FIXED)
+   КАСТОМНИЙ ХРЕСТИК МОДАЛКИ (FIXED V2: Bigger & Moved)
    ========================================= */
+
+/* 2. Оновлена кнопка-хрестик (зміщена праворуч) */
 .custom-close-btn {
-    /* 1. РОЗМІРИ (Квадрат) */
-    width: 20px !important;
-    height: 20px !important;
-    min-width: 20px !important;
-    min-height: 20px !important;
+    /* Розміри */
+    width: 28px !important;
+    height: 28px !important;
+    min-width: 28px !important;
+    min-height: 28px !important;
     aspect-ratio: 1 / 1;
 
-    /* 2. СККИДАННЯ ГЛОБАЛЬНИХ СТИЛІВ КНОПОК */
-    /* Це найважливіше: прибираємо фіолетовий фон, тіні та відступи */
+    /* ПОЗИЦІЯ: Змінюємо margin */
+    /* Було: margin: -0.5rem 10px -0.5rem auto !important; */
+    /* Стало: 0 замість 10px. Це притисне кнопку до правого паддінгу модалки,
+       так само як текст притиснутий до лівого. */
+    margin: -0.5rem 0 -0.5rem auto !important;
+
+    /* Скидання стилів */
     background: transparent !important; 
     border: none !important;
     box-shadow: none !important;
     padding: 0 !important; 
     border-radius: 0 !important;
-    margin: -0.5rem -0.5rem -0.5rem auto !important;
-
+    
     position: relative;
     cursor: pointer;
     opacity: 0.6;
@@ -401,26 +413,22 @@ button:hover, .btn:hover {
 .custom-close-btn:hover {
     opacity: 1;
     transform: scale(1.1);
-    background: transparent !important; /* На всяк випадок при ховері теж */
+    background: transparent !important;
 }
 
 /* Лінії хрестика */
 .custom-close-btn span {
     display: block;
     position: absolute;
-    height: 2px;
+    height: 2.5px;
     width: 100%;
-    background-color: #333; /* Темний колір для світлої теми */
+    background-color: #333; /* Темний колір ліній */
     border-radius: 2px;
     left: 0;
     top: 50%;
-    margin-top: -1px; 
+    margin-top: -1.25px;
 }
 
-/* Повертаємо лінії */
-.custom-close-btn span:nth-child(1) {
-    transform: rotate(45deg);
-}
-.custom-close-btn span:nth-child(2) {
-    transform: rotate(-45deg);
-}
+/* Поворот ліній */
+.custom-close-btn span:nth-child(1) { transform: rotate(45deg); }
+.custom-close-btn span:nth-child(2) { transform: rotate(-45deg); }
