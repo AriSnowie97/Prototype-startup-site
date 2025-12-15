@@ -333,61 +333,52 @@ button:hover, .btn:hover {
 /* Налаштування */
 #settings form { display: flex; flex-direction: column; gap: 15px; }
 #settings label { display: flex; justify-content: space-between; align-items: center; }
-/* =========================================
-   FIX: КНОПКА ЗАКРИТТЯ МОДАЛКИ (ХРЕСТИК)
-   ========================================= */
-.modal-header .btn-close {
-  /* Скидаємо глобальний фіолетовий фон */
-  background-color: transparent !important; 
+/* =================================================================
+   ФІНАЛЬНІ ВИПРАВЛЕННЯ: ХЕСТИК ТА ПЛАШКА ХЕДЕРА (СВІТЛА ТЕМА)
+   (Додай це в самий кінець файлу style.css)
+   ================================================================= */
+
+/* 1. РОБИМО ХРЕСТИК МАЛЕНЬКИМ ТА ЧОРНИМ */
+#addEventModal .modal-header .btn-close {
+  padding: 0.5rem !important; /* Стандартний малий відступ */
+  margin: -0.5rem -0.5rem -0.5rem auto !important; /* Підтягуємо в куток */
+  
+  width: 1em !important;    /* Стандартний розмір іконки */
+  height: 1em !important;
+  background-size: 1em !important;
+  min-height: auto !important; /* Скидаємо глобальну висоту кнопок */
+
+  background-color: transparent !important; /* Прозорий фон */
+  
+  /* ЧОРНИЙ хрестик */
   background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23000'%3e%3cpath d='M.293.293a1 1 0 0 1 1.414 0L8 6.586 14.293.293a1 1 0 1 1 1.414 1.414L9.414 8l6.293 6.293a1 1 0 0 1-1.414 1.414L8 9.414l-6.293 6.293a1 1 0 0 1-1.414-1.414L6.586 8 .293 1.707a1 1 0 0 1 0-1.414z'/%3e%3c/svg%3e") !important;
   
-  /* Повертаємо нормальні розміри */
-  width: 1em !important;
-  height: 1em !important;
-  min-height: auto !important;
-  padding: 0.5rem !important;
-  margin: -0.5rem -0.5rem -0.5rem auto !important;
-  
-  /* Прибираємо тіні та скруглення */
-  border: none !important;
-  border-radius: 4px !important; /* Робимо трохи квадратнішою */
-  box-shadow: none !important;
   opacity: 0.5;
-  filter: none !important; /* Хрестик має бути чорним */
-}
-
-.modal-header .btn-close:hover {
-  opacity: 1;
-  transform: none !important; /* Щоб не скакала при наведенні */
-}
-/* =========================================
-   SUPER FIX: ХРЕСТИК МОДАЛКИ (FINAL)
-   ========================================= */
-/* Використовуємо дуже довгий шлях, щоб перебити всі інші стилі */
-div.modal-header button.btn-close {
-  /* 1. Скидаємо фіолетовий фон */
-  background: transparent !important;
-  background-color: transparent !important;
-  
-  /* 2. Відновлюємо іконку хрестика (Чорний) */
-  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23000'%3e%3cpath d='M.293.293a1 1 0 0 1 1.414 0L8 6.586 14.293.293a1 1 0 1 1 1.414 1.414L9.414 8l6.293 6.293a1 1 0 0 1-1.414 1.414L8 9.414l-6.293 6.293a1 1 0 0 1-1.414-1.414L6.586 8 .293 1.707a1 1 0 0 1 0-1.414z'/%3e%3c/svg%3e") !important;
-  
-  /* 3. Скидаємо розміри (щоб не була величезною) */
-  width: 1em !important;
-  height: 1em !important;
-  min-height: auto !important;
-  padding: 0.5rem !important;
-  margin: -0.5rem -0.5rem -0.5rem auto !important;
-  
-  /* 4. Прибираємо ефекти кнопок */
+  border-radius: 4px !important; /* Трохи квадратніший */
+  box-shadow: none !important;   /* Без тіні */
   border: none !important;
-  box-shadow: none !important;
-  border-radius: 4px !important;
-  opacity: 0.5 !important;
-  filter: none !important;
+}
+#addEventModal .modal-header .btn-close:hover {
+  opacity: 1;
 }
 
-div.modal-header button.btn-close:hover {
-  opacity: 1 !important;
-  transform: none !important;
+
+/* 2. ПОВЕРТАЄМО СКЛЯНУ ПЛАШКУ ХЕДЕРА */
+header {
+  /* Візуальний стиль "Скло" */
+  background: rgba(255, 255, 255, 0.25) !important; /* Напівпрозорий білий */
+  backdrop-filter: blur(15px) !important;           /* Розмиття фону */
+  -webkit-backdrop-filter: blur(15px) !important;   /* Для Safari */
+  border-bottom: 1px solid rgba(255, 255, 255, 0.6) !important;
+  box-shadow: 0 4px 20px rgba(176, 196, 222, 0.2) !important;
+  border-radius: 0 0 20px 20px; /* Заокруглення знизу для краси */
+
+  /* Вирівнювання (пірамідка по центру) */
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 1.5rem 1rem !important;
+  gap: 1rem !important;
+  margin-bottom: 2rem !important;
 }
