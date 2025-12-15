@@ -483,6 +483,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const calendarStatus = document.getElementById("add-task-status");
     let currentDate = new Date();
+    let isEditingMode = false;   // Чи ми зараз редагуємо?
+    let editingEventId = null;   // ID події, яку редагуємо
 
     /**
      * 3. Головна функція рендеру (малювання) календаря
@@ -563,89 +565,64 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     /**
-     * 4. Функція відкриття модалки (ОНОВЛЕНО: Завантаження списку + Блокування кнопки)
+     * 4. Функція відкриття модалки (Універсальна: Create або Edit)
      */
-    async function openAddEventModal(dateStr) {
-      document.getElementById("add-event-form").reset();
-      eventDateInput.value = dateStr;
-
-      // Скидаємо блокування полів часу
-      eventTimeInput.disabled = false;
-      eventEndTimeInput.disabled = false;
-
-      // === ЛОГІКА СПИСКУ ПОДІЙ В МОДАЛЦІ ===
-      const modalBody = document.querySelector("#addEventModal .modal-body");
-      // Видаляємо старий список якщо був
+    async function openAddEventModal(dateStr, eventData = null) {
+      const modalTitle = document.getElementById("addEventModalLabel");
+      const saveBtn = document.getElementById("save-event-btn");
+      const form = document.getElementById("add-event-form");
+      
+      form.reset(); // Очищуємо форму
+      
+      // Видаляємо старий список подій (якщо ми відкриваємо з календаря)
       const oldList = document.getElementById("modal-events-list");
       if (oldList) oldList.remove();
 
-      // Створюємо контейнер для списку
-      const listContainer = document.createElement("div");
-      listContainer.id = "modal-events-list";
-      listContainer.innerHTML = "<p>⏳ Завантаження подій...</p>";
-      listContainer.style.marginBottom = "20px";
-      listContainer.style.borderBottom = "1px solid rgba(255,255,255,0.2)";
-      listContainer.style.paddingBottom = "15px";
+      if (eventData) {
+        // === РЕЖИМ РЕДАГУВАННЯ ===
+        isEditingMode = true;
+        editingEventId = eventData.id;
+        
+        modalTitle.textContent = "Редагувати подію";
+        saveBtn.textContent = "Зберегти зміни";
+        
+        // Заповнюємо поля
+        document.getElementById("event-title").value = eventData.raw_title;
+        document.getElementById("event-date").value = dateStr;
+        document.getElementById("all-day-checkbox").checked = eventData.is_all_day;
 
-      // Вставляємо перед формою
-      modalBody.insertBefore(listContainer, document.getElementById("add-event-form"));
+        if (!eventData.is_all_day && eventData.raw_start) {
+            // Витягуємо час з ISO рядка (YYYY-MM-DDTHH:MM:SS...)
+            const dt = new Date(eventData.raw_start);
+            const hh = String(dt.getHours()).padStart(2, '0');
+            const mm = String(dt.getMinutes()).padStart(2, '0');
+            document.getElementById("event-time").value = `${hh}:${mm}`;
+            
+            // End time можна вирахувати або залишити пустим (сервіс сам додасть годину)
+            document.getElementById("event-time").disabled = false;
+            document.getElementById("event-end-time").disabled = false;
+        } else {
+            document.getElementById("event-time").disabled = true;
+            document.getElementById("event-end-time").disabled = true;
+        }
 
-      // Відкриваємо модалку
-      addEventModal.show();
-
-      // Блокуємо кнопку збереження поки вантажиться
-      saveEventBtn.disabled = true;
-
-      try {
-          // Запит на бекенд за подіями
-          const result = await fetchApi("/api/get_day_events", { date: dateStr });
-          
-          if (result.status === "success") {
-              listContainer.innerHTML = `<h6>Події на ${dateStr}:</h6>`;
-              
-              if (result.events && result.events.length > 0) {
-                  const ul = document.createElement("ul");
-                  ul.style.listStyleType = "none";
-                  ul.style.padding = "0";
-
-                  result.events.forEach(ev => {
-                      const li = document.createElement("li");
-                      li.style.background = "rgba(255,255,255,0.1)";
-                      li.style.marginBottom = "5px";
-                      li.style.padding = "8px";
-                      li.style.borderRadius = "8px";
-                      li.innerHTML = `<strong>${ev.time || ''}</strong> ${ev.title}`;
-                      ul.appendChild(li);
-                  });
-                  listContainer.appendChild(ul);
-              } else {
-                  listContainer.innerHTML += "<p style='opacity:0.7'>Подій немає</p>";
-              }
-
-              // === ПЕРЕВІРКА НА МИНУЛИЙ ЧАС ===
-              if (result.is_past) {
-                  saveEventBtn.disabled = true;
-                  saveEventBtn.textContent = "Минулий час";
-                  saveEventBtn.classList.remove("btn-primary");
-                  saveEventBtn.classList.add("btn-secondary");
-                  
-                  // Можна також заблокувати форму
-                  document.getElementById("event-title").disabled = true;
-              } else {
-                  saveEventBtn.disabled = false;
-                  saveEventBtn.textContent = "Зберегти";
-                  saveEventBtn.classList.add("btn-primary");
-                  saveEventBtn.classList.remove("btn-secondary");
-                  document.getElementById("event-title").disabled = false;
-              }
-
-          }
-      } catch (e) {
-          console.error("Помилка завантаження подій дня:", e);
-          listContainer.innerHTML = "<p style='color:red'>Помилка завантаження списку</p>";
-          // На всяк випадок розблокуємо кнопку, якщо це не минуле (або заблокуємо)
-          saveEventBtn.disabled = false;
+      } else {
+        // === РЕЖИМ СТВОРЕННЯ ===
+        isEditingMode = false;
+        editingEventId = null;
+        
+        modalTitle.textContent = "Додати нову подію";
+        saveBtn.textContent = "Зберегти";
+        
+        document.getElementById("event-date").value = dateStr;
+        document.getElementById("event-time").disabled = false;
+        document.getElementById("event-end-time").disabled = false;
+        
+        // Тут (опціонально) можна викликати завантаження списку подій, як було раніше
+        // Щоб не перевантажувати код зараз, я це пропущу, але ти можеш залишити свій fetchApi("/api/get_day_events"...)
       }
+
+      addEventModal.show();
     }
 
     /**
@@ -679,12 +656,11 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     /**
-     * 6. Обробник кнопки "Зберегти" в модалці (Додає в Google)
+     * 6. Обробник кнопки "Зберегти" в модалці
      */
     saveEventBtn.addEventListener("click", async () => {
       const title = eventTitleInput.value;
       const date = eventDateInput.value;
-
       const time = eventTimeInput.value;
       const endTime = eventEndTimeInput.value;
       const isAllDay = allDayCheckbox.checked;
@@ -694,6 +670,7 @@ document.addEventListener("DOMContentLoaded", () => {
         return;
       }
 
+      // Базовий payload
       const payload = {
         title: title,
         date: date,
@@ -703,17 +680,30 @@ document.addEventListener("DOMContentLoaded", () => {
       };
 
       try {
-        await sendApiRequest(
-          "/add_event",
-          payload,
-          calendarStatus,
-          "Подію успішно додано!"
-        );
+        if (isEditingMode && editingEventId) {
+            // === ОНОВЛЕННЯ ===
+            payload.eventId = editingEventId;
+            await sendApiRequest(
+                "/api/update_event_full", // Новий ендпоінт
+                payload,
+                calendarStatus,
+                "Подію оновлено!"
+            );
+        } else {
+            // === СТВОРЕННЯ ===
+            await sendApiRequest(
+                "/add_event",
+                payload,
+                calendarStatus,
+                "Подію створено!"
+            );
+        }
+
         addEventModal.hide();
-        await renderCalendar(); // Оновлюємо крапки на календарі
         
-        // Якщо додали на "Сьогодні", треба оновити й головний список завдань
-        initializeTasks(); 
+        // Оновлюємо все
+        await renderCalendar(); 
+        initializeTasks(); // Оновлюємо список "Сьогодні"
 
       } catch (error) {
         console.error("Помилка збереження:", error);
@@ -912,36 +902,19 @@ document.addEventListener("DOMContentLoaded", () => {
       updateAnalytics();
     }
 
-    // --- Логіка Редагування (ОНОВЛЕНО ДЛЯ GOOGLE) ---
-    async function editTask(id, oldText) {
-      // Якщо текст містить час у дужках [14:00], спробуємо його прибрати для редагування
-      // щоб юзер правив тільки суть.
-      let cleanText = oldText;
-      const timeMatch = oldText.match(/^\[\d{2}:\d{2}\]\s(.*)/);
-      if (timeMatch && timeMatch[1]) {
-          cleanText = timeMatch[1];
-      }
+    // --- Логіка Редагування (ВІДКРИВАЄ МОДАЛКУ) ---
+    function editTask(id, text) {
+        // Знаходимо повний об'єкт завдання
+        const task = tasks.find(t => t.id === id);
+        if (!task) return;
 
-      const newText = prompt("Змінити назву події:", cleanText);
-      
-      if (newText && newText.trim() !== "" && newText !== cleanText) {
-        // Оновлюємо локально (візуально), щоб не чекати перезавантаження
-        const task = tasks.find((t) => t.id == id);
-        if (task) {
-          // Якщо був час, зберігаємо його префікс
-          const prefix = timeMatch ? `[${oldText.slice(1,6)}] ` : "";
-          task.text = prefix + newText.trim();
-          renderTasks();
-        }
-
-        // Відправляємо запит на Google Calendar API
-        await sendApiRequest(
-          "/api/update_event_title", 
-          { eventId: id, text: newText.trim() },
-          null, // statusElement не потрібен
-          "Оновлено"
-        );
-      }
+        // Визначаємо дату. 
+        // В списку "Сьогодні" дата завжди сьогоднішня.
+        const d = new Date();
+        const todayStr = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+        
+        // Відкриваємо модалку в режимі редагування
+        openAddEventModal(todayStr, task);
     }
 
     // --- Логіка Видалення (ОНОВЛЕНО ДЛЯ GOOGLE) ---
@@ -1019,13 +992,15 @@ document.addEventListener("DOMContentLoaded", () => {
         // Викликаємо новий бекенд ендпоінт
         const response = await fetchApi("/api/get_day_events", { date: dateStr });
         
-        // Мапимо відповідь Google (events) у формат завдань сайту
         if (response.events) {
             tasks = response.events.map(ev => ({
-                id: ev.id, // String ID від Google
-                // Додаємо час до назви, якщо це не весь день
+                id: ev.id,
                 text: `${ev.time !== 'Весь день' ? '[' + ev.time + '] ' : ''}${ev.title}`,
-                done: false // Google Events не мають статусу done, ставимо false
+                done: false,
+                // === ЗБЕРІГАЄМО СИРІ ДАНІ ДЛЯ РЕДАГУВАННЯ ===
+                raw_title: ev.title,
+                raw_start: ev.raw_start, // ISO string або YYYY-MM-DD
+                is_all_day: ev.is_all_day
             }));
         } else {
             tasks = [];
