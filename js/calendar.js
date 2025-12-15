@@ -1,5 +1,5 @@
 // ==================================================
-//          ЛОГІКА КАЛЕНДАРЯ (ОНОВЛЕНО: Edit & Delete)
+//          ЛОГІКА КАЛЕНДАРЯ (FINAL: Auto-Refresh + Timeout)
 // ==================================================
 import { backendUrl, tg } from './config.js';
 import { sendApiRequest, fetchApi } from './api.js';
@@ -14,9 +14,26 @@ export function initCalendar() {
         const nextMonthBtn = document.getElementById("next-month-btn");
         const addEventModalEl = document.getElementById("addEventModal");
         
+        // Змінні для керування таймерами
+        let autoRefreshInterval = null; // Повторення (кожні 30с)
+        let autoRefreshTimeout = null;  // Ліміт часу (стоп через 2хв)
+
         let addEventModal;
         if (addEventModalEl) {
             addEventModal = new bootstrap.Modal(addEventModalEl);
+            
+            // ВАЖЛИВО: Коли вікно закривається, зупиняємо ВСІ таймери
+            addEventModalEl.addEventListener('hidden.bs.modal', () => {
+                if (autoRefreshInterval) {
+                    clearInterval(autoRefreshInterval);
+                    autoRefreshInterval = null;
+                }
+                if (autoRefreshTimeout) {
+                    clearTimeout(autoRefreshTimeout);
+                    autoRefreshTimeout = null;
+                }
+                console.log("🛑 Модальне вікно закрито: всі оновлення зупинено.");
+            });
         }
 
         const saveEventBtn = document.getElementById("save-event-btn");
@@ -91,7 +108,7 @@ export function initCalendar() {
         }
 
         // =========================================================
-        // ЛОГІКА МОДАЛЬНОГО ВІКНА (ОНОВЛЕНА ЧАСТИНА)
+        // ЛОГІКА МОДАЛЬНОГО ВІКНА
         // =========================================================
         async function openAddEventModal(dateStr) {
             if (!addEventModal) return;
@@ -123,10 +140,13 @@ export function initCalendar() {
             // Функція для завантаження і малювання списку подій
             async function loadEventsForDay() {
                 try {
-                    listContainer.innerHTML = `<h6>Події на ${dateStr}:</h6>`;
+                    if (!document.querySelector("#addEventModal.show")) return;
+                    
                     const result = await fetchApi("/api/get_day_events", { date: dateStr });
                     
                     if (result.status === "success") {
+                        listContainer.innerHTML = `<h6>Події на ${dateStr}:</h6>`;
+                        
                         if (result.events && result.events.length > 0) {
                             const ul = document.createElement("ul");
                             ul.style.listStyleType = "none";
@@ -134,8 +154,6 @@ export function initCalendar() {
 
                             result.events.forEach(ev => {
                                 const li = document.createElement("li");
-                                
-                                // Стилі як у блоці "Завдання"
                                 li.style.background = "rgba(255,255,255,0.1)";
                                 li.style.marginBottom = "5px";
                                 li.style.padding = "8px 12px";
@@ -144,30 +162,27 @@ export function initCalendar() {
                                 li.style.justifyContent = "space-between";
                                 li.style.alignItems = "center";
 
-                                // 1. Текст події
                                 const textSpan = document.createElement("span");
                                 textSpan.innerHTML = `<strong>${ev.time || ''}</strong> ${ev.title}`;
                                 textSpan.style.flexGrow = "1";
                                 textSpan.style.marginRight = "10px";
 
-                                // 2. Кнопки дій (Edit / Delete)
                                 const actionsDiv = document.createElement("div");
                                 actionsDiv.style.display = "flex";
                                 actionsDiv.style.gap = "5px";
 
-                                // -- Кнопка Редагувати --
+                                // -- Edit --
                                 const editBtn = document.createElement("button");
                                 editBtn.textContent = "✏️";
-                                editBtn.className = "icon-btn"; // Клас з твого CSS
+                                editBtn.className = "icon-btn"; 
                                 editBtn.title = "Редагувати";
                                 editBtn.onclick = async () => {
                                     const newText = prompt("Змінити назву події:", ev.title);
                                     if (newText && newText.trim() !== "" && newText !== ev.title) {
-                                        li.style.opacity = "0.5"; // Ефект завантаження
+                                        li.style.opacity = "0.5"; 
                                         try {
                                             await sendApiRequest("/api/update_event_title", { eventId: ev.id, text: newText.trim() });
-                                            await loadEventsForDay(); // Оновлюємо список
-                                            // Оновлюємо також головний список завдань
+                                            await loadEventsForDay(); 
                                             if (typeof initializeTasks === 'function') initializeTasks(); 
                                         } catch (e) {
                                             alert("Помилка редагування");
@@ -176,7 +191,7 @@ export function initCalendar() {
                                     }
                                 };
 
-                                // -- Кнопка Видалити --
+                                // -- Delete --
                                 const deleteBtn = document.createElement("button");
                                 deleteBtn.textContent = "🗑️";
                                 deleteBtn.className = "icon-btn delete-btn"; 
@@ -186,9 +201,8 @@ export function initCalendar() {
                                         li.style.opacity = "0.5";
                                         try {
                                             await sendApiRequest("/api/delete_event", { eventId: ev.id });
-                                            await loadEventsForDay(); // Оновлюємо список в модалці
-                                            await renderCalendar();   // Оновлюємо крапки на календарі
-                                            // Оновлюємо головний список завдань
+                                            await loadEventsForDay(); 
+                                            await renderCalendar();   
                                             if (typeof initializeTasks === 'function') initializeTasks();
                                         } catch (e) {
                                             alert("Помилка видалення");
@@ -197,19 +211,15 @@ export function initCalendar() {
                                     }
                                 };
 
-                                // Блокування кнопок, якщо час минув
                                 if (result.is_past) {
                                     editBtn.disabled = true;
                                     deleteBtn.disabled = true;
                                     editBtn.style.opacity = "0.3";
                                     deleteBtn.style.opacity = "0.3";
-                                    editBtn.style.cursor = "not-allowed";
-                                    deleteBtn.style.cursor = "not-allowed";
                                 }
 
                                 actionsDiv.appendChild(editBtn);
                                 actionsDiv.appendChild(deleteBtn);
-
                                 li.appendChild(textSpan);
                                 li.appendChild(actionsDiv);
                                 ul.appendChild(li);
@@ -219,7 +229,6 @@ export function initCalendar() {
                             listContainer.innerHTML += "<p style='opacity:0.7'>Подій немає</p>";
                         }
 
-                        // Управління кнопкою збереження (блокування для минулого)
                         if (result.is_past) {
                             saveEventBtn.disabled = true;
                             saveEventBtn.textContent = "Минулий час";
@@ -235,17 +244,32 @@ export function initCalendar() {
                         }
                     }
                 } catch (e) {
-                    console.error("Помилка завантаження подій дня:", e);
-                    listContainer.innerHTML = "<p style='color:red'>Помилка завантаження списку</p>";
-                    saveEventBtn.disabled = false;
+                    // console.error(e); // Тиха помилка при авто-оновленні
                 }
             }
 
-            // Запускаємо завантаження при відкритті
+            // 1. Завантаження при відкритті
             await loadEventsForDay();
 
-            // Перевизначаємо логіку кнопки "Зберегти", щоб вона оновлювала цей самий список
-            // Важливо: видаляємо старі лісенери (клонуванням), щоб не дублювати події
+            // 2. Скидання попередніх таймерів (безпека)
+            if (autoRefreshInterval) clearInterval(autoRefreshInterval);
+            if (autoRefreshTimeout) clearTimeout(autoRefreshTimeout);
+
+            // 3. СТАРТ ІНТЕРВАЛУ (Кожні 30 сек)
+            autoRefreshInterval = setInterval(() => {
+                loadEventsForDay();
+            }, 30000); 
+
+            // 4. СТАРТ ЛІМІТУ (СТОП ЧЕРЕЗ 2 ХВИЛИНИ)
+            autoRefreshTimeout = setTimeout(() => {
+                if (autoRefreshInterval) {
+                    clearInterval(autoRefreshInterval);
+                    autoRefreshInterval = null;
+                    console.log("⏳ Час авто-оновлення вичерпано (2 хв). Економія трафіку.");
+                }
+            }, 120000); // 120000 мс = 2 хвилини
+
+            // Логіка кнопки "Зберегти"
             const newSaveBtn = saveEventBtn.cloneNode(true);
             saveEventBtn.parentNode.replaceChild(newSaveBtn, saveEventBtn);
             
@@ -271,18 +295,11 @@ export function initCalendar() {
 
                 try {
                     await sendApiRequest("/add_event", payload, calendarStatus, "Подію додано!");
-                    
-                    // Очищаємо форму
                     document.getElementById("add-event-form").reset();
-                    eventDateInput.value = dateStr; // Повертаємо дату
-                    
-                    // ОНОВЛЮЄМО СПИСОК ПРЯМО ТУТ
+                    eventDateInput.value = dateStr; 
                     await loadEventsForDay(); 
-                    
-                    // Оновлюємо зовнішні елементи
                     await renderCalendar(); 
                     if (typeof initializeTasks === 'function') initializeTasks(); 
-
                 } catch (error) {
                     console.error("Помилка збереження:", error);
                 }
