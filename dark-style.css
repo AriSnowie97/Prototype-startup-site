@@ -12,112 +12,103 @@ body {
   overflow-x: hidden;
 }
 
+/* =========================================
+   dark-style.css - FIX MENU & HEADER
+   ========================================= */
+
 /* --- Хедер --- */
 header {
   background: rgba(0, 0, 0, 0.3);
   backdrop-filter: blur(15px);
-  -webkit-backdrop-filter: blur(15px);
   border-bottom: 1px solid rgba(255, 255, 255, 0.15);
-  box-shadow: 0 4px 20px rgba(0,0,0,0.4);
-  padding: 1rem 2rem;
+  padding: 1rem;
   text-align: center;
   margin-bottom: 2rem;
 }
-
 header h1 {
-  margin: 0 0 1.5rem 0;
-  font-weight: 700;
   color: #ffffff;
+  margin: 0 0 1rem 0;
 }
 
-/* --- Контейнер хедера --- */
+/* --- Контейнер --- */
 .header-bottom-row {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 1.5rem;
+  gap: 1rem;
   max-width: 1200px;
   margin: 0 auto;
 }
-
 @media (min-width: 992px) {
   .header-bottom-row {
     flex-direction: row;
     justify-content: space-between;
-    align-items: center;
   }
 }
 
-/* --- Навігація - FIX --- */
-header nav { width: 100%; }
-@media (min-width: 992px) { header nav { width: auto; } }
-
+/* --- НАВІГАЦІЯ (МЕНЮ) - FIX --- */
 header nav ul {
   display: flex !important;
   flex-direction: row !important;
+  flex-wrap: wrap !important;
   justify-content: center;
   list-style: none !important;
   padding: 0 !important;
   margin: 0 !important;
-  gap: 0.5rem;
-  flex-wrap: wrap;
+  gap: 8px;
 }
-
-header nav ul li { list-style: none !important; margin: 0; }
-
+header nav ul li {
+  list-style: none !important;
+  margin: 0 !important;
+}
 header nav ul li a {
-  display: inline-block;
+  display: block;
   background: rgba(255, 255, 255, 0.1);
   color: #ffffff;
-  padding: 0.6rem 1.2rem;
-  border-radius: 30px;
+  padding: 8px 16px;
+  border-radius: 20px;
   border: 1px solid rgba(255, 255, 255, 0.2);
-  transition: all 0.3s;
   text-decoration: none;
   font-size: 0.9rem;
   font-weight: 600;
 }
-
 header nav ul li a:hover {
   background: rgba(255, 255, 255, 0.25);
-  border-color: #ffffff;
-  box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
+  box-shadow: 0 0 10px rgba(255,255,255,0.2);
 }
 
-/* --- Права частина (Погода + Кнопка) --- */
-#weather-form-header {
-  width: 100%;
-  max-width: 300px;
-  margin: 0;
+/* --- ПРАВА ГРУПА --- */
+.header-right-group {
   display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
+#weather-form-header {
+  display: flex;
+  margin: 0;
+}
 #weather-form-header .form-control {
+  width: 150px;
   background: rgba(255, 255, 255, 0.1) !important;
   border-radius: 20px 0 0 20px !important;
   border: 1px solid rgba(255, 255, 255, 0.2) !important;
   color: #ffffff !important;
-  padding-left: 15px;
 }
-#weather-form-header .form-control::placeholder {
-  color: rgba(255, 255, 255, 0.7) !important;
-}
-
 #weather-form-header .btn {
   border-radius: 0 20px 20px 0 !important;
   background: rgba(255, 255, 255, 0.2) !important;
   border: 1px solid rgba(255,255,255,0.2) !important;
   color: #ffffff !important;
+  padding: 6px 12px !important;
   margin: 0 !important;
   min-height: auto !important;
-  padding: 0.5rem 1rem !important;
 }
 
-/* Кнопка зміни теми */
 #theme-toggle-btn {
-  width: 45px !important;
-  height: 45px !important;
-  min-width: 45px !important;
+  width: 40px !important;
+  height: 40px !important;
+  min-width: 40px !important;
   border-radius: 50% !important;
   padding: 0 !important;
   display: flex;
@@ -125,14 +116,8 @@ header nav ul li a:hover {
   justify-content: center;
   background: rgba(0, 0, 0, 0.5) !important;
   border: 1px solid rgba(255, 255, 255, 0.3) !important;
-  font-size: 1.2rem;
-  margin-left: 10px !important;
   color: #fff !important;
-  box-shadow: none !important;
-}
-#theme-toggle-btn:hover {
-    transform: rotate(20deg);
-    background: rgba(255,255,255,0.1) !important;
+  margin: 0 !important;
 }
 
 /* --- Секции --- */
