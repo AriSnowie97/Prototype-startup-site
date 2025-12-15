@@ -1,8 +1,8 @@
 /* =========================================
-   style.css (LIGHT THEME - RESTORED & FIXED)
+   style.css (LIGHT THEME - FINAL)
    ========================================= */
 
-/* --- Основа и Фон (Возвращаем шрифт!) --- */
+/* --- Основа и Фон --- */
 body {
   background: radial-gradient(circle at 10% 20%, rgb(239, 246, 249) 0%, rgb(206, 239, 253) 90%);
   background-attachment: fixed;
@@ -12,26 +12,27 @@ body {
   overflow-x: hidden;
 }
 
-/* --- Хедер (Возвращаем плашку + Центрирование) --- */
+/* --- Хедер --- */
 header {
-  /* Внешний вид (Плашка) */
-  background: rgba(255, 255, 255, 0.25);
-  backdrop-filter: blur(15px);
-  -webkit-backdrop-filter: blur(15px);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.6);
-  box-shadow: 0 4px 20px rgba(176, 196, 222, 0.2);
-  
-  /* Выравнивание (Пирамидка) */
+  /* Внешний вид (Скло) */
+  background: rgba(255, 255, 255, 0.25) !important;
+  backdrop-filter: blur(15px) !important;
+  -webkit-backdrop-filter: blur(15px) !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.6) !important;
+  box-shadow: 0 4px 20px rgba(176, 196, 222, 0.2) !important;
+  border-radius: 0 0 20px 20px;
+
+  /* Выравнивание */
   display: flex !important;
   flex-direction: column !important;
   align-items: center !important;
   justify-content: center !important;
   padding: 1.5rem 1rem !important;
   gap: 1rem !important;
-  margin-bottom: 2rem;
+  margin-bottom: 2rem !important;
 }
 
-/* 1. Верхний ряд (Кнопка + Заголовок) */
+/* 1. Верхний ряд */
 .header-top-row {
   display: flex !important;
   align-items: center !important;
@@ -70,7 +71,7 @@ header h1 {
   box-shadow: none !important;
 }
 
-/* 2. Меню (Строго горизонтально) */
+/* 2. Меню */
 header nav {
   width: 100%;
   display: flex;
@@ -114,7 +115,7 @@ header nav ul li a:hover {
   color: #3498db;
 }
 
-/* 3. Погода (По центру) */
+/* 3. Погода */
 #weather-form-header {
   display: flex !important;
   align-items: center !important;
@@ -226,9 +227,7 @@ button:hover, .btn:hover {
   transform: scale(1.1);
 }
 
-/* style.css */
-
-/* --- Секція ФОКУС --- */
+/* --- Секція ФОКУС (ВИПРАВЛЕНО) --- */
 #focus {
   display: flex;
   flex-direction: column;
@@ -238,26 +237,27 @@ button:hover, .btn:hover {
 #start-btn {
   display: block;
   width: 100% !important;
-  max-width: 320px;       /* Обмеження ширини як у полів вводу */
-  margin: 15px auto 15px auto !important; /* Відступ знизу 15px */
+  max-width: 320px;
+  margin: 15px auto 15px auto !important;
 }
 
-/* Новий клас для ряду кнопок */
+/* Flex-контейнер для кнопок Пауза/Стоп */
 .timer-controls-row {
   display: flex;
   flex-direction: row;
   justify-content: center;
-  gap: 15px;             /* Відстань між кнопками Пауза і Стоп */
+  gap: 15px; /* Відступ між кнопками */
   width: 100%;
-  max-width: 320px;      /* Така ж ширина, як у кнопки Старт */
+  max-width: 320px;
 }
 
 #pause-btn, #stop-btn {
   display: block;
-  width: 100% !important; /* Розтягуємо на всю доступну ширину в flex-контейнері */
-  margin: 0 !important;   /* Прибираємо старі відступи, працює gap */
+  width: 100% !important;
+  margin: 0 !important;
   min-width: auto !important;
 }
+
 /* Кнопка "Додати" */
 #add-task-form .input-group { display: flex; gap: 0; }
 #add-task-form button { width: auto !important; margin: 0 !important; height: auto !important; border-radius: 0 12px 12px 0 !important; }
@@ -344,52 +344,24 @@ button:hover, .btn:hover {
 /* Налаштування */
 #settings form { display: flex; flex-direction: column; gap: 15px; }
 #settings label { display: flex; justify-content: space-between; align-items: center; }
-/* =================================================================
-   ФІНАЛЬНІ ВИПРАВЛЕННЯ: ХЕСТИК ТА ПЛАШКА ХЕДЕРА (СВІТЛА ТЕМА)
-   (Додай це в самий кінець файлу style.css)
-   ================================================================= */
 
-/* 1. РОБИМО ХРЕСТИК МАЛЕНЬКИМ ТА ЧОРНИМ */
+/* Хрестик для світлої теми (чорний) */
 #addEventModal .modal-header .btn-close {
-  padding: 0.5rem !important; /* Стандартний малий відступ */
-  margin: -0.5rem -0.5rem -0.5rem auto !important; /* Підтягуємо в куток */
-  
-  width: 1em !important;    /* Стандартний розмір іконки */
+  padding: 0.5rem !important;
+  margin: -0.5rem -0.5rem -0.5rem auto !important;
+  width: 1em !important;
   height: 1em !important;
-  background-size: 1em !important;
-  min-height: auto !important; /* Скидаємо глобальну висоту кнопок */
-
-  background-color: transparent !important; /* Прозорий фон */
+  min-height: auto !important;
+  background-color: transparent !important;
   
-  /* ЧОРНИЙ хрестик */
+  /* Чорний хрестик */
   background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23000'%3e%3cpath d='M.293.293a1 1 0 0 1 1.414 0L8 6.586 14.293.293a1 1 0 1 1 1.414 1.414L9.414 8l6.293 6.293a1 1 0 0 1-1.414 1.414L8 9.414l-6.293 6.293a1 1 0 0 1-1.414-1.414L6.586 8 .293 1.707a1 1 0 0 1 0-1.414z'/%3e%3c/svg%3e") !important;
   
   opacity: 0.5;
-  border-radius: 4px !important; /* Трохи квадратніший */
-  box-shadow: none !important;   /* Без тіні */
+  border-radius: 4px !important;
+  box-shadow: none !important;
   border: none !important;
 }
 #addEventModal .modal-header .btn-close:hover {
   opacity: 1;
-}
-
-
-/* 2. ПОВЕРТАЄМО СКЛЯНУ ПЛАШКУ ХЕДЕРА */
-header {
-  /* Візуальний стиль "Скло" */
-  background: rgba(255, 255, 255, 0.25) !important; /* Напівпрозорий білий */
-  backdrop-filter: blur(15px) !important;           /* Розмиття фону */
-  -webkit-backdrop-filter: blur(15px) !important;   /* Для Safari */
-  border-bottom: 1px solid rgba(255, 255, 255, 0.6) !important;
-  box-shadow: 0 4px 20px rgba(176, 196, 222, 0.2) !important;
-  border-radius: 0 0 20px 20px; /* Заокруглення знизу для краси */
-
-  /* Вирівнювання (пірамідка по центру) */
-  display: flex !important;
-  flex-direction: column !important;
-  align-items: center !important;
-  justify-content: center !important;
-  padding: 1.5rem 1rem !important;
-  gap: 1rem !important;
-  margin-bottom: 2rem !important;
 }
