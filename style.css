@@ -1,8 +1,8 @@
 /* =========================================
-   style.css (LIGHT THEME - FULL FIXED v12)
+   style.css (LIGHT THEME - RESTORED & FIXED)
    ========================================= */
 
-/* --- Основа и Фон --- */
+/* --- Основа и Фон (Возвращаем шрифт!) --- */
 body {
   background: radial-gradient(circle at 10% 20%, rgb(239, 246, 249) 0%, rgb(206, 239, 253) 90%);
   background-attachment: fixed;
@@ -12,31 +12,47 @@ body {
   overflow-x: hidden;
 }
 
-/* =========================================
-   FIX HEADER & MENU (FINAL)
-   ========================================= */
-
+/* --- Хедер (Возвращаем плашку + Центрирование) --- */
 header {
-  padding: 1rem;
+  /* Внешний вид (Плашка) */
+  background: rgba(255, 255, 255, 0.25);
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.6);
+  box-shadow: 0 4px 20px rgba(176, 196, 222, 0.2);
+  
+  /* Выравнивание (Пирамидка) */
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 1.5rem 1rem !important;
+  gap: 1rem !important;
+  margin-bottom: 2rem;
 }
 
-/* 1. ВЕРХНІЙ РЯД (Кнопка + H1) */
+/* 1. Верхний ряд (Кнопка + Заголовок) */
 .header-top-row {
-  display: flex;
-  align-items: center;
-  justify-content: center; /* Центруємо блок */
-  gap: 15px; /* Відступ між кнопкою і текстом */
-  margin-bottom: 1.5rem;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 15px !important;
+  width: 100%;
   position: relative;
 }
 
 header h1 {
+  color: #34495e;
+  font-weight: 800;
   margin: 0 !important;
-  font-size: 1.5rem; /* Оптимально для мобільних */
+  letter-spacing: -0.5px;
+  text-shadow: 0 2px 10px rgba(255, 255, 255, 0.8);
+  font-size: 1.5rem;
   line-height: 1.2;
+  text-align: center;
 }
 
-/* Кнопка теми (зліва від H1) */
+/* Кнопка темы */
 #theme-toggle-btn {
   width: 45px !important;
   height: 45px !important;
@@ -48,41 +64,28 @@ header h1 {
   justify-content: center;
   font-size: 1.2rem;
   margin: 0 !important;
-  
-  /* Кольори для кнопки (універсальні) */
-  background: rgba(255, 255, 255, 0.2) !important; 
-  border: 1px solid rgba(255,255,255,0.5) !important;
-  color: inherit !important; 
+  background: rgba(255, 255, 255, 0.6) !important;
+  border: 1px solid rgba(255, 255, 255, 0.8) !important;
+  color: #333 !important;
+  box-shadow: none !important;
 }
 
-/* 2. НИЖНІЙ РЯД (Меню + Погода) */
-.header-bottom-row {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1rem;
-}
-
-@media (min-width: 992px) {
-  .header-bottom-row {
-    flex-direction: row;
-    justify-content: space-between;
-  }
-}
-
-/* 3. ФІКС МЕНЮ (Щоб було горизонтальним) */
+/* 2. Меню (Строго горизонтально) */
 header nav {
-  width: auto;
+  width: 100%;
+  display: flex;
+  justify-content: center;
 }
 
 header nav ul {
-  display: flex !important;        /* Вмикаємо Flex */
-  flex-direction: row !important;  /* Тільки в РЯДОК */
-  flex-wrap: wrap !important;      /* Перенос, якщо не влазить */
-  justify-content: center;
+  display: flex !important;
+  flex-direction: row !important;
+  flex-wrap: wrap !important;
+  justify-content: center !important;
+  align-items: center !important;
+  gap: 10px !important;
   padding: 0 !important;
   margin: 0 !important;
-  gap: 8px;                        /* Відступи між кнопками */
   list-style: none !important;
 }
 
@@ -91,27 +94,56 @@ header nav ul li {
   margin: 0 !important;
 }
 
-/* Стиль кнопок меню */
 header nav ul li a {
   display: inline-block;
-  padding: 8px 16px;
-  border-radius: 20px;
-  text-decoration: none;
+  background: rgba(255, 255, 255, 0.5);
+  color: #2c3e50;
+  padding: 8px 18px;
+  border-radius: 25px;
   font-weight: 600;
-  font-size: 0.9rem;
-  
-  /* Універсальний фон (напівпрозорий) */
-  background: rgba(255, 255, 255, 0.15); 
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  color: inherit; /* Колір тексту береться від батька (body) */
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  box-shadow: 0 2px 10px rgba(0,0,0,0.03);
+  transition: all 0.3s;
+  text-decoration: none;
+  font-size: 0.95rem;
 }
 
-/* 4. ФОРМА ПОГОДИ */
-#weather-form-header {
-  display: flex;
-  width: 100%;
-  max-width: 300px;
+header nav ul li a:hover {
+  background: #fff;
+  transform: translateY(-2px);
+  color: #3498db;
 }
+
+/* 3. Погода (По центру) */
+#weather-form-header {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 100%;
+  max-width: 320px;
+  margin: 0 auto !important;
+}
+
+#weather-form-header .form-control {
+  border-radius: 20px 0 0 20px !important;
+  background: rgba(255, 255, 255, 0.6) !important;
+  border: 1px solid rgba(255,255,255,0.9) !important;
+  padding-left: 15px;
+  color: #2c3e50 !important;
+}
+
+#weather-form-header .btn {
+  border-radius: 0 20px 20px 0 !important;
+  background: rgba(255, 255, 255, 0.8) !important;
+  border: 1px solid rgba(255,255,255,0.9) !important;
+  margin: 0 !important;
+  width: 50px !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #333 !important;
+}
+
 /* --- Секции --- */
 main section, .login-box, #weather-result {
   background: rgba(255, 255, 255, 0.45);
@@ -162,17 +194,17 @@ main section h2 {
   border-color: #87cefa !important;
 }
 
-/* --- Кнопки (Глобально - як у темній темі) --- */
+/* --- Кнопки (Глобально) --- */
 button, .btn {
   padding: 10px 20px !important;
   font-size: 1rem !important;
-  min-height: 45px; /* Щоб були високі */
+  min-height: 45px;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
   color: #ffffff !important;
   border-radius: 12px !important;
   border: none !important;
   box-shadow: 0 4px 15px rgba(118, 75, 162, 0.3);
-  margin: 5px; /* Щоб не злипались */
+  margin: 5px;
   transition: transform 0.2s;
 }
 
@@ -194,7 +226,7 @@ button:hover, .btn:hover {
   transform: scale(1.1);
 }
 
-/* --- Секція ФОКУС (Кнопки) --- */
+/* --- Секція ФОКУС --- */
 #focus {
   display: flex;
   flex-direction: column;
@@ -215,20 +247,10 @@ button:hover, .btn:hover {
   margin: 5px 2px !important;
 }
 
-/* Кнопка "Додати" біля інпуту завдань */
-#add-task-form .input-group {
-    display: flex;
-    gap: 0;
-}
-#add-task-form button {
-  width: auto !important;
-  margin: 0 !important;
-  height: auto !important;
-  border-radius: 0 12px 12px 0 !important;
-}
-#new-task-input {
-    border-radius: 12px 0 0 12px !important;
-}
+/* Кнопка "Додати" */
+#add-task-form .input-group { display: flex; gap: 0; }
+#add-task-form button { width: auto !important; margin: 0 !important; height: auto !important; border-radius: 0 12px 12px 0 !important; }
+#new-task-input { border-radius: 12px 0 0 12px !important; }
 
 /* --- КАЛЕНДАР --- */
 .calendar-grid {
@@ -287,9 +309,7 @@ button:hover, .btn:hover {
   background: linear-gradient(90deg, #a8edea 0%, #fed6e3 100%);
   border-radius: 20px;
 }
-#progress-text-overlay {
-  color: #555;
-}
+#progress-text-overlay { color: #555; }
 
 /* --- Модальне вікно --- */
 .modal-content {
@@ -311,13 +331,5 @@ button:hover, .btn:hover {
 }
 
 /* Налаштування */
-#settings form {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-}
-#settings label {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
+#settings form { display: flex; flex-direction: column; gap: 15px; }
+#settings label { display: flex; justify-content: space-between; align-items: center; }
