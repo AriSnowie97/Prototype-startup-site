@@ -108,14 +108,15 @@ header nav ul li a:hover {
   box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
 }
 
-/* 3. Погода */
+/* 3. Погода (Виправлено налізання) */
 #weather-form-header {
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
   width: 100%;
   max-width: 320px;
-  margin: 0 auto !important;
+  /* Додали 15px зверху */
+  margin: 15px auto 0 auto !important; 
 }
 
 #weather-form-header .form-control {

@@ -116,15 +116,16 @@ header nav ul li a:hover {
 }
 
 /* 3. Погода */
+/* 3. Погода (Виправлено налізання) */
 #weather-form-header {
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
   width: 100%;
   max-width: 320px;
-  margin: 0 auto !important;
+  /* Додали 15px зверху, щоб відсунути від кнопок */
+  margin: 15px auto 0 auto !important; 
 }
-
 #weather-form-header .form-control {
   border-radius: 20px 0 0 20px !important;
   background: rgba(255, 255, 255, 0.6) !important;
