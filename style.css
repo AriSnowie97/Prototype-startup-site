@@ -13,36 +13,56 @@ body {
 }
 
 /* =========================================
-   style.css - FIX MENU & HEADER
+   FIX HEADER & MENU (FINAL)
    ========================================= */
 
-/* --- Хедер --- */
 header {
-  background: rgba(255, 255, 255, 0.25);
-  backdrop-filter: blur(15px);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.6);
   padding: 1rem;
-  text-align: center;
-  margin-bottom: 2rem;
+}
+
+/* 1. ВЕРХНІЙ РЯД (Кнопка + H1) */
+.header-top-row {
+  display: flex;
+  align-items: center;
+  justify-content: center; /* Центруємо блок */
+  gap: 15px; /* Відступ між кнопкою і текстом */
+  margin-bottom: 1.5rem;
+  position: relative;
 }
 
 header h1 {
-  color: #34495e;
-  font-weight: 800;
-  margin: 0 0 1rem 0;
+  margin: 0 !important;
+  font-size: 1.5rem; /* Оптимально для мобільних */
+  line-height: 1.2;
 }
 
-/* --- Контейнер (Рядок знизу) --- */
+/* Кнопка теми (зліва від H1) */
+#theme-toggle-btn {
+  width: 45px !important;
+  height: 45px !important;
+  min-width: 45px !important;
+  border-radius: 50% !important;
+  padding: 0 !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  margin: 0 !important;
+  
+  /* Кольори для кнопки (універсальні) */
+  background: rgba(255, 255, 255, 0.2) !important; 
+  border: 1px solid rgba(255,255,255,0.5) !important;
+  color: inherit !important; 
+}
+
+/* 2. НИЖНІЙ РЯД (Меню + Погода) */
 .header-bottom-row {
   display: flex;
-  flex-direction: column; /* На мобільному стовпчик */
+  flex-direction: column;
   align-items: center;
   gap: 1rem;
-  max-width: 1200px;
-  margin: 0 auto;
 }
 
-/* На комп'ютері - розтягуємо в сторони */
 @media (min-width: 992px) {
   .header-bottom-row {
     flex-direction: row;
@@ -50,21 +70,20 @@ header h1 {
   }
 }
 
-/* --- НАВІГАЦІЯ (МЕНЮ) - ЖОРСТКИЙ ФІКС --- */
+/* 3. ФІКС МЕНЮ (Щоб було горизонтальним) */
 header nav {
   width: auto;
 }
 
 header nav ul {
-  display: flex !important;           /* Примусово Flex */
-  flex-direction: row !important;     /* Примусово РЯДОК */
-  flex-wrap: wrap !important;         /* Якщо не влазить - перенос */
+  display: flex !important;        /* Вмикаємо Flex */
+  flex-direction: row !important;  /* Тільки в РЯДОК */
+  flex-wrap: wrap !important;      /* Перенос, якщо не влазить */
   justify-content: center;
-  align-items: center;
-  list-style: none !important;        /* Ніяких крапок */
   padding: 0 !important;
   margin: 0 !important;
-  gap: 8px;                           /* Відступ між кнопками */
+  gap: 8px;                        /* Відступи між кнопками */
+  list-style: none !important;
 }
 
 header nav ul li {
@@ -72,68 +91,26 @@ header nav ul li {
   margin: 0 !important;
 }
 
+/* Стиль кнопок меню */
 header nav ul li a {
-  display: block;
-  background: rgba(255, 255, 255, 0.5);
-  color: #2c3e50;
+  display: inline-block;
   padding: 8px 16px;
   border-radius: 20px;
-  font-weight: 600;
-  border: 1px solid rgba(255, 255, 255, 0.8);
   text-decoration: none;
+  font-weight: 600;
   font-size: 0.9rem;
-  white-space: nowrap; /* Текст не переноситься */
+  
+  /* Універсальний фон (напівпрозорий) */
+  background: rgba(255, 255, 255, 0.15); 
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: inherit; /* Колір тексту береться від батька (body) */
 }
 
-header nav ul li a:hover {
-  background: #fff;
-  color: #3498db;
-  transform: translateY(-2px);
-}
-
-/* --- ПРАВА ГРУПА (Погода + Кнопка) --- */
-.header-right-group {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-/* Форма погоди */
+/* 4. ФОРМА ПОГОДИ */
 #weather-form-header {
   display: flex;
-  margin: 0;
-}
-#weather-form-header .form-control {
-  width: 150px; /* Фіксована ширина інпуту */
-  border-radius: 20px 0 0 20px !important;
-  background: rgba(255,255,255,0.6) !important;
-  border: 1px solid white !important;
-}
-#weather-form-header .btn {
-  border-radius: 0 20px 20px 0 !important;
-  background: rgba(255,255,255,0.8) !important;
-  border: 1px solid white !important;
-  color: #333 !important;
-  margin: 0 !important;
-  padding: 6px 12px !important;
-  min-height: auto !important; /* Скидаємо висоту */
-}
-
-/* Кнопка теми */
-#theme-toggle-btn {
-  width: 40px !important;
-  height: 40px !important;
-  min-width: 40px !important;
-  border-radius: 50% !important;
-  padding: 0 !important;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: rgba(255, 255, 255, 0.6) !important;
-  border: 1px solid white !important;
-  font-size: 1.2rem;
-  margin: 0 !important;
-  color: #333 !important;
+  width: 100%;
+  max-width: 300px;
 }
 /* --- Секции --- */
 main section, .login-box, #weather-result {
