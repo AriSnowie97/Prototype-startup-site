@@ -371,3 +371,46 @@ button:hover, .btn:hover {
 #addEventModal .modal-header .btn-close:hover {
   opacity: 1;
 }
+
+/* =========================================
+   КАСТОМНИЙ ХРЕСТИК МОДАЛКИ (Базові стилі + Світла тема)
+   ========================================= */
+.custom-close-btn {
+    width: 24px;  /* Розмір кнопки */
+    height: 24px;
+    position: relative;
+    background: transparent;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    /* Вирівнювання праворуч в хедері модалки Bootstrap */
+    margin: -0.5rem -0.5rem -0.5rem auto !important; 
+    opacity: 0.6;
+    transition: opacity 0.2s, transform 0.2s;
+}
+
+.custom-close-btn:hover {
+    opacity: 1;
+    transform: scale(1.1); /* Невелике збільшення при наведенні */
+}
+
+/* Стилі для ліній хрестика */
+.custom-close-btn span {
+    display: block;
+    position: absolute;
+    height: 3px;        /* Товщина ліній */
+    width: 100%;
+    background-color: #333; /* ТЕМНИЙ колір для світлої теми */
+    border-radius: 4px;
+    left: 0;
+    top: 50%;
+}
+
+/* Повертаємо лінії, щоб утворити Хрестик (як в exam.html active стан) */
+.custom-close-btn span:nth-child(1) {
+    transform: translateY(-50%) rotate(45deg);
+}
+
+.custom-close-btn span:nth-child(2) {
+    transform: translateY(-50%) rotate(-45deg);
+}

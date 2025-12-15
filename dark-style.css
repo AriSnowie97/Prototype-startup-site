@@ -330,3 +330,19 @@ button:hover, .btn:hover {
   opacity: 1;
   transform: none; 
 }
+
+
+/* =========================================
+   КАСТОМНИЙ ХРЕСТИК (Темна тема)
+   ========================================= */
+/* Міняємо колір ліній на білий */
+.modal-header .custom-close-btn span {
+    background-color: #fff !important;
+    box-shadow: 0 0 5px rgba(255,255,255,0.3); /* Додамо легке світіння */
+}
+
+/* При наведенні робимо ще яскравішим */
+.modal-header .custom-close-btn:hover span {
+   background-color: #ffffff !important;
+   box-shadow: 0 0 8px rgba(255,255,255,0.6);
+}
