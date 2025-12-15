@@ -43,20 +43,50 @@ header nav ul li a:hover {
   box-shadow: 0 0 15px rgba(255, 255, 255, 0.1) !important;
 }
 
-/* --- Пошук погоди --- */
-#weather-form-header .form-control {
-  background: rgba(255, 255, 255, 0.1) !important;
-  border: 1px solid rgba(255, 255, 255, 0.2) !important;
-  color: #ffffff !important;
+/* 3. Погода (Виправлено стик та фони) */
+#weather-form-header {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 100%;
+  max-width: 320px;
+  margin: 15px auto 0 auto !important; /* Відступ від меню */
 }
+
+#weather-form-header .form-control {
+  background: rgba(255, 255, 255, 0.25) !important; /* Однаковий фон з кнопкою */
+  border: 1px solid rgba(255, 255, 255, 0.6) !important;
+  border-right: none !important; /* ПРИБИРАЄМО правий борт, щоб злити з кнопкою */
+  border-radius: 20px 0 0 20px !important;
+  color: #ffffff !important;
+  padding-left: 15px;
+  height: 45px !important; /* Фіксуємо висоту */
+}
+
 #weather-form-header .form-control::placeholder {
-  color: rgba(255, 255, 255, 0.6) !important;
+  color: rgba(255, 255, 255, 0.75) !important;
 }
 
 #weather-form-header .btn {
-  background: rgba(255, 255, 255, 0.2) !important;
-  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  background: rgba(255, 255, 255, 0.25) !important; /* Фон як у поля вводу */
+  border: 1px solid rgba(255, 255, 255, 0.6) !important;
+  border-left: none !important; /* ПРИБИРАЄМО лівий борт */
+  border-radius: 0 20px 20px 0 !important;
   color: #ffffff !important;
+  margin: 0 !important;
+  width: 50px !important;
+  height: 45px !important; /* Фіксуємо висоту */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* При наведенні або фокусі підсвічуємо весь блок */
+#weather-form-header:focus-within .form-control,
+#weather-form-header:focus-within .btn {
+  background: rgba(255, 255, 255, 0.35) !important;
+  border-color: #ffffff !important;
+  box-shadow: none !important; /* Прибираємо стандартну тінь, щоб не рвати стик */
 }
 
 /* --- Секції (Картки) --- */
