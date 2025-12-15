@@ -147,36 +147,79 @@ select option {
 }
 
 /* =========================================
-   ВИПРАВЛЕННЯ: ВІДСТУПИ ТА КОЛЬОРИ КНОПОК
+   FIX: ВІДСТУПИ ТА ГЕОМЕТРІЯ (FINAL)
    ========================================= */
 
-/* Щоб кнопки не налазили одна на одну в будь-якому блоці */
-button {
-  margin-top: 8px !important;
-  margin-bottom: 8px !important;
+/* 1. Виправлення кнопок (Стиль + Білий текст) */
+button, .btn {
+  /* Градієнт як у темній темі */
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+  color: #ffffff !important; /* Текст завжди білий */
+  border: none !important;
+  border-radius: 12px !important;
+  padding: 10px 20px;
+  box-shadow: 0 4px 15px rgba(118, 75, 162, 0.3);
+  
+  /* Глобальний відступ, щоб кнопки не липли одна до одної */
+  margin: 5px; 
 }
 
-/* Специфічне виправлення для кнопок Фокусу (щоб стояли красиво) */
+/* 2. Секція "Налаштування" (щоб рядки не налізали) */
+#settings form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px; /* Відстань між "Тема" і "Режим розробника" */
+}
+
+#settings label {
+  display: flex; /* Робимо рядком */
+  justify-content: space-between; /* Текст зліва, кнопка справа */
+  align-items: center;
+  width: 100%;
+  margin-bottom: 5px;
+  font-weight: 600;
+}
+
+#settings select, 
+#settings button {
+  width: auto !important;
+  min-width: 140px;
+  margin: 0 !important; /* Прибираємо зайві відступи всередині label */
+}
+
+/* 3. Секція "Фокус" (Таймер) */
+#focus {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
 #start-btn {
   display: block;
   width: 90%;
-  margin: 20px auto !important; /* Великий відступ, щоб не налазити на таймер і кнопки знизу */
+  max-width: 300px;
+  margin-bottom: 20px !important; /* ВІДСТУП ЗНИЗУ (щоб не налізав на Паузу) */
+  font-size: 1.1rem;
+  padding: 15px;
 }
 
 #pause-btn, #stop-btn {
   display: inline-block;
-  width: 45%; /* Щоб вони стали поруч */
-  margin: 5px 2% !important;
+  min-width: 100px;
+  width: 40%; /* Кнопки поруч */
 }
 
-/* ВИПРАВЛЕННЯ: Кнопка "Додати" біля поля вводу (була чорна) */
+/* 4. Кнопка "Додати" в завданнях (фікс для форми) */
+#add-task-form .input-group {
+  display: flex;
+  gap: 0; /* Тут відступ не треба, вони злиті */
+}
 #add-task-form button {
-  /* Яскравий градієнт замість чорного */
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
-  color: white !important;
-  border: none !important;
-  margin: 0 !important; /* Скидаємо марджин, щоб не розривати input-group */
-  border-radius: 0 12px 12px 0 !important;
+  margin: 0 !important;
+  border-radius: 0 12px 12px 0 !important; /* Рівний край */
+}
+#new-task-input {
+  border-radius: 12px 0 0 12px !important;
 }
 
 /* ВИПРАВЛЕННЯ: Поле вводу (щоб текст був білим) */

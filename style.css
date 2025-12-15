@@ -148,60 +148,80 @@ main section h2 {
   border-color: #87cefa !important;
 }
 
-/* --- ВИПРАВЛЕННЯ КНОПОК (ГЛОБАЛЬНО) --- */
+/* =========================================
+   FIX: ВІДСТУПИ ТА ГЕОМЕТРІЯ (FINAL)
+   ========================================= */
 
-/* Загальний стиль кнопок (щоб були як цукерочки) */
+/* 1. Виправлення кнопок (Стиль + Білий текст) */
 button, .btn {
+  /* Градієнт як у темній темі */
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+  color: #ffffff !important; /* Текст завжди білий */
   border: none !important;
   border-radius: 12px !important;
-  font-weight: 600;
   padding: 10px 20px;
-  /* Градієнт як у темній темі, але трохи яскравіший для світлої */
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: #ffffff !important;
   box-shadow: 0 4px 15px rgba(118, 75, 162, 0.3);
-  transition: transform 0.2s, box-shadow 0.2s;
   
-  /* ВАЖЛИВО: Відступи, щоб не налазили одна на одну */
-  margin-top: 5px;
+  /* Глобальний відступ, щоб кнопки не липли одна до одної */
+  margin: 5px; 
+}
+
+/* 2. Секція "Налаштування" (щоб рядки не налізали) */
+#settings form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px; /* Відстань між "Тема" і "Режим розробника" */
+}
+
+#settings label {
+  display: flex; /* Робимо рядком */
+  justify-content: space-between; /* Текст зліва, кнопка справа */
+  align-items: center;
+  width: 100%;
   margin-bottom: 5px;
+  font-weight: 600;
 }
 
-button:hover, .btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(118, 75, 162, 0.5);
-  filter: brightness(1.1);
+#settings select, 
+#settings button {
+  width: auto !important;
+  min-width: 140px;
+  margin: 0 !important; /* Прибираємо зайві відступи всередині label */
 }
 
-/* --- ВИПРАВЛЕННЯ: РЕЖИМ КОНЦЕНТРАЦІЇ (FOCUS) --- */
+/* 3. Секція "Фокус" (Таймер) */
 #focus {
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
-/* Кнопка "Почати сесію" - велика зверху */
 #start-btn {
   display: block;
-  width: 80%;        /* Широка кнопка */
+  width: 90%;
   max-width: 300px;
-  font-size: 1.2rem;
-  margin: 15px auto; /* Відступ зверху і знизу */
+  margin-bottom: 20px !important; /* ВІДСТУП ЗНИЗУ (щоб не налізав на Паузу) */
+  font-size: 1.1rem;
+  padding: 15px;
 }
 
-/* Кнопки "Пауза" та "Стоп" - поруч знизу */
 #pause-btn, #stop-btn {
   display: inline-block;
   min-width: 100px;
-  margin: 5px 10px; /* Відступи по боках */
-  background: linear-gradient(135deg, #4b6cb7 0%, #182848 100%); /* Трохи інший колір для відмінності */
+  width: 40%; /* Кнопки поруч */
 }
 
-/* --- ВИПРАВЛЕННЯ: КНОПКА "ДОДАТИ" В ЗАВДАННЯХ --- */
-#add-task-form .btn {
-  border-radius: 0 12px 12px 0 !important; /* Заокруглення тільки справа */
-  margin: 0 !important; /* Тут відступ не треба, бо вона прилипає до поля */
-  height: auto;
+/* 4. Кнопка "Додати" в завданнях (фікс для форми) */
+#add-task-form .input-group {
+  display: flex;
+  gap: 0; /* Тут відступ не треба, вони злиті */
+}
+#add-task-form button {
+  margin: 0 !important;
+  border-radius: 0 12px 12px 0 !important; /* Рівний край */
+}
+#new-task-input {
+  border-radius: 12px 0 0 12px !important;
 }
 
 .icon-btn {
