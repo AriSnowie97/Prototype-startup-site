@@ -345,13 +345,17 @@ button:hover, .btn:hover {
 #settings form { display: flex; flex-direction: column; gap: 15px; }
 #settings label { display: flex; justify-content: space-between; align-items: center; }
 
-/* Хрестик для світлої теми (чорний) */
+/* Хрестик для світлої теми (зменшений) */
 #addEventModal .modal-header .btn-close {
   padding: 0.5rem !important;
   margin: -0.5rem -0.5rem -0.5rem auto !important;
-  width: 1em !important;
-  height: 1em !important;
+  
+  /* Зменшуємо розмір з 1em до 0.75em */
+  width: 0.75em !important;
+  height: 0.75em !important;
+  background-size: 0.75em !important;
   min-height: auto !important;
+  
   background-color: transparent !important;
   
   /* Чорний хрестик */
@@ -362,6 +366,7 @@ button:hover, .btn:hover {
   box-shadow: none !important;
   border: none !important;
 }
+
 #addEventModal .modal-header .btn-close:hover {
   opacity: 1;
 }
