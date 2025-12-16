@@ -1,5 +1,5 @@
 // ==================================================
-//          ЛОГІКА КАЛЕНДАРЯ (FIXED: Button & Logs)
+//          ЛОГІКА КАЛЕНДАРЯ (FINAL: Silent Auto-Refresh)
 // ==================================================
 import { backendUrl, tg } from './config.js';
 import { sendApiRequest, fetchApi } from './api.js';
@@ -34,7 +34,6 @@ export function initCalendar() {
             });
         }
 
-        // Видаляємо глобальне оголошення saveEventBtn, щоб не плутатись
         const eventTitleInput = document.getElementById("event-title");
         const eventDateInput = document.getElementById("event-date");
         const eventTimeInput = document.getElementById("event-time");
@@ -115,21 +114,19 @@ export function initCalendar() {
             eventTimeInput.disabled = false;
             eventEndTimeInput.disabled = false;
 
-            // 2. ЗНАХОДИМО АКТУАЛЬНУ КНОПКУ І ЗАМІНЮЄМО ЇЇ (FIXED)
+            // 2. Кнопка "Зберегти" (FIX з клонуванням)
             const oldBtn = document.getElementById("save-event-btn");
-            const saveEventBtn = oldBtn.cloneNode(true); // Тепер saveEventBtn - це НОВА ЖИВА кнопка
+            const saveEventBtn = oldBtn.cloneNode(true); 
             oldBtn.parentNode.replaceChild(saveEventBtn, oldBtn);
 
-            // Далі використовуємо тільки локальну saveEventBtn!
-            saveEventBtn.disabled = true; // Блокуємо поки вантажиться
-
-            // Підготовка списку
+            // Підготовка контейнера списку
             const modalBody = document.querySelector("#addEventModal .modal-body");
             const oldList = document.getElementById("modal-events-list");
             if (oldList) oldList.remove();
 
             const listContainer = document.createElement("div");
             listContainer.id = "modal-events-list";
+            // Початковий текст (тільки для першого відкриття)
             listContainer.innerHTML = "<p>⏳ Завантаження подій...</p>";
             listContainer.style.marginBottom = "20px";
             listContainer.style.borderBottom = "1px solid rgba(255,255,255,0.2)";
@@ -139,15 +136,23 @@ export function initCalendar() {
 
             addEventModal.show();
 
-            // --- Load Events ---
-            async function loadEventsForDay() {
+            // --- Load Events (З параметром isBackgroundUpdate) ---
+            async function loadEventsForDay(isBackgroundUpdate = false) {
                 try {
                     if (!document.querySelector("#addEventModal.show")) return;
                     
+                    // Якщо це ПЕРШЕ завантаження - блокуємо кнопку. 
+                    // Якщо це АВТО-ОНОВЛЕННЯ - НЕ чіпаємо кнопку і інтерфейс.
+                    if (!isBackgroundUpdate) {
+                        saveEventBtn.disabled = true;
+                        listContainer.style.opacity = "0.6"; // Легкий візуальний ефект
+                    }
+
                     const result = await fetchApi("/api/get_day_events", { date: dateStr });
                     
                     if (result.status === "success") {
-                        listContainer.innerHTML = `<h6>Події на ${dateStr}:</h6>`;
+                        // Формуємо новий HTML для списку
+                        let newContent = `<h6>Події на ${dateStr}:</h6>`;
                         
                         if (result.events && result.events.length > 0) {
                             const ul = document.createElement("ul");
@@ -183,7 +188,7 @@ export function initCalendar() {
                                         li.style.opacity = "0.5"; 
                                         try {
                                             await sendApiRequest("/api/update_event_title", { eventId: ev.id, text: newText.trim() });
-                                            await loadEventsForDay(); 
+                                            await loadEventsForDay(true); // Тихе оновлення
                                             if (typeof initializeTasks === 'function') initializeTasks(); 
                                         } catch (e) {
                                             alert("Помилка редагування: " + e.message);
@@ -201,7 +206,7 @@ export function initCalendar() {
                                         li.style.opacity = "0.5";
                                         try {
                                             await sendApiRequest("/api/delete_event", { eventId: ev.id });
-                                            await loadEventsForDay(); 
+                                            await loadEventsForDay(true); // Тихе оновлення
                                             await renderCalendar();   
                                             if (typeof initializeTasks === 'function') initializeTasks();
                                         } catch (e) {
@@ -223,12 +228,20 @@ export function initCalendar() {
                                 li.appendChild(actionsDiv);
                                 ul.appendChild(li);
                             });
+                            // Тут ми не можемо просто додати string, треба вставити елемент
+                            // Тому трохи змінимо логіку: очистимо контейнер і додамо
+                            listContainer.innerHTML = "";
+                            listContainer.innerHTML = `<h6>Події на ${dateStr}:</h6>`;
                             listContainer.appendChild(ul);
                         } else {
-                            listContainer.innerHTML += "<p style='opacity:0.7'>Подій немає</p>";
+                            listContainer.innerHTML = `<h6>Події на ${dateStr}:</h6><p style='opacity:0.7'>Подій немає</p>`;
                         }
 
-                        // Логіка кнопки Зберегти (використовуємо локальну saveEventBtn)
+                        // Повертаємо прозорість
+                        listContainer.style.opacity = "1";
+
+                        // Логіка кнопки Зберегти
+                        // Ми змінюємо стан кнопки ТІЛЬКИ якщо це не фонове оновлення АБО якщо час реально вийшов
                         if (result.is_past) {
                             saveEventBtn.disabled = true;
                             saveEventBtn.textContent = "Минулий час";
@@ -236,27 +249,35 @@ export function initCalendar() {
                             saveEventBtn.classList.add("btn-secondary");
                             document.getElementById("event-title").disabled = true;
                         } else {
-                            saveEventBtn.disabled = false;
-                            saveEventBtn.textContent = "Зберегти";
-                            saveEventBtn.classList.add("btn-primary");
-                            saveEventBtn.classList.remove("btn-secondary");
-                            document.getElementById("event-title").disabled = false;
+                            // Якщо це фонове оновлення, ми НЕ ВМИКАЄМО кнопку примусово, якщо користувач її натиснув
+                            // Але якщо це ініціалізація - вмикаємо.
+                            if (!saveEventBtn.disabled || !isBackgroundUpdate) {
+                                saveEventBtn.disabled = false;
+                                saveEventBtn.textContent = "Зберегти";
+                                saveEventBtn.classList.add("btn-primary");
+                                saveEventBtn.classList.remove("btn-secondary");
+                                document.getElementById("event-title").disabled = false;
+                            }
                         }
                     }
                 } catch (e) {
                     console.error("Помилка списку подій:", e);
-                    // Якщо помилка авторизації - кнопка не розблокується
+                    // При помилці в фоні - просто ігноруємо, не ламаємо інтерфейс
                 }
             }
 
-            // Старт завантаження
-            await loadEventsForDay();
+            // 1. ПЕРШЕ ЗАВАНТАЖЕННЯ (З блокуванням)
+            await loadEventsForDay(false);
 
-            // Таймери
+            // 2. Таймери
             if (autoRefreshInterval) clearInterval(autoRefreshInterval);
             if (autoRefreshTimeout) clearTimeout(autoRefreshTimeout);
 
-            autoRefreshInterval = setInterval(loadEventsForDay, 30000); 
+            // 3. АВТО-ОНОВЛЕННЯ (Без блокування, параметр true)
+            autoRefreshInterval = setInterval(() => {
+                loadEventsForDay(true);
+            }, 30000); 
+
             autoRefreshTimeout = setTimeout(() => {
                 if (autoRefreshInterval) {
                     clearInterval(autoRefreshInterval);
@@ -264,7 +285,7 @@ export function initCalendar() {
                 }
             }, 120000);
 
-            // --- Click Listener for NEW Button ---
+            // --- Click Listener for Button ---
             saveEventBtn.addEventListener("click", async () => {
                 const title = eventTitleInput.value;
                 const date = eventDateInput.value;
@@ -277,10 +298,10 @@ export function initCalendar() {
                     return;
                 }
 
-                // Візуальна реакція кнопки
+                // Візуальна реакція
                 const originalText = saveEventBtn.textContent;
                 saveEventBtn.textContent = "⏳...";
-                saveEventBtn.disabled = true;
+                saveEventBtn.disabled = true; // Блокуємо, щоб не клікали двічі
 
                 const payload = {
                     title: title,
@@ -296,7 +317,8 @@ export function initCalendar() {
                     document.getElementById("add-event-form").reset();
                     eventDateInput.value = dateStr; 
                     
-                    await loadEventsForDay(); 
+                    // Оновлюємо список тихо, щоб не блимало
+                    await loadEventsForDay(true); 
                     await renderCalendar(); 
                     if (typeof initializeTasks === 'function') initializeTasks(); 
 
@@ -304,9 +326,8 @@ export function initCalendar() {
                     console.error("Помилка збереження:", error);
                     alert(`❌ Помилка: ${error.message}`);
                 } finally {
-                    // Повертаємо кнопку до життя
                     saveEventBtn.textContent = originalText;
-                    saveEventBtn.disabled = false;
+                    saveEventBtn.disabled = false; // Розблоковуємо
                 }
             });
         }
